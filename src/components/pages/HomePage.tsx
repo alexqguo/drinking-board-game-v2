@@ -1,10 +1,9 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { Heading, Paragraph, Button } from 'evergreen-ui';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 
 export default () => {
-  const i18n = React.useContext(TranslationContext);
-  const x: number = 3;
+  const i18n = useContext(TranslationContext);
 
   return (
     <section>

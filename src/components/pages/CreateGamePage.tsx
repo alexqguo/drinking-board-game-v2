@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   FormField,
   TextInput,
@@ -7,24 +7,35 @@ import {
   SelectField,
   Button,
   RadioGroup,
+  DeleteIcon,
 } from 'evergreen-ui';
 import useInput from 'src/hooks/useInput';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { GameType, CreateGameOptions, Board } from 'src/types';
 import config from 'src/config';
+import { StoreContext } from 'src/providers/StoreProvider';
 
 export default () => {
+  const store = useContext(StoreContext);
   const i18n = useContext(TranslationContext);
   const [board, boardBind] = useInput(config.boards[0]);
+  const [createdGameId, setCreatedGameId] = useState('');
   const [players, setPlayers] = useState<string[]>(['', '']);
   const [gameType, gameTypeBind] = useInput(GameType.local);
   // const [localPlayer, localPlayerBind] = useInput(''); // Not yet
+
+  if (createdGameId) return <Redirect to={`/game/${createdGameId}`} />;
+
   const gameTypeOptions = [
     { label: i18n.createGame.local, value: GameType.local },
     { label: i18n.createGame.remote, value: GameType.remote },
   ]; // Don't really want to define this every time
 
   const isValidName = (name: string) => players.indexOf(name) !== -1 && name.length > 0;
+  const removePlayer = (idx: number) => {
+    players.splice(idx, 1);
+    setPlayers([...players]);
+  };
   const updatePlayerName = (target: EventTarget, i: number) => {
     players[i] = (target as HTMLInputElement).value;
     setPlayers([...players]);
@@ -49,60 +60,67 @@ export default () => {
       gameType,
       board
     };
-    console.log(options);
+    
+    const gameId = await store.createGame(options);
+    setCreatedGameId(gameId);
   }
 
   return (
     <section>
       <Heading size={800} is="h1">{i18n.createGame.title}</Heading>
 
-      <form autoComplete="off">
-        {/* game */}
-        <SelectField
-          value={board}
-          label={i18n.createGame.selectGame} 
-          onChange={boardBind.onChange}
-        >
-          {config.boards.map((board: Board) => (
-            <option value={board.value} key={board.value}>{board.name}</option>
-          ))}
-        </SelectField>
+      {/* game */}
+      <SelectField
+        value={board}
+        label={i18n.createGame.selectGame} 
+        onChange={boardBind.onChange}
+      >
+        {config.boards.map((board: Board) => (
+          <option value={board.value} key={board.value}>{board.name}</option>
+        ))}
+      </SelectField>
 
-        {/* players */}
-        <FormField label={i18n.createGame.players} />
-        {players.map((name: string, i: number) => (
+      {/* players */}
+      <FormField label={i18n.createGame.players} />
+      {players.map((name: string, i: number) => (
+        <div key={`player-input-${i}`}>
           <TextInput 
             placeholder="name"
-            key={`player-input-${i}`}
             onChange={({ target }: { target: EventTarget }) => updatePlayerName(target, i)}
             value={name}
           />
-        ))}
-        <Button
-          disabled={players.length >= config.maxPlayers}
-          onClick={() => setPlayers([...players, ''])}
-        >
-          {i18n.createGame.addPlayer}
-        </Button>
+          {i >= 2 ? <DeleteIcon 
+            color="muted"
+            size={12}
+            style={{ cursor: 'pointer' }}
+            marginLeft={4}
+            onClick={() => removePlayer(i)}
+          /> : null}
+        </div>
+      ))}
+      <Button
+        disabled={players.length >= config.maxPlayers}
+        onClick={() => setPlayers([...players, ''])}
+      >
+        {i18n.createGame.addPlayer}
+      </Button>
 
-        {/* gametype */}
-        <RadioGroup
-          label={i18n.createGame.gameType}
-          value={gameType}
-          options={gameTypeOptions}
-          onChange={value => gameTypeBind.onChangeVal(value)}
-        />
+      {/* gametype */}
+      <RadioGroup
+        label={i18n.createGame.gameType}
+        value={gameType}
+        options={gameTypeOptions}
+        onChange={value => gameTypeBind.onChangeVal(value)}
+      />
 
-        {/* submit */}
-        <Button
-          disabled={!isReadyToStart()}
-          onClick={validateAndSubmit}
-          role="button"
-        >
-          {i18n.createGame.start}
-        </Button>
-
-      </form>
+      {/* submit */}
+      <Button
+        disabled={!isReadyToStart()}
+        onClick={validateAndSubmit}
+        role="button"
+      >
+        {i18n.createGame.start}
+      </Button>
     </section>
   );
 }

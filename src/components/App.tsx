@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { HashRouter, Switch, Route } from 'react-router-dom';
+import React from 'react';
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { StoreProvider } from 'src/providers/StoreProvider';
 import { TranslationProvider } from 'src/providers/TranslationProvider';
 import CreateGamePage from 'src/components/pages/CreateGamePage';
@@ -16,7 +16,10 @@ function App() {
             <Route path="/join" component={JoinGamePage} />
             <Route path="/game/:gameId" component={PlayGamePage} />
             <Route path="/create" component={CreateGamePage} />
-            <Route path="/" component={HomePage} />
+            <Route path="/" exact component={HomePage} />
+            <Route path="*">
+              <Redirect to="/" />
+            </Route>
           </Switch>
         </HashRouter>
       </TranslationProvider>
