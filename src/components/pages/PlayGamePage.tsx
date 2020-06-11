@@ -9,7 +9,8 @@ export default () => {
   const rootStore = useContext(StoreContext);
   const { gameStore, playerStore } = rootStore;
   // check if gameStore has an ID (aka is hydrated), if not redirect to the join game page
-  if (!gameId || gameId !== gameStore.game.id) return <Redirect to="/" />;
+  if (!gameId) return <Redirect to="/" />;
+  if (gameId !== gameStore.game.id) return <Redirect to={`/join/${gameId}`} />;
 
   console.log('game id: ' + gameStore.game.id);
   return useObserver(() => (
