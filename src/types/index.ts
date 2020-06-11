@@ -7,6 +7,10 @@ export interface CreateGameOptions {
   playerNames: string[],
   // localPlayer: string,
   gameType: GameType,
+  board: Board
 }
 
-console.log('asdf');
+export interface Board {
+  name: string,
+  value: string,
+}

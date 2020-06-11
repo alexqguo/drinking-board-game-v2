@@ -10,16 +10,18 @@ import {
 } from 'evergreen-ui';
 import useInput from 'src/hooks/useInput';
 import { TranslationContext } from 'src/providers/TranslationProvider';
-import { GameType, CreateGameOptions } from 'src/types';
+import { GameType, CreateGameOptions, Board } from 'src/types';
+import config from 'src/config';
 
 export default () => {
   const i18n = useContext(TranslationContext);
+  const [board, boardBind] = useInput(config.boards[0]);
   const [players, setPlayers] = useState<string[]>(['', '']);
-  const [gameType, gameTypeBind] = useInput('');
+  const [gameType, gameTypeBind] = useInput(GameType.local);
   // const [localPlayer, localPlayerBind] = useInput(''); // Not yet
   const gameTypeOptions = [
     { label: i18n.createGame.local, value: GameType.local },
-    { label: i18n.createGame.remote, value: 'remote' },
+    { label: i18n.createGame.remote, value: GameType.remote },
   ]; // Don't really want to define this every time
 
   const isValidName = (name: string) => players.indexOf(name) !== -1 && name.length > 0;
@@ -29,21 +31,23 @@ export default () => {
   };
 
   const isReadyToStart = () => {
-    const isValidGameType: boolean = gameType === GameType.local || gameType === 'remote';
+    const hasBoard: boolean = !!board;
+    const isValidGameType: boolean = gameType === GameType.local || gameType === GameType.remote;
     const hasEnoughPlayers: boolean = players.length >= 2;
     const hasValidNames: boolean = players.every(isValidName);
     // Local player validation
 
-    return isValidGameType && hasEnoughPlayers && hasValidNames;
+    return hasBoard && isValidGameType && hasEnoughPlayers && hasValidNames;
   };
 
   const validateAndSubmit = async (e: Event) => {
     e.preventDefault();
     if (!isReadyToStart()) return;
 
-    const options = {
+    const options: CreateGameOptions = {
       playerNames: players,
       gameType,
+      board
     };
     console.log(options);
   }
@@ -54,9 +58,14 @@ export default () => {
 
       <form autoComplete="off">
         {/* game */}
-        <SelectField label={i18n.createGame.selectGame}>
-          <option value="asdf">Asdf</option>
-          <option value="blah">Blah</option>
+        <SelectField
+          value={board}
+          label={i18n.createGame.selectGame} 
+          onChange={boardBind.onChange}
+        >
+          {config.boards.map((board: Board) => (
+            <option value={board.value} key={board.value}>{board.name}</option>
+          ))}
         </SelectField>
 
         {/* players */}
@@ -70,7 +79,7 @@ export default () => {
           />
         ))}
         <Button
-          disabled={players.length >= 8}
+          disabled={players.length >= config.maxPlayers}
           onClick={() => setPlayers([...players, ''])}
         >
           {i18n.createGame.addPlayer}
