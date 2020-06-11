@@ -21,7 +21,7 @@ export default class RootStore {
     const { playerNames, gameType, board } = options;
     const gameId: string = createId('game');
     this.gameId = gameId;
-    this.prefix = `v2/sessions/${getAppStage()}`;
+    this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
 
     const gameData: GameData = {
       id: gameId,
