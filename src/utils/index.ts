@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { AppStage } from 'src/types';
+import { AppStage, Point } from 'src/types';
 
 export const getAppStage = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -17,4 +17,14 @@ export const createId = (prefix: string) => {
   if (!prefix) throw new Error('Must pass a prefix');
   prefix = isDevMode() ? `${prefix}-dev` : prefix;
   return `${prefix}-${v4()}`
+}
+
+export const getCenterPoint = (points: Point[]): Point => {
+  const total: Point = points.reduce((prev: Point, cur: Point) => {
+    return {x: prev.x + cur.x, y: prev.y + cur.y};
+  }, {x: 0, y: 0});
+  total.x /= points.length;
+  total.y /= points.length;
+
+  return total;
 }

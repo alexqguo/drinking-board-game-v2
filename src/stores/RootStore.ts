@@ -1,12 +1,14 @@
 import GameStore from 'src/stores/GameStore';
 import PlayerStore from 'src/stores/PlayerStore';
-import { CreateGameOptions, SessionData, GameData, Player, GameState } from 'src/types';
+import { CreateGameOptions, SessionData, GameData, Player, GameState, BoardSchema } from 'src/types';
 import { createId, getAppStage } from 'src/utils';
 import { db } from 'src/firebase';
+import BoardStore from './BoardStore';
 
 export default class RootStore {
   gameStore: GameStore;
   playerStore: PlayerStore;
+  boardStore: BoardStore;
   prefix: string = '';
   gameId: string = '';
   gameRef: firebase.database.Reference | null = null;
@@ -15,57 +17,57 @@ export default class RootStore {
   constructor() {
     this.gameStore = new GameStore();
     this.playerStore = new PlayerStore();
+    this.boardStore = new BoardStore();
   }
 
-  createGame(options: CreateGameOptions): Promise<string> {
-    return new Promise((resolve) => {
-      const { playerNames, gameType, board } = options;
-      const gameId: string = createId('game');
-      this.gameId = gameId;
-      this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
-  
-      const playerData: Player[] = playerNames.map((name: string) => {
-        const id: string = createId('player');
-  
-        return {
-          id,
-          name,
-          tileIndex: 0,
-          color: 'blue',
-        };
-      });
+  async createGame(options: CreateGameOptions): Promise<string> {
+    const { playerNames, gameType, board } = options;
+    const gameId: string = createId('game');
+    this.gameId = gameId;
+    this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
 
-      const gameData: GameData = {
-        id: gameId,
-        type: gameType,
-        board: board.value,
-        state: GameState.GAME_START,
-        currentPlayerId: playerData[0].id,
+    const playerData: Player[] = playerNames.map((name: string) => {
+      const id: string = createId('player');
+
+      return {
+        id,
+        name,
+        tileIndex: 0,
+        color: 'blue',
       };
-  
-      const initialSessionData: SessionData = {
-        game: gameData,
-        players: playerData,
-      };
-  
-      this.subscribeToGame();
-      Promise.all([
-        this.fetchBoard(board.value),
-        this.fetchImage(board.value),
-        db.ref(this.prefix).set(initialSessionData),
-      ]).then((values) => {
-        const board = values[0];
-        console.log('board json', board);
-        resolve(gameId);
-      });
     });
+
+    const gameData: GameData = {
+      id: gameId,
+      type: gameType,
+      board: board.value,
+      state: GameState.GAME_START,
+      currentPlayerId: playerData[0].id,
+    };
+
+    const initialSessionData: SessionData = {
+      game: gameData,
+      players: playerData,
+    };
+
+    this.subscribeToGame();
+    await Promise.all([
+      this.fetchBoard(board.value),
+      this.fetchImage(board.value),
+      db.ref(this.prefix).set(initialSessionData),
+    ]);
+
+    return gameId;
   }
 
-  fetchBoard = (path: string): Promise<any> => {
+  fetchBoard = (path: string): Promise<BoardSchema> => {
     return new Promise(resolve => {
       fetch(`games/${path}/index.json`)
         .then(resp => resp.json())
-        .then(data => resolve(data));
+        .then(data => {
+          this.boardStore.setBoardSchema(data);
+          resolve(data);
+        });
     });
   };
 
@@ -90,7 +92,5 @@ export default class RootStore {
     this.playerRef.on('child_changed', () => {
       console.log('Time to fix this!');
     })
-
-    // Pull JSON for the game and stores it locally
   }
 }

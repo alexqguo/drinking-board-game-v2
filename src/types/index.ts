@@ -15,6 +15,11 @@ export interface Board {
   value: string,
 }
 
+export interface BoardSchema {
+  tiles: any,
+  zones: any
+}
+
 export interface SessionData {
   game: GameData,
   players: Player[],
@@ -57,4 +62,9 @@ export interface Player {
 export enum AppStage {
   dev = 'dev',
   prod = 'prod',
+}
+
+export interface Point {
+  x: number,
+  y: number,
 }
