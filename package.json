@@ -2,6 +2,12 @@
   "name": "drinking-board-game-v2",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -21,11 +27,9 @@
     "typescript": "^3.7.5",
     "uuid": "^8.1.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.5",
+    "@types/uuid": "^8.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,9 +45,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/react-router-dom": "^5.1.5",
-    "@types/uuid": "^8.0.0"
   }
 }

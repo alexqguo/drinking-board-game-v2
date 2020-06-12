@@ -89,7 +89,5 @@ export default class RootStore {
     this.playerRef.on('child_changed', () => {
       console.log('Time to fix this!');
     })
-
-    // Pull JSON for the game and stores it locally
   }
 }

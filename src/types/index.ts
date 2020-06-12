@@ -42,3 +42,8 @@ export enum AppStage {
   dev = 'dev',
   prod = 'prod',
 }
+
+export interface Point {
+  x: number,
+  y: number,
+}
