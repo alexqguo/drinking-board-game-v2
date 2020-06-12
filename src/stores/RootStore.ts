@@ -1,6 +1,6 @@
 import GameStore from 'src/stores/GameStore';
 import PlayerStore from 'src/stores/PlayerStore';
-import { CreateGameOptions, SessionData, GameData, Player } from 'src/types';
+import { CreateGameOptions, SessionData, GameData, Player, GameState } from 'src/types';
 import { createId, getAppStage } from 'src/utils';
 import { db } from 'src/firebase';
 
@@ -24,21 +24,24 @@ export default class RootStore {
       this.gameId = gameId;
       this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
   
-      const gameData: GameData = {
-        id: gameId,
-        type: gameType,
-        board: board.value,
-      };
-  
       const playerData: Player[] = playerNames.map((name: string) => {
         const id: string = createId('player');
   
         return {
           id,
           name,
+          tileIndex: 0,
           color: 'blue',
         };
       });
+
+      const gameData: GameData = {
+        id: gameId,
+        type: gameType,
+        board: board.value,
+        state: GameState.GAME_START,
+        currentPlayerId: playerData[0].id,
+      };
   
       const initialSessionData: SessionData = {
         game: gameData,
