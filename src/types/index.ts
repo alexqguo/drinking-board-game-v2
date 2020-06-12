@@ -15,6 +15,11 @@ export interface Board {
   value: string,
 }
 
+export interface BoardSchema {
+  tiles: any,
+  zones: any
+}
+
 export interface SessionData {
   game: GameData,
   players: Player[],
