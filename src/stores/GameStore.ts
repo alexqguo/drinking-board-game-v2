@@ -15,8 +15,11 @@ export default class GameStore {
     this.game = game;
   }
 
-  @action setGameState = (state: GameState) => {
-    this.game.state = state;
+  @action TESTsetGameState = (state: GameState) => {
+    this.game = {
+      ...this.game,
+      state,
+    }
   }
 
   @computed get isMyTurn() {
