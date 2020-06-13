@@ -15,6 +15,10 @@ export default class GameStore {
     this.game = game;
   }
 
+  @action setGameState = (state: GameState) => {
+    this.game.state = state;
+  }
+
   @computed get isMyTurn() {
     if (this.game.type === GameType.local) return true;
     return this.localPlayerId === this.game.currentPlayerId;

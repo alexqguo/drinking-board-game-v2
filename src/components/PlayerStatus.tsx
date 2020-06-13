@@ -20,6 +20,8 @@ export default ({ player }: Props) => {
       left={0}
     >
       <Heading>{player.name}</Heading>
+      {/* <Button iconBefore="hand-right">Roll</Button>
+      <Button iconBefore="disable">Skip</Button> */}
     </Pane>
   ));
 }

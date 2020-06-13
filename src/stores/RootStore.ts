@@ -4,6 +4,7 @@ import { CreateGameOptions, SessionData, GameData, Player, GameState, BoardSchem
 import { createId, getAppStage } from 'src/utils';
 import { db } from 'src/firebase';
 import BoardStore from './BoardStore';
+import GameEventHandler from 'src/engine/game';
 
 export default class RootStore {
   gameStore: GameStore;
@@ -52,6 +53,7 @@ export default class RootStore {
     };
 
     this.subscribeToGame();
+    GameEventHandler();
     await Promise.all([
       this.fetchBoard(board.value),
       this.fetchImage(board.value),
