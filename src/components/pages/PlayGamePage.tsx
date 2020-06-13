@@ -5,6 +5,7 @@ import { Player } from 'src/types';
 import { StoreContext } from 'src/providers/StoreProvider';
 import BoardImage from 'src/components/BoardImage';
 import PlayerAvatar from 'src/components/PlayerAvatar';
+import PlayerStatus from '../PlayerStatus';
 
 export default () => {
   const { gameId } = useParams();
@@ -16,6 +17,7 @@ export default () => {
 
   return useObserver(() => (
     <section>
+      <PlayerStatus player={playerStore.players.get(gameStore.playerStatusId)!} />
       <BoardImage />
 
       {Array.from(playerStore.players.values()).map((p: Player) => (

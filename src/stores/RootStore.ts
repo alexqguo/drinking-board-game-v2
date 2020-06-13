@@ -28,6 +28,7 @@ export default class RootStore {
 
     const playerData: Player[] = playerNames.map((name: string) => {
       const id: string = createId('player');
+      // set localPlayerId if remote game and name === local player name
 
       return {
         id,
