@@ -17,7 +17,7 @@ export default () => {
 
   return useObserver(() => (
     <section>
-      <PlayerStatus player={playerStore.players.get(gameStore.playerStatusId)!} />
+      <PlayerStatus />
       <BoardImage />
 
       {Array.from(playerStore.players.values()).map((p: Player) => (

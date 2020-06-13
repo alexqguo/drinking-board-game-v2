@@ -1,17 +1,14 @@
 import React, { useContext } from 'react';
 import { useObserver } from 'mobx-react';
 import { Pane, Heading, Button, Text } from 'evergreen-ui';
-import { Player, GameState, GameType } from 'src/types';
+import { Player, GameState } from 'src/types';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 
-interface Props {
-  player: Player
-}
-
-export default ({ player }: Props) => {
+export default () => {
   const i18n = useContext(TranslationContext);
-  const { gameStore } = useContext(StoreContext);
+  const { gameStore, playerStore } = useContext(StoreContext);
+  const player: Player = playerStore.players.get(gameStore.playerStatusId)!;
   const isActionable = gameStore.isMyTurn && gameStore.game.state === GameState.ROLL_START;
   console.log(gameStore.isMyTurn);
   console.log(gameStore.game.state, GameState.ROLL_START);
