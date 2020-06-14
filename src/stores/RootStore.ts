@@ -1,7 +1,17 @@
 import GameStore from 'src/stores/GameStore';
 import PlayerStore from 'src/stores/PlayerStore';
+import AlertStore from 'src/stores/AlertStore';
 import BoardStore from 'src/stores/BoardStore';
-import { CreateGameOptions, SessionData, GameData, Player, GameState, BoardSchema, RestoreGameOptions } from 'src/types';
+import {
+  CreateGameOptions,
+  SessionData,
+  GameData,
+  Player,
+  GameState,
+  BoardSchema,
+  RestoreGameOptions,
+  Alert
+} from 'src/types';
 import { createId, getAppStage, getCenterPoint } from 'src/utils';
 import { db } from 'src/firebase';
 import GameEventHandler from 'src/engine/game';
@@ -9,15 +19,18 @@ import GameEventHandler from 'src/engine/game';
 export default class RootStore {
   gameStore: GameStore;
   playerStore: PlayerStore;
+  alertStore: AlertStore;
   boardStore: BoardStore;
   prefix: string = '';
   gameId: string = '';
   gameRef: firebase.database.Reference | null = null;
   playerRef: firebase.database.Reference | null = null;
+  alertRef: firebase.database.Reference | null = null;
 
   constructor() {
     this.gameStore = new GameStore(this);
     this.playerStore = new PlayerStore(this);
+    this.alertStore = new AlertStore(this);
     this.boardStore = new BoardStore();
   }
 
@@ -48,9 +61,14 @@ export default class RootStore {
       currentRoll: null,
     };
 
+    const alertData: Alert = {
+      open: false,
+    };
+
     const initialSessionData: SessionData = {
       game: gameData,
       players: playerData,
+      alert: alertData,
     };
 
     this.subscribeToGame();
@@ -96,6 +114,11 @@ export default class RootStore {
     this.playerRef.on('child_changed', (snap: firebase.database.DataSnapshot) => {
       this.playerStore.setPlayer(snap.val() as Player);
     })
+
+    this.alertRef = db.ref(`${this.prefix}/alert`);
+    this.alertRef.on('value', (snap: firebase.database.DataSnapshot) => {
+      this.alertStore.setAlert(snap.val() as Alert);
+    });
   }
 
   async findSession(gameId: string): Promise<SessionData> {

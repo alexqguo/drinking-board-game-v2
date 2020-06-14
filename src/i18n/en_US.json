@@ -25,6 +25,9 @@
     "notFound": "Could not find game",
     "join": "Join"
   },
+  "alert": {
+    "done": "Done"
+  },
   "playerStatus": {
     "roll": "Roll",
     "skip": "Skip"

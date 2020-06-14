@@ -29,6 +29,7 @@ export interface BoardSchema {
 export interface SessionData {
   game: GameData,
   players: Player[],
+  alert: Alert
 }
 
 export interface GameData {
@@ -38,6 +39,10 @@ export interface GameData {
   state: GameState,
   currentPlayerId: string,
   currentRoll: number | null,
+}
+
+export interface Alert {
+  open: boolean,
 }
 
 export enum GameState {
