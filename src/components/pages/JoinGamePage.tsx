@@ -71,7 +71,7 @@ export default () => {
       localPlayerId: state.selectedPlayerId,
       board: state.session!.game.board,
     });
-      setJoined(true);
+    setJoined(true);
   };
 
   const canJoin = () => {

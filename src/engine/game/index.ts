@@ -1,6 +1,7 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { GameState } from 'src/types';
+import { getCenterPoint } from 'src/utils';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore } = rootStore;
@@ -18,7 +19,7 @@ const GameEventHandler = () => {
       gameStore.setGameState(GameState.TURN_START);
     },
     [GameState.TURN_START]: () => {
-      //
+      rootStore.scrollToCurrentPlayer();
       gameStore.setGameState(GameState.ROLL_START);
     },
     [GameState.ROLL_START]: () => {
@@ -27,10 +28,7 @@ const GameEventHandler = () => {
     [GameState.ROLL_END]: () => {
       // const roll = gameStore.game.currentRoll;
       // TODO - check move condition
-      setTimeout(() => {
-        gameStore.setGameState(GameState.MOVE_CALCULATE);
-      }, 1000);
-      // gameStore.setGameState(GameState.MOVE_CALCULATE);
+      gameStore.setGameState(GameState.MOVE_CALCULATE);
     },
     [GameState.MOVE_CALCULATE]: async () => {
       const roll = gameStore.game.currentRoll!;
@@ -81,11 +79,13 @@ const GameEventHandler = () => {
       const nextPlayerIdx = (currentPlayerIdx + 1) % playerIds.length;
       const nextPlayerId = playerIds[nextPlayerIdx];
 
-      gameStore.setCurrentPlayer(nextPlayerId);
-      gameStore.update({
-        state: GameState.TURN_CHECK,
-        currentRoll: null,
-      })
+      setTimeout(() => {
+        gameStore.setCurrentPlayer(nextPlayerId);
+        gameStore.update({
+          state: GameState.TURN_CHECK,
+          currentRoll: null,
+        });
+      }, 1000);
     }
   };
 

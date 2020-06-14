@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import { useObserver } from 'mobx-react';
 import { Player } from 'src/types';
@@ -14,6 +14,10 @@ export default () => {
 
   if (!gameId) return <Redirect to="/" />;
   if (gameId !== gameStore.game.id) return <Redirect to={`/join/${gameId}`} />;
+
+  useEffect(() => {
+    rootStore.scrollToCurrentPlayer();
+  }, []);
 
   return useObserver(() => (
     <section>

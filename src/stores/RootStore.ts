@@ -2,7 +2,7 @@ import GameStore from 'src/stores/GameStore';
 import PlayerStore from 'src/stores/PlayerStore';
 import BoardStore from 'src/stores/BoardStore';
 import { CreateGameOptions, SessionData, GameData, Player, GameState, BoardSchema, RestoreGameOptions } from 'src/types';
-import { createId, getAppStage } from 'src/utils';
+import { createId, getAppStage, getCenterPoint } from 'src/utils';
 import { db } from 'src/firebase';
 import GameEventHandler from 'src/engine/game';
 
@@ -118,5 +118,16 @@ export default class RootStore {
       this.fetchBoard(board),
       this.fetchImage(board),
     ]);
+  }
+
+  scrollToCurrentPlayer() {
+    const { playerStore, gameStore, boardStore } = this;
+    const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+    const position = getCenterPoint(boardStore.boardSchema.tiles[currentPlayer.tileIndex].position);
+    window.scrollTo({
+      top: position.y - (window.outerHeight / 2),
+      left: position.x - (window.outerWidth / 2),
+      behavior: 'smooth',
+    });
   }
 }
