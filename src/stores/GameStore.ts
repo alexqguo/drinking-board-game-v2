@@ -21,6 +21,10 @@ export default class GameStore {
     this.game = game;
   }
 
+  @action setLocalPlayerId = (localPlayerId: string) => {
+    this.localPlayerId = localPlayerId;
+  }
+
   setGameState = (state: GameState) => {
     this.rootStore.gameRef?.update({ state });
   }

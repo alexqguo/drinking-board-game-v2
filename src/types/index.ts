@@ -10,6 +10,12 @@ export interface CreateGameOptions {
   board: Board
 }
 
+export interface RestoreGameOptions {
+  localPlayerId: string,
+  gameId: string,
+  board: string,
+}
+
 export interface Board {
   name: string,
   value: string,

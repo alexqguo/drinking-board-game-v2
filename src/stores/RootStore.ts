@@ -1,9 +1,9 @@
 import GameStore from 'src/stores/GameStore';
 import PlayerStore from 'src/stores/PlayerStore';
-import { CreateGameOptions, SessionData, GameData, Player, GameState, BoardSchema } from 'src/types';
+import BoardStore from 'src/stores/BoardStore';
+import { CreateGameOptions, SessionData, GameData, Player, GameState, BoardSchema, RestoreGameOptions } from 'src/types';
 import { createId, getAppStage } from 'src/utils';
 import { db } from 'src/firebase';
-import BoardStore from './BoardStore';
 import GameEventHandler from 'src/engine/game';
 
 export default class RootStore {
@@ -102,5 +102,20 @@ export default class RootStore {
     const path = `v2/sessions/${getAppStage()}/${gameId}`;
     const snap: firebase.database.DataSnapshot = await db.ref(path).once('value');
     return snap.val();
+  }
+
+  async restoreSession(options: RestoreGameOptions) {
+    const { gameId, localPlayerId, board } = options;
+    this.gameId = gameId;
+    this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
+    this.gameStore.setLocalPlayerId(localPlayerId);
+
+    GameEventHandler();
+    this.subscribeToGame();
+    await this.gameRef?.once('value'); // To ensure GameStore is hydrated before the redirect
+    await Promise.all([
+      this.fetchBoard(board),
+      this.fetchImage(board),
+    ]);
   }
 }

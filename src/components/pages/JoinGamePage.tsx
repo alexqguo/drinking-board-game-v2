@@ -7,10 +7,9 @@ import {
   Button,
   TextInputField 
 } from 'evergreen-ui';
-import debounce from 'lodash/debounce';
 import { TranslationContext } from 'src/providers/TranslationProvider';
-import { useParams } from 'react-router-dom';
-import { GameType, Player } from 'src/types';
+import { useParams, Redirect } from 'react-router-dom';
+import { GameType, Player, SessionData } from 'src/types';
 import { StoreContext } from 'src/providers/StoreProvider';
 
 enum SearchStatus {
@@ -23,8 +22,7 @@ enum SearchStatus {
 interface State {
   gameId: string,
   searchStatus: SearchStatus,
-  gameType?: GameType,
-  players?: Player[],
+  session?: SessionData
   selectedPlayerId: string,
 }
 
@@ -34,20 +32,30 @@ export default () => {
   const { gameId = '' } = useParams();
   const rootStore = useContext(StoreContext);
   const i18n = useContext(TranslationContext);
+  const [joined, setJoined] = useState(false);
   const [state, setState] = useState<State>({
     gameId,
     searchStatus: gameId ? SearchStatus.searching : SearchStatus.idle,
     selectedPlayerId: '',
   });
+
   const updateState = (newState: Object) => setState({ ...state, ...newState });
   const search = async (gameId: string) => {
     updateState({ searchStatus: SearchStatus.searching });
-    const session = await rootStore.findSession(gameId);
-    if (!session) {
+    try {
+      const session = await rootStore.findSession(gameId);
+      if (!session) {
+        updateState({ searchStatus: SearchStatus.notFound });
+      } else {
+        updateState({
+          gameId,
+          session,
+          searchStatus: SearchStatus.found,
+        });
+      }
+    } catch (e) {
+      console.error(e);
       updateState({ searchStatus: SearchStatus.notFound });
-    } else {
-      updateState({ searchStatus: SearchStatus.found, gameId });
-      console.log(session);
     }
   };
   const onInputChange = (e: Event) => {
@@ -57,7 +65,28 @@ export default () => {
     updateState({ gameId: newId });
   };
 
+  const joinGame = async () => {
+    await rootStore.restoreSession({
+      gameId: state.gameId,
+      localPlayerId: state.selectedPlayerId,
+      board: state.session!.game.board,
+    });
+      setJoined(true);
+  };
+
+  const canJoin = () => {
+    if (!state.session) return false;
+    if (state.searchStatus !== SearchStatus.found) return false;
+    if (state.session?.game.type === GameType.local) return true;
+    // TODO - handle remote game types
+    return false;
+  };
+
   useEffect(() => { if (gameId) search(gameId) }, []);
+  if (joined) {
+    console.log('joined ' + state.gameId)
+    return <Redirect to={`/game/${state.gameId}`} />;
+  }
   return (
     <section>
       <Heading is="h1" size={800}>
@@ -71,7 +100,12 @@ export default () => {
         disabled={state.searchStatus === SearchStatus.found || state.searchStatus === SearchStatus.searching}
         validationMessage={state.searchStatus === SearchStatus.notFound ? i18n.joinGame.notFound : null}
       />
-
+      <Button
+        disabled={!canJoin()}
+        onClick={joinGame}
+      >
+        {i18n.joinGame.join}
+      </Button>
     </section>
   );
 }

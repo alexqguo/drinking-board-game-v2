@@ -22,7 +22,8 @@
     "title": "Join a game",
     "gameId": "Game ID",
     "searching": "Searching...",
-    "notFound": "Could not find game"
+    "notFound": "Could not find game",
+    "join": "Join"
   },
   "playerStatus": {
     "roll": "Roll",
