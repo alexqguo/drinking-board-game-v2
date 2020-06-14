@@ -37,8 +37,8 @@ export enum GameState {
   NOT_STARTED,
   GAME_START,
   TURN_CHECK, // Can the player take their turn
+  ZONE_CHECK, // Is there a zone which needs action
   TURN_START, // Start turn
-  ZONE_CHECK, //
   ROLL_START,
   ROLL_END,
   MOVE_CALCULATE,
@@ -49,6 +49,11 @@ export enum GameState {
   TURN_END,
   GAME_OVER,
   TURN_SKIP,
+}
+
+export enum TurnOrder {
+  normal = 1,
+  reverse = -1,
 }
 
 export interface Player {

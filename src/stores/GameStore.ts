@@ -1,7 +1,9 @@
 import { observable, action, computed } from 'mobx';
 import { GameData, GameType, GameState } from 'src/types';
+import RootStore from 'src/stores/RootStore';
 
 export default class GameStore {
+  rootStore: RootStore;
   @observable localPlayerId: string = '';
   @observable game: GameData = {
     id: '',
@@ -11,15 +13,20 @@ export default class GameStore {
     currentPlayerId: '',
   };
 
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
+
   @action setGame = (game: GameData) => {
     this.game = game;
   }
 
-  @action TESTsetGameState = (state: GameState) => {
-    this.game = {
-      ...this.game,
-      state,
-    }
+  setGameState = (state: GameState) => {
+    this.rootStore.gameRef?.update({ state });
+  }
+
+  setCurrentPlayer = (playerId: string) => {
+    this.rootStore.gameRef?.update({ currentPlayerId: playerId });
   }
 
   @computed get isMyTurn() {

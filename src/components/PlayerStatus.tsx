@@ -10,8 +10,8 @@ export default () => {
   const { gameStore, playerStore } = useContext(StoreContext);
   const player: Player = playerStore.players.get(gameStore.playerStatusId)!;
   const isActionable = gameStore.isMyTurn && gameStore.game.state === GameState.ROLL_START;
-  console.log(gameStore.isMyTurn);
-  console.log(gameStore.game.state, GameState.ROLL_START);
+  
+  const skipTurn = () => gameStore.setGameState(GameState.TURN_SKIP);
 
   return useObserver(() => (
     <Pane
@@ -35,6 +35,7 @@ export default () => {
       <Button 
         disabled={!isActionable}
         iconBefore="disable"
+        onClick={skipTurn}
       >
         {i18n.playerStatus.skip}
       </Button>

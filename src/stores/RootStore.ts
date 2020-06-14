@@ -16,8 +16,8 @@ export default class RootStore {
   playerRef: firebase.database.Reference | null = null;
 
   constructor() {
-    this.gameStore = new GameStore();
-    this.playerStore = new PlayerStore();
+    this.gameStore = new GameStore(this);
+    this.playerStore = new PlayerStore(this);
     this.boardStore = new BoardStore();
   }
 
