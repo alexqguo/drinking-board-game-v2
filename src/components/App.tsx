@@ -14,6 +14,7 @@ function App() {
         <HashRouter>
           <Switch>
             <Route path="/join/:gameId" component={JoinGamePage} />
+            <Route path="/join" component={JoinGamePage} />
             <Route path="/game/:gameId" component={PlayGamePage} />
             <Route path="/create" component={CreateGamePage} />
             <Route path="/" exact component={HomePage} />

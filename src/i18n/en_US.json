@@ -18,6 +18,12 @@
     "remote": "Remote",
     "start": "Start!"
   },
+  "joinGame": {
+    "title": "Join a game",
+    "gameId": "Game ID",
+    "searching": "Searching...",
+    "notFound": "Could not find game"
+  },
   "playerStatus": {
     "roll": "Roll",
     "skip": "Skip"

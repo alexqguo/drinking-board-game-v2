@@ -96,4 +96,11 @@ export default class RootStore {
       console.log('Time to fix this!');
     })
   }
+
+  async findSession(gameId: string): Promise<SessionData> {
+    // Means you can't look up prod games in dev mode. Which is fine, for now
+    const path = `v2/sessions/${getAppStage()}/${gameId}`;
+    const snap: firebase.database.DataSnapshot = await db.ref(path).once('value');
+    return snap.val();
+  }
 }
