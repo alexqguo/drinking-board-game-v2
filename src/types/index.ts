@@ -37,24 +37,25 @@ export interface GameData {
   board: string,
   state: GameState,
   currentPlayerId: string,
+  currentRoll: number | null,
 }
 
 export enum GameState {
-  NOT_STARTED,
-  GAME_START,
-  TURN_CHECK, // Can the player take their turn
-  ZONE_CHECK, // Is there a zone which needs action
-  TURN_START, // Start turn
-  ROLL_START,
-  ROLL_END,
-  MOVE_CALCULATE,
-  MOVE_START,
-  MOVE_END,
-  RULE_TRIGGER,
-  RULE_END,
-  TURN_END,
-  GAME_OVER,
-  TURN_SKIP,
+  NOT_STARTED = 'NOT_STARTED',
+  GAME_START = 'GAME_START',
+  TURN_CHECK = 'TURN_CHECK',
+  ZONE_CHECK = 'ZONE_CHECK',
+  TURN_START = 'TURN_START',
+  ROLL_START = 'ROLL_START',
+  ROLL_END = 'ROLL_END',
+  MOVE_CALCULATE = 'MOVE_CALCULATE',
+  MOVE_START = 'MOVE_START',
+  MOVE_END = 'MOVE_END',
+  RULE_TRIGGER = 'RULE_TRIGGER',
+  RULE_END = 'RULE_END',
+  TURN_END = 'TURN_END',
+  GAME_OVER = 'GAME_OVER',
+  TURN_SKIP = 'TURN_SKIP',
 }
 
 export enum TurnOrder {

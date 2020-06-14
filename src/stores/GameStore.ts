@@ -11,6 +11,7 @@ export default class GameStore {
     board: '',
     state: GameState.NOT_STARTED,
     currentPlayerId: '',
+    currentRoll: null,
   };
 
   constructor(rootStore: RootStore) {
@@ -31,6 +32,10 @@ export default class GameStore {
 
   setCurrentPlayer = (playerId: string) => {
     this.rootStore.gameRef?.update({ currentPlayerId: playerId });
+  }
+
+  update = (game: Partial<GameData>) => {
+    this.rootStore.gameRef?.update(game);
   }
 
   @computed get isMyTurn() {

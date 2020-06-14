@@ -45,6 +45,7 @@ export default class RootStore {
       board: board.value,
       state: GameState.GAME_START,
       currentPlayerId: playerData[0].id,
+      currentRoll: null,
     };
 
     const initialSessionData: SessionData = {
@@ -90,10 +91,10 @@ export default class RootStore {
 
     this.playerRef = db.ref(`${this.prefix}/players`);
     this.playerRef.on('child_added', (snap: firebase.database.DataSnapshot) => {
-      this.playerStore.addPlayer(snap.val() as Player);
+      this.playerStore.setPlayer(snap.val() as Player);
     });
-    this.playerRef.on('child_changed', () => {
-      console.log('Time to fix this!');
+    this.playerRef.on('child_changed', (snap: firebase.database.DataSnapshot) => {
+      this.playerStore.setPlayer(snap.val() as Player);
     })
   }
 
@@ -112,7 +113,7 @@ export default class RootStore {
 
     GameEventHandler();
     this.subscribeToGame();
-    await this.gameRef?.once('value'); // To ensure GameStore is hydrated before the redirect
+    await this.gameRef?.once('value'); // To ensure GameStore is hydrated before the
     await Promise.all([
       this.fetchBoard(board),
       this.fetchImage(board),

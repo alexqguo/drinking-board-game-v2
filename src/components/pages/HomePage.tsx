@@ -14,8 +14,6 @@ export default () => {
       </Paragraph>
       <Button is="a" href="/#/create">{i18n.home.createGame}</Button>{' '}
       <Button is="a" href="/#/join">{i18n.home.joinGame}</Button>
-      <br />
-      <DiceRoll numRolls={3} onRoll={() => {}} disabled={false} />
     </section>
   );
 }

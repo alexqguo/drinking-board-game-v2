@@ -1,6 +1,7 @@
 import { observable, computed, action } from 'mobx';
 import { Player } from 'src/types';
 import RootStore from 'src/stores/RootStore';
+import { db } from 'src/firebase';
 
 export default class PlayerStore {
   rootStore: RootStore;
@@ -10,11 +11,17 @@ export default class PlayerStore {
     this.rootStore = rootStore;
   }
 
-  @action addPlayer = (player: Player) => {
+  @action setPlayer = (player: Player) => {
     this.players.set(player.id, player);
   }
 
   @computed get ids(): string[] {
     return Array.from(this.players.keys());
+  }
+
+  updatePlayer = async (id: string, playerData: Partial<Player>) => {
+    const playerSnap = await this.rootStore.playerRef?.orderByChild('id').equalTo(id).once('value');
+    const [key, player] = Object.entries(playerSnap!.val())[0];
+    db.ref(`${this.rootStore.prefix}/players/${key}`).update(playerData);
   }
 }
