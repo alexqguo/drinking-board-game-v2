@@ -1,7 +1,9 @@
 import rootStore from 'src/stores';
-import { RuleSchema } from 'src/types';
+import { RuleSchema, RuleHandler } from 'src/types';
 
-export default (rule: RuleSchema) => {
-  const { alertStore } = rootStore;
-
+const DisplayRule: RuleHandler = (rule: RuleSchema) => {
+  console.log('handling a display rule');
+  rootStore.alertStore.update({ canClose: true });
 };
+
+export default DisplayRule;

@@ -12,7 +12,6 @@ export default () => {
   const currentTile = boardStore.boardSchema.tiles[alertStore.alert.ruleIdx];
   const rule = currentTile ? currentTile.rule : null;
 
-  console.log('asdf')
   return useObserver(() => (
     <Dialog
       isShown={alertStore.alert.open}
@@ -22,6 +21,8 @@ export default () => {
       confirmLabel={i18n.alert.done}
       isConfirmDisabled={!gameStore.isMyTurn /* AND the rule is done */}
       onCloseComplete={uiActions.alertClose}
+      shouldCloseOnOverlayClick={false}
+      shouldCloseOnEscapePress={false}
     >
       {rule ? 
         <Paragraph size={500}>{rule.displayText}</Paragraph>

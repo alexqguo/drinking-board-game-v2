@@ -1,5 +1,6 @@
 import rootStore from 'src/stores';
-import { RuleSchema } from 'src/types';
+import { RuleSchema, RuleHandler } from 'src/types';
+import DisplayRule from 'src/engine/rules/DisplayRule';
 
 /*
 Brainstorm how rules will work
@@ -50,7 +51,9 @@ RollAugmentRule
 
 */
 
-
+const ruleMappings: { [key: string]: RuleHandler } = {
+  DisplayRule,
+};
 
 export default async (ruleIndex: number) => {
   const { alertStore, boardStore } = rootStore;
@@ -62,5 +65,10 @@ export default async (ruleIndex: number) => {
     ruleIdx: ruleIndex,
   });
 
-
+  let handler = ruleMappings[rule.type];
+  if (!handler) {
+    console.warn(`No handler found for ${rule.type}, falling back to DisplayRule`);
+    handler = DisplayRule;
+  }
+  handler(rule);
 };
