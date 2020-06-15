@@ -22,8 +22,32 @@ export interface Board {
 }
 
 export interface BoardSchema {
-  tiles: any,
-  zones: any
+  tiles: TileSchema[],
+  zones: ZoneSchema[],
+}
+
+export interface TileSchema {
+  mandatory?: boolean,
+  rule: RuleSchema,
+  position: Point[],
+  zone?: string,
+}
+
+export interface RuleSchema {
+  displayText: string,
+  type: string,
+  // more
+}
+
+export interface ZoneSchema {
+  name: string,
+  type: ZoneType,
+  rule: RuleSchema,
+}
+
+export enum ZoneType {
+  passive = 'passive',
+  active = 'active'
 }
 
 export interface SessionData {
@@ -43,6 +67,7 @@ export interface GameData {
 
 export interface Alert {
   open: boolean,
+  canClose: boolean,
   ruleIdx: number,
 }
 

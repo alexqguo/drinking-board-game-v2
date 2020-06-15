@@ -6,6 +6,7 @@ export default class AlertStore {
   rootStore: RootStore;
   @observable alert: Alert = {
     open: false,
+    canClose: false,
     ruleIdx: -1,
   }
 
@@ -24,6 +25,7 @@ export default class AlertStore {
   clear = () => {
     this.rootStore.alertRef?.update({
       open: false,
+      canClose: false,
       ruleIdx: -1
     });
   }

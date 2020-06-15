@@ -1,6 +1,6 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { GameState } from 'src/types';
+import { GameState, TileSchema } from 'src/types';
 import RuleEngine from 'src/engine/rules';
 
 const GameEventHandler = () => {
@@ -38,7 +38,7 @@ const GameEventHandler = () => {
       // TODO - check for mandatory spaces
       let firstMandatoryIndex = boardStore.boardSchema.tiles
         .slice(currentPlayer.tileIndex + 1, currentPlayer.tileIndex + 1 + roll)
-        .findIndex((tile: any) => {
+        .findIndex((tile: TileSchema) => {
           return tile.mandatory;
           // TODO - OR anchor, OR custom mandatory
         });

@@ -12,18 +12,19 @@ export default () => {
   const currentTile = boardStore.boardSchema.tiles[alertStore.alert.ruleIdx];
   const rule = currentTile ? currentTile.rule : null;
 
+  console.log('asdf')
   return useObserver(() => (
     <Dialog
       isShown={alertStore.alert.open}
-      header={<Heading size={600}>{currentPlayer ? currentPlayer.name : ''}</Heading>}
-      hasCancel={false}
+      header={<Heading size={800}>{currentPlayer ? currentPlayer.name : ''}</Heading>}
+      hasFooter={alertStore.alert.canClose}
       width={700}
       confirmLabel={i18n.alert.done}
       isConfirmDisabled={!gameStore.isMyTurn /* AND the rule is done */}
       onCloseComplete={uiActions.alertClose}
     >
       {rule ? 
-        <Paragraph>{rule.displayText}</Paragraph>
+        <Paragraph size={500}>{rule.displayText}</Paragraph>
       : <></>}
     </Dialog> 
   ));

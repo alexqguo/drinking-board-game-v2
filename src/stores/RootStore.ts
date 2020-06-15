@@ -63,6 +63,7 @@ export default class RootStore {
 
     const alertData: Alert = {
       open: false,
+      canClose: false,
       ruleIdx: -1,
     };
 

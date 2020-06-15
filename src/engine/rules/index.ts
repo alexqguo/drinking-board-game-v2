@@ -1,4 +1,5 @@
 import rootStore from 'src/stores';
+import { RuleSchema } from 'src/types';
 
 /*
 Brainstorm how rules will work
@@ -48,12 +49,18 @@ AnchorRule
 RollAugmentRule
 
 */
-export default async (ruleIndex: any) => {
-  const { gameStore, alertStore, boardStore } = rootStore;
-  const rule = boardStore.boardSchema.tiles[ruleIndex].rule;
-  
+
+
+
+export default async (ruleIndex: number) => {
+  const { alertStore, boardStore } = rootStore;
+  const rule: RuleSchema = boardStore.boardSchema.tiles[ruleIndex].rule;
+
   alertStore.update({
     open: true,
+    canClose: false,
     ruleIdx: ruleIndex,
   });
+
+
 };
