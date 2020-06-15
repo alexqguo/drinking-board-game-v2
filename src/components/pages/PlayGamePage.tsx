@@ -6,7 +6,8 @@ import { StoreContext } from 'src/providers/StoreProvider';
 import BoardImage from 'src/components/BoardImage';
 import PlayerAvatar from 'src/components/PlayerAvatar';
 import Alert from 'src/components/Alert';
-import PlayerStatus from '../PlayerStatus';
+import PlayerStatus from 'src/components/PlayerStatus';
+import { uiActions } from 'src/engine/game';
 
 export default () => {
   const { gameId } = useParams();
@@ -17,6 +18,7 @@ export default () => {
   if (gameId !== gameStore.game.id) return <Redirect to={`/join/${gameId}`} />;
 
   useEffect(() => {
+    uiActions.start();
     rootStore.scrollToCurrentPlayer();
   }, []);
 

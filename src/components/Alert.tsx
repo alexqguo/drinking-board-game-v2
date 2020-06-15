@@ -30,7 +30,6 @@ export default () => {
       footer={footer}
       width={700}
       confirmLabel={i18n.alert.done}
-      isConfirmDisabled={!gameStore.isMyTurn /* AND the rule is done */}
       onCloseComplete={uiActions.alertClose}
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEscapePress={false}

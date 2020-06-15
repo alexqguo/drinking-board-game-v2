@@ -2,6 +2,7 @@ import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { GameState, TileSchema } from 'src/types';
 import RuleEngine from 'src/engine/rules';
+import GameStore from 'src/stores/GameStore';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore } = rootStore;
@@ -104,16 +105,17 @@ const GameEventHandler = () => {
 // This file should be the only thing updating game.gameState.
 // Provide some hooks for UI components 
 const uiActions = {
+  start: () => {
+    rootStore.gameStore.setGameState(GameState.GAME_START);
+  },
   handleRoll: (roll: number) => {
-    const { gameStore } = rootStore;
-    gameStore.update({
+    rootStore.gameStore.update({
       state: GameState.ROLL_END,
       currentRoll: roll,
     });
   },
   skipTurn: () => {
-    const { gameStore } = rootStore;
-    gameStore.setGameState(GameState.TURN_SKIP);
+    rootStore.gameStore.setGameState(GameState.TURN_SKIP);
   },
   alertClose: () => {
     const { alertStore, gameStore } = rootStore;

@@ -56,7 +56,7 @@ export default class RootStore {
       id: gameId,
       type: gameType,
       board: board.value,
-      state: GameState.GAME_START,
+      state: GameState.NOT_STARTED,
       currentPlayerId: playerData[0].id,
       currentRoll: null,
     };
