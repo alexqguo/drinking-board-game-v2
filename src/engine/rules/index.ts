@@ -1,15 +1,9 @@
 import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler } from 'src/types';
 import DisplayRule from 'src/engine/rules/DisplayRule';
+import ExtraTurnRule from 'src/engine/rules/ExtraTurnRule';
 
 /*
-Brainstorm how rules will work
-
-Rule
-
-DisplayRule
-- set game alert message
-
 MoveRule
 - Three variants: numSpaces, dice rolls, tileIndex
   - numSpaces
@@ -53,6 +47,7 @@ RollAugmentRule
 
 const ruleMappings: { [key: string]: RuleHandler } = {
   DisplayRule,
+  ExtraTurnRule,
 };
 
 export default async (ruleIndex: number) => {

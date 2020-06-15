@@ -49,6 +49,7 @@ export default class RootStore {
         name,
         tileIndex: 0,
         color: 'blue',
+        effects: PlayerStore.defaultEffects(),
       };
     });
 

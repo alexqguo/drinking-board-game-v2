@@ -1,5 +1,5 @@
 import { observable, computed, action } from 'mobx';
-import { Player } from 'src/types';
+import { Player, PlayerEffects } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
 
@@ -24,4 +24,8 @@ export default class PlayerStore {
     const [key, player] = Object.entries(playerSnap!.val())[0];
     db.ref(`${this.rootStore.prefix}/players/${key}`).update(playerData);
   }
+
+  static defaultEffects = (): PlayerEffects => ({
+    extraTurns: 0,
+  })
 }

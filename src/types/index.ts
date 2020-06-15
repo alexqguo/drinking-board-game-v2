@@ -100,6 +100,18 @@ export interface Player {
   color: string,
   tileIndex: number,
   isActive?: boolean,
+  effects: PlayerEffects,
+}
+
+export interface PlayerEffects {
+  // mandatorySkips: number,
+  // customMandatoryTiles: number[],
+  extraTurns: number,
+  // skippedTurns: string[],
+  // speedModifiers: SpeedModifier[],
+  // moveCondition: MoveCondition,
+  // anchors: number,
+  // rollAugmentation: RollAugmentation,
 }
 
 export enum AppStage {

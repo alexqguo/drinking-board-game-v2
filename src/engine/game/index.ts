@@ -2,7 +2,6 @@ import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { GameState, TileSchema } from 'src/types';
 import RuleEngine from 'src/engine/rules';
-import GameStore from 'src/stores/GameStore';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore } = rootStore;
@@ -74,12 +73,25 @@ const GameEventHandler = () => {
     [GameState.TURN_SKIP]: () => {
       gameStore.setGameState(GameState.TURN_END);
     },
-    [GameState.TURN_END]: () => {
+    [GameState.TURN_END]: async () => {
       // TODO - check for extra turns
       const playerIds = playerStore.ids;
-      const currentPlayerIdx = playerIds.indexOf(gameStore.game.currentPlayerId);
-      const nextPlayerIdx = (currentPlayerIdx + 1) % playerIds.length;
-      const nextPlayerId = playerIds[nextPlayerIdx];
+      const { currentPlayerId } = gameStore.game;
+      const currentPlayerIdx = playerIds.indexOf(currentPlayerId);
+      const currentPlayer = playerStore.players.get(currentPlayerId)!;
+      let nextPlayerId: string;
+
+      if (currentPlayer.effects.extraTurns > 0) {
+        nextPlayerId = currentPlayerId;
+        await playerStore.updatePlayer(currentPlayerId, {
+          effects: {
+            extraTurns: currentPlayer.effects.extraTurns - 1,
+          },
+        });
+      } else {
+        const nextPlayerIdx = (currentPlayerIdx + 1) % playerIds.length;
+        nextPlayerId = playerIds[nextPlayerIdx]; 
+      }
 
       setTimeout(() => {
         gameStore.setCurrentPlayer(nextPlayerId);

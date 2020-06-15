@@ -5,6 +5,7 @@ import { Player, GameState } from 'src/types';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
+import PlayerEffects from 'src/components/PlayerEffects';
 import { uiActions } from 'src/engine/game';
 
 export default () => {
@@ -32,6 +33,7 @@ export default () => {
       left={0}
     >
       <Heading>{player.name}</Heading>
+      <PlayerEffects />
       <DiceRoll rolls={rolls} disabled={!isActionable} onRoll={onRoll} />
       <Button 
         disabled={!isActionable}

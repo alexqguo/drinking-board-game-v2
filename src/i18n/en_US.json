@@ -30,6 +30,7 @@
   },
   "playerStatus": {
     "roll": "Roll",
-    "skip": "Skip"
+    "skip": "Skip",
+    "extraTurn": "Extra turn"
   }
 }
