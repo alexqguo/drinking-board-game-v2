@@ -1,3 +1,5 @@
+import rootStore from 'src/stores';
+
 /*
 Brainstorm how rules will work
 
@@ -46,4 +48,8 @@ AnchorRule
 RollAugmentRule
 
 */
-export default {};
+export default (rule: any) => {
+  const { gameStore, alertStore } = rootStore;
+
+  
+};

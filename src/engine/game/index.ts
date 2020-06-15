@@ -1,7 +1,6 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { GameState } from 'src/types';
-import { getCenterPoint } from 'src/utils';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore } = rootStore;
@@ -64,6 +63,9 @@ const GameEventHandler = () => {
       gameStore.setGameState(GameState.RULE_TRIGGER);
     },
     [GameState.RULE_TRIGGER]: () => {
+      const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+      const rule = boardStore.boardSchema.tiles[currentPlayer.tileIndex].rule;
+      console.log(rule);
       gameStore.setGameState(GameState.RULE_END);
     },
     [GameState.RULE_END]: () => {

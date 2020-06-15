@@ -136,10 +136,11 @@ export default class RootStore {
 
     GameEventHandler();
     this.subscribeToGame();
-    await this.gameRef?.once('value'); // To ensure GameStore is hydrated before the
     await Promise.all([
       this.fetchBoard(board),
       this.fetchImage(board),
+      this.gameRef?.once('value'), // Ensure stores are hydrated before redirecting
+      this.playerRef?.once('value'),
     ]);
   }
 
