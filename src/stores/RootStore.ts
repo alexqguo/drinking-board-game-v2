@@ -63,6 +63,7 @@ export default class RootStore {
 
     const alertData: Alert = {
       open: false,
+      ruleIdx: -1,
     };
 
     const initialSessionData: SessionData = {
@@ -72,12 +73,12 @@ export default class RootStore {
     };
 
     this.subscribeToGame();
-    GameEventHandler();
     await Promise.all([
       this.fetchBoard(board.value),
       this.fetchImage(board.value),
       db.ref(this.prefix).set(initialSessionData),
     ]);
+    GameEventHandler();
 
     return gameId;
   }
@@ -134,7 +135,6 @@ export default class RootStore {
     this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
     this.gameStore.setLocalPlayerId(localPlayerId);
 
-    GameEventHandler();
     this.subscribeToGame();
     await Promise.all([
       this.fetchBoard(board),
@@ -142,6 +142,7 @@ export default class RootStore {
       this.gameRef?.once('value'), // Ensure stores are hydrated before redirecting
       this.playerRef?.once('value'),
     ]);
+    GameEventHandler();
   }
 
   scrollToCurrentPlayer() {

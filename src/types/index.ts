@@ -43,6 +43,7 @@ export interface GameData {
 
 export interface Alert {
   open: boolean,
+  ruleIdx: number,
 }
 
 export enum GameState {

@@ -48,8 +48,12 @@ AnchorRule
 RollAugmentRule
 
 */
-export default (rule: any) => {
-  const { gameStore, alertStore } = rootStore;
-
+export default async (ruleIndex: any) => {
+  const { gameStore, alertStore, boardStore } = rootStore;
+  const rule = boardStore.boardSchema.tiles[ruleIndex].rule;
   
+  alertStore.update({
+    open: true,
+    ruleIdx: ruleIndex,
+  });
 };

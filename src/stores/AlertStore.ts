@@ -6,6 +6,7 @@ export default class AlertStore {
   rootStore: RootStore;
   @observable alert: Alert = {
     open: false,
+    ruleIdx: -1,
   }
 
   constructor(rootStore: RootStore) {
@@ -14,5 +15,16 @@ export default class AlertStore {
 
   @action setAlert = (alert: Alert) => {
     this.alert = alert;
+  }
+
+  update = (alert: Partial<Alert>) => {
+    this.rootStore.alertRef?.update(alert);
+  }
+
+  clear = () => {
+    this.rootStore.alertRef?.update({
+      open: false,
+      ruleIdx: -1
+    });
   }
 }

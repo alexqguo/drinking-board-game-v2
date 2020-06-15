@@ -1,6 +1,7 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { GameState } from 'src/types';
+import RuleEngine from 'src/engine/rules';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore } = rootStore;
@@ -38,7 +39,7 @@ const GameEventHandler = () => {
       let firstMandatoryIndex = boardStore.boardSchema.tiles
         .slice(currentPlayer.tileIndex + 1, currentPlayer.tileIndex + 1 + roll)
         .findIndex((tile: any) => {
-          return tile.isMandatory;
+          return tile.mandatory;
           // TODO - OR anchor, OR custom mandatory
         });
 
@@ -64,9 +65,7 @@ const GameEventHandler = () => {
     },
     [GameState.RULE_TRIGGER]: () => {
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-      const rule = boardStore.boardSchema.tiles[currentPlayer.tileIndex].rule;
-      console.log(rule);
-      gameStore.setGameState(GameState.RULE_END);
+      RuleEngine(currentPlayer.tileIndex);
     },
     [GameState.RULE_END]: () => {
       gameStore.setGameState(GameState.TURN_END);
@@ -115,6 +114,11 @@ const uiActions = {
   skipTurn: () => {
     const { gameStore } = rootStore;
     gameStore.setGameState(GameState.TURN_SKIP);
+  },
+  alertClose: () => {
+    const { alertStore, gameStore } = rootStore;
+    alertStore.clear();
+    gameStore.setGameState(GameState.RULE_END);
   }
 };
 
