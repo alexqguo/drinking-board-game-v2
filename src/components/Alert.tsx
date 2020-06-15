@@ -36,7 +36,7 @@ export default () => {
       shouldCloseOnEscapePress={false}
     >
       {rule ? 
-        <Paragraph size={500}>{rule.displayText}</Paragraph>
+        <Paragraph style={{ lineHeight: '32px', fontSize: 24 }}>{rule.displayText}</Paragraph>
       : <></>}
     </Dialog> 
   ));
