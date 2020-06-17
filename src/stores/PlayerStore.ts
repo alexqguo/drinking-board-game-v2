@@ -19,6 +19,7 @@ export default class PlayerStore {
     return Array.from(this.players.keys());
   }
 
+  // TODO - needs to be a way to update just the effects, this will overwrite
   updatePlayer = async (id: string, playerData: Partial<Player>) => {
     const playerSnap = await this.rootStore.playerRef?.orderByChild('id').equalTo(id).once('value');
     const [key, player] = Object.entries(playerSnap!.val())[0];

@@ -25,9 +25,6 @@ TeleportRule
 GameOverRule
 - todo
 
-ExtraTurnRule
-- increment player effect for extra turns
-
 DiceRollRule
 
 DrinkDuringLostTurnsRule
