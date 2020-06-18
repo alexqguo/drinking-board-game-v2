@@ -67,8 +67,15 @@ export interface GameData {
 
 export interface Alert {
   open: boolean,
-  canClose: boolean,
   ruleIdx: number,
+  state: AlertState,
+}
+
+export enum AlertState {
+  CLOSED = 'CLOSED',
+  PENDING = 'PENDING',
+  CAN_CLOSE = 'CAN_CLOSE',
+  REQUIRE_ACTION = 'REQUIRE_ACTION',
 }
 
 export enum GameState {
@@ -107,11 +114,16 @@ export interface PlayerEffects {
   // mandatorySkips: number,
   // customMandatoryTiles: number[],
   extraTurns: number,
-  // skippedTurns: string[],
+  skippedTurns: LostTurnInfo,
   // speedModifiers: SpeedModifier[],
   // moveCondition: MoveCondition,
   // anchors: number,
   // rollAugmentation: RollAugmentation,
+}
+
+export interface LostTurnInfo {
+  message: string,
+  numTurns: number,
 }
 
 export enum AppStage {

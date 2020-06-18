@@ -1,9 +1,9 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler } from 'src/types';
+import { RuleSchema, RuleHandler, AlertState } from 'src/types';
 
 const DisplayRule: RuleHandler = (rule: RuleSchema) => {
   setTimeout(() => {
-    rootStore.alertStore.update({ canClose: true });
+    rootStore.alertStore.update({ state: AlertState.CAN_CLOSE });
   }, 3000);
 };
 

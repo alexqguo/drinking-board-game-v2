@@ -20,7 +20,14 @@ const GameEventHandler = () => {
     },
     [GameState.TURN_START]: () => {
       rootStore.scrollToCurrentPlayer();
-      gameStore.setGameState(GameState.ROLL_START);
+      const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+      const isSkipped = currentPlayer.effects.skippedTurns.numTurns > 0;
+
+      if (isSkipped) {
+        // Trigger lost turn start?
+      } else {
+        gameStore.setGameState(GameState.ROLL_START);
+      }
     },
     [GameState.ROLL_START]: () => {
 
@@ -83,10 +90,8 @@ const GameEventHandler = () => {
 
       if (currentPlayer.effects.extraTurns > 0) {
         nextPlayerId = currentPlayerId;
-        await playerStore.updatePlayer(currentPlayerId, {
-          effects: {
-            extraTurns: currentPlayer.effects.extraTurns - 1,
-          },
+        await playerStore.updateEffects(currentPlayerId, {
+          extraTurns: currentPlayer.effects.extraTurns - 1,
         });
       } else {
         const nextPlayerIdx = (currentPlayerIdx + 1) % playerIds.length;

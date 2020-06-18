@@ -4,6 +4,7 @@ import { Dialog, Heading, Paragraph, Button } from 'evergreen-ui';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import { uiActions } from 'src/engine/game';
+import { AlertState } from 'src/types';
 
 export default () => {
   const { gameStore, playerStore, boardStore, alertStore } = useContext(StoreContext);
@@ -16,7 +17,7 @@ export default () => {
   const footer = ({ close }: any) => (
     <Button
       appearance="primary" 
-      disabled={!alertStore.alert.canClose || !gameStore.isMyTurn}
+      disabled={alertStore.alert.state !== AlertState.CAN_CLOSE || !gameStore.isMyTurn}
       onClick={close}
     >
       {i18n.alert.done}

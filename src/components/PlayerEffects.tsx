@@ -7,12 +7,14 @@ import { PlayerEffects } from 'src/types';
 
 export default () => {
   const i18n = useContext(TranslationContext);
+  const { playerStatus } = i18n;
   const { gameStore, playerStore } = useContext(StoreContext);
   const effects: PlayerEffects = playerStore.players.get(gameStore.playerStatusId)?.effects!;
 
   return useObserver(() => (
     <div>
-      {effects.extraTurns ? <Badge color="green">{i18n.playerStatus.extraTurn}</Badge> : null}
+      {effects.extraTurns ? <Badge color="green">{playerStatus.extraTurn}</Badge> : null}
+      {effects.skippedTurns.numTurns ? <Badge color="red">{playerStatus.missedTurn}</Badge> : null}
     </div>
   ));
 };

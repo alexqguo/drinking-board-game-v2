@@ -1,5 +1,5 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler } from 'src/types';
+import { RuleSchema, RuleHandler, AlertState } from 'src/types';
 import DisplayRule from 'src/engine/rules/DisplayRule';
 import ExtraTurnRule from 'src/engine/rules/ExtraTurnRule';
 
@@ -53,7 +53,7 @@ export default async (ruleIndex: number) => {
 
   alertStore.update({
     open: true,
-    canClose: false,
+    state: AlertState.PENDING,
     ruleIdx: ruleIndex,
   });
 

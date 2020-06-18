@@ -10,7 +10,8 @@ import {
   GameState,
   BoardSchema,
   RestoreGameOptions,
-  Alert
+  Alert,
+  AlertState
 } from 'src/types';
 import { createId, getAppStage, getCenterPoint } from 'src/utils';
 import { db } from 'src/firebase';
@@ -64,7 +65,7 @@ export default class RootStore {
 
     const alertData: Alert = {
       open: false,
-      canClose: false,
+      state: AlertState.PENDING,
       ruleIdx: -1,
     };
 
