@@ -110,6 +110,7 @@ export enum GameState {
   TURN_END = 'TURN_END',
   GAME_OVER = 'GAME_OVER',
   TURN_SKIP = 'TURN_SKIP',
+  LOST_TURN_START = 'LOST_TURN_START',
 }
 
 export enum TurnOrder {

@@ -106,6 +106,9 @@ const GameEventHandler = () => {
           currentRoll: null,
         });
       }, 1000);
+    },
+    [GameState.LOST_TURN_START]: () => {
+      
     }
   };
 
