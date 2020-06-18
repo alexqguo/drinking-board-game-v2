@@ -36,7 +36,13 @@ export interface TileSchema {
 export interface RuleSchema {
   displayText: string,
   type: string,
+  diceRolls: DiceRollSchema
   // more
+}
+
+export interface DiceRollSchema {
+  numRequired: number,
+  // Others
 }
 
 export interface ZoneSchema {
@@ -69,6 +75,7 @@ export interface Alert {
   open: boolean,
   ruleIdx: number,
   state: AlertState,
+  diceRolls: AlertDiceRollInfo,
 }
 
 export enum AlertState {
@@ -76,6 +83,15 @@ export enum AlertState {
   PENDING = 'PENDING',
   CAN_CLOSE = 'CAN_CLOSE',
   REQUIRE_ACTION = 'REQUIRE_ACTION',
+}
+
+export type AlertDiceRollInfo = { 
+  [key: string]: AlertDiceRoll,
+};
+
+export interface AlertDiceRoll {
+  numRolls: number,
+  result: string // pipe separated string
 }
 
 export enum GameState {

@@ -2,6 +2,7 @@ import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { GameState, TileSchema } from 'src/types';
 import RuleEngine from 'src/engine/rules';
+import AlertStore from 'src/stores/AlertStore';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore } = rootStore;
@@ -51,7 +52,8 @@ const GameEventHandler = () => {
         });
 
       // TODO - check mandataorySkips
-      const numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
+      // const numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
+      const numSpacesToAdvance = 18;
 
       // TODO - if user is going to land on their custom mandatory, clear it
       if (numSpacesToAdvance > 0) {
@@ -138,6 +140,10 @@ const uiActions = {
     const { alertStore, gameStore } = rootStore;
     alertStore.clear();
     gameStore.setGameState(GameState.RULE_END);
+  },
+  handleAlertRoll: (key: string, rolls: number[]) => {
+    const { alertStore } = rootStore;
+    alertStore.updateDiceRollResult(key, rolls.join('|'));
   }
 };
 

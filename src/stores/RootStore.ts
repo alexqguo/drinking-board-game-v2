@@ -67,6 +67,7 @@ export default class RootStore {
       open: false,
       state: AlertState.PENDING,
       ruleIdx: -1,
+      diceRolls: {},
     };
 
     const initialSessionData: SessionData = {

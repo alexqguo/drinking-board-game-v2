@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
 import { Alert, AlertState } from 'src/types';
 import RootStore from 'src/stores/RootStore';
+import { db } from 'src/firebase';
 
 export default class AlertStore {
   rootStore: RootStore;
@@ -8,6 +9,7 @@ export default class AlertStore {
     open: false,
     state: AlertState.PENDING,
     ruleIdx: -1,
+    diceRolls: {},
   }
 
   constructor(rootStore: RootStore) {
@@ -20,6 +22,13 @@ export default class AlertStore {
 
   update = (alert: Partial<Alert>) => {
     this.rootStore.alertRef?.update(alert);
+  }
+
+  updateDiceRollResult = (key: string, result: string) => {
+    // this.rootStore.
+    db.ref(`${this.rootStore.prefix}/alert/diceRolls/${key}`).update({
+      result,
+    });
   }
 
   clear = () => {

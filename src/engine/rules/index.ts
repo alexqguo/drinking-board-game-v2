@@ -2,6 +2,7 @@ import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState } from 'src/types';
 import DisplayRule from 'src/engine/rules/DisplayRule';
 import ExtraTurnRule from 'src/engine/rules/ExtraTurnRule';
+import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
 MoveRule
@@ -45,6 +46,7 @@ RollAugmentRule
 const ruleMappings: { [key: string]: RuleHandler } = {
   DisplayRule,
   ExtraTurnRule,
+  DrinkDuringLostTurnsRule,
 };
 
 export default async (ruleIndex: number) => {

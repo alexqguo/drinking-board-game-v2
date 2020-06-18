@@ -3,8 +3,14 @@ import { useObserver } from 'mobx-react';
 import { Dialog, Heading, Paragraph, Button } from 'evergreen-ui';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
+import DiceRoll from 'src/components/DiceRoll';
 import { uiActions } from 'src/engine/game';
-import { AlertState } from 'src/types';
+import { AlertState, AlertDiceRoll } from 'src/types';
+
+const normalizeRolls = (input: string): number[] => {
+  if (!input) return [];
+  return input.split('|').map(x => Number(x));
+};
 
 export default () => {
   const { gameStore, playerStore, boardStore, alertStore } = useContext(StoreContext);
@@ -36,7 +42,23 @@ export default () => {
       shouldCloseOnEscapePress={false}
     >
       {rule ? 
-        <Paragraph style={{ lineHeight: '32px', fontSize: 24 }}>{rule.displayText}</Paragraph>
+        <section>
+          <Paragraph style={{ lineHeight: '32px', fontSize: 24 }}>
+            {rule.displayText}
+          </Paragraph>
+
+          <Paragraph>
+            {Object.keys(alertStore.alert.diceRolls).map((key: string) => (
+              <DiceRoll
+                key={key}
+                disabled={!gameStore.isMyTurn || !!alertStore.alert.diceRolls[key].result}
+                numRolls={alertStore.alert.diceRolls[key].numRolls}
+                rolls={normalizeRolls(alertStore.alert.diceRolls[key].result)}
+                onRoll={(rolls) => uiActions.handleAlertRoll(key, rolls)} 
+              />
+            ))}
+          </Paragraph>
+        </section>
       : <></>}
     </Dialog> 
   ));
