@@ -33,5 +33,6 @@
     "skip": "Skip",
     "extraTurn": "Extra turn",
     "missedTurn": "Missed turn"
-  }
+  },
+  "lostTurn": "Drink {numTurns}"
 }

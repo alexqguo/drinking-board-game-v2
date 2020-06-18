@@ -5,7 +5,7 @@ import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
 import { uiActions } from 'src/engine/game';
-import { AlertState, AlertDiceRoll } from 'src/types';
+import { AlertState } from 'src/types';
 
 const normalizeRolls = (input: string): number[] => {
   if (!input) return [];

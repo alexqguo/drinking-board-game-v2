@@ -1,6 +1,8 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState, AlertDiceRollInfo, AlertDiceRoll } from 'src/types';
+import { formatString } from 'src/providers/TranslationProvider';
+import en from 'src/i18n/en_US.json'; // TODO - make locale a store value so the engine can use them
 
 // TODO - this should probably be incorporated into DiceRollRule. It's basically only used for SS Anne
 const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
@@ -39,10 +41,14 @@ const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
       playerStore.updateEffects(currentPlayer.id, {
         skippedTurns: {
           numTurns: Number(diceRolls[keys[0]].result),
-          message: 'shit',
+          message: formatString(en.lostTurn, { numTurns: diceRolls[keys[1]].result }),
         }
       })
-      alertStore.update({ state: AlertState.CAN_CLOSE });
+      
+      alertStore.update({
+        state: AlertState.CAN_CLOSE,
+        diceRolls: {},
+      });
     }
   });
 

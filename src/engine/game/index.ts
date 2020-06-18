@@ -83,7 +83,6 @@ const GameEventHandler = () => {
       gameStore.setGameState(GameState.TURN_END);
     },
     [GameState.TURN_END]: async () => {
-      // TODO - check for extra turns
       const playerIds = playerStore.ids;
       const { currentPlayerId } = gameStore.game;
       const currentPlayerIdx = playerIds.indexOf(currentPlayerId);
