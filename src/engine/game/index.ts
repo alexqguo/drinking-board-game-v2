@@ -1,11 +1,10 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { GameState, TileSchema } from 'src/types';
+import { GameState, TileSchema, AlertState } from 'src/types';
 import RuleEngine from 'src/engine/rules';
-import AlertStore from 'src/stores/AlertStore';
 
 const GameEventHandler = () => {
-  const { gameStore, playerStore, boardStore } = rootStore;
+  const { gameStore, playerStore, boardStore, alertStore } = rootStore;
   let prevGameState = gameStore.game.state;
   const eventHandlers: { [key: string]: Function } = {
     [GameState.GAME_START]: () => {
@@ -25,13 +24,13 @@ const GameEventHandler = () => {
       const isSkipped = currentPlayer.effects.skippedTurns.numTurns > 0;
 
       if (isSkipped) {
-        // Trigger lost turn start?
+        gameStore.setGameState(GameState.LOST_TURN_START);
       } else {
         gameStore.setGameState(GameState.ROLL_START);
       }
     },
     [GameState.ROLL_START]: () => {
-
+      // Not really anything special to do here I guess
     },
     [GameState.ROLL_END]: () => {
       // const roll = gameStore.game.currentRoll;
@@ -108,7 +107,20 @@ const GameEventHandler = () => {
       }, 1000);
     },
     [GameState.LOST_TURN_START]: () => {
-      
+      const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+      // decrement lost turns of player, set modal
+      playerStore.updateEffects(currentPlayer.id, {
+        skippedTurns: {
+          ...currentPlayer.effects.skippedTurns,
+          numTurns: currentPlayer.effects.skippedTurns.numTurns - 1,
+        }
+      });
+      alertStore.update({
+        open: true,
+        state: AlertState.CAN_CLOSE,
+        ruleIdx: -1,
+        messageOverride: currentPlayer.effects.skippedTurns.message,
+      });
     }
   };
 
@@ -142,6 +154,7 @@ const uiActions = {
     const { alertStore, gameStore } = rootStore;
     alertStore.clear();
     gameStore.setGameState(GameState.RULE_END);
+    // TODO - will need to check here whether or not to trigger zone end or rule end
   },
   handleAlertRoll: (key: string, rolls: number[]) => {
     const { alertStore } = rootStore;

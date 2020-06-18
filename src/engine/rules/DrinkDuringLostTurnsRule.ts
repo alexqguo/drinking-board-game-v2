@@ -34,7 +34,6 @@ const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
     const keys = Object.keys(alertStore.alert.diceRolls);
     const { diceRolls } = alertStore.alert;
     const hasFullResults = keys.every((key: string) => !!diceRolls[key].result);
-    console.log('has full results', hasFullResults);
 
     if (hasFullResults) {
       reaction.dispose();
@@ -45,10 +44,7 @@ const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
         }
       })
       
-      alertStore.update({
-        state: AlertState.CAN_CLOSE,
-        diceRolls: {},
-      });
+      alertStore.update({ state: AlertState.CAN_CLOSE });
     }
   });
 

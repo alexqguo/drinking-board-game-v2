@@ -63,17 +63,10 @@ export default class RootStore {
       currentRoll: null,
     };
 
-    const alertData: Alert = {
-      open: false,
-      state: AlertState.PENDING,
-      ruleIdx: -1,
-      diceRolls: {},
-    };
-
     const initialSessionData: SessionData = {
       game: gameData,
       players: playerData,
-      alert: alertData,
+      alert: AlertStore.defaultAlert(),
     };
 
     this.subscribeToGame();

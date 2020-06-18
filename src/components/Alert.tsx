@@ -7,6 +7,11 @@ import DiceRoll from 'src/components/DiceRoll';
 import { uiActions } from 'src/engine/game';
 import { AlertState } from 'src/types';
 
+const displayTextStyles = {
+  lineHeight: '32px',
+  fontSize: 24,
+};
+
 const normalizeRolls = (input: string): number[] => {
   if (!input) return [];
   return input.split('|').map(x => Number(x));
@@ -41,14 +46,20 @@ export default () => {
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEscapePress={false}
     >
+      {alertStore.alert.messageOverride ?
+        <Paragraph style={displayTextStyles}>
+          {alertStore.alert.messageOverride}
+        </Paragraph>
+      : null}
+
       {rule ? 
-        <section>
-          <Paragraph style={{ lineHeight: '32px', fontSize: 24 }}>
+        <>
+          <Paragraph style={displayTextStyles}>
             {rule.displayText}
           </Paragraph>
 
           <Paragraph>
-            {Object.keys(alertStore.alert.diceRolls).map((key: string) => (
+            {alertStore.alert.diceRolls && Object.keys(alertStore.alert.diceRolls).map((key: string) => (
               <DiceRoll
                 key={key}
                 disabled={!gameStore.isMyTurn || !!alertStore.alert.diceRolls[key].result}
@@ -58,7 +69,7 @@ export default () => {
               />
             ))}
           </Paragraph>
-        </section>
+        </>
       : <></>}
     </Dialog> 
   ));

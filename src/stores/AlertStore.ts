@@ -5,12 +5,7 @@ import { db } from 'src/firebase';
 
 export default class AlertStore {
   rootStore: RootStore;
-  @observable alert: Alert = {
-    open: false,
-    state: AlertState.PENDING,
-    ruleIdx: -1,
-    diceRolls: {},
-  }
+  @observable alert: Alert = AlertStore.defaultAlert();
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -25,17 +20,18 @@ export default class AlertStore {
   }
 
   updateDiceRollResult = (key: string, result: string) => {
-    // this.rootStore.
-    db.ref(`${this.rootStore.prefix}/alert/diceRolls/${key}`).update({
-      result,
-    });
+    db.ref(`${this.rootStore.prefix}/alert/diceRolls/${key}`).update({ result });
   }
 
   clear = () => {
-    this.rootStore.alertRef?.update({
-      open: false,
-      state: AlertState.PENDING,
-      ruleIdx: -1
-    });
+    this.rootStore.alertRef?.update(AlertStore.defaultAlert());
   }
+
+  static defaultAlert = () => ({
+    open: false,
+    state: AlertState.PENDING,
+    ruleIdx: -1,
+    diceRolls: {},
+    messageOverride: '',
+  });
 }

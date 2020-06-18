@@ -76,6 +76,7 @@ export interface Alert {
   ruleIdx: number,
   state: AlertState,
   diceRolls: AlertDiceRollInfo,
+  messageOverride: string,
 }
 
 export enum AlertState {
