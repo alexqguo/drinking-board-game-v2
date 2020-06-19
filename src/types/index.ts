@@ -36,7 +36,8 @@ export interface TileSchema {
 export interface RuleSchema {
   displayText: string,
   type: string,
-  diceRolls: DiceRollSchema
+  diceRolls?: DiceRollSchema
+  numTurns?: number
   // more
 }
 

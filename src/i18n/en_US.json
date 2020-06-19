@@ -34,5 +34,8 @@
     "extraTurn": "Extra turn",
     "missedTurn": "Missed turn"
   },
-  "lostTurn": "Drink {numTurns}"
+  "lostTurn": {
+    "drink": "Drink {numTurns}",
+    "general": "Missed turn"
+  }
 }

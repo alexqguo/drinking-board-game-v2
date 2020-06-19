@@ -2,6 +2,7 @@ import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState } from 'src/types';
 import DisplayRule from 'src/engine/rules/DisplayRule';
 import ExtraTurnRule from 'src/engine/rules/ExtraTurnRule';
+import SkipTurnRule from 'src/engine/rules/SkipTurnRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
@@ -43,10 +44,17 @@ RollAugmentRule
 
 */
 
+export const validateRequiredFields = (...args: any[]): boolean => (
+  args
+    .filter(arg => typeof arg === 'undefined' || arg === null || arg === '')
+    .length === 0
+);
+
 const ruleMappings: { [key: string]: RuleHandler } = {
   DisplayRule,
   ExtraTurnRule,
   DrinkDuringLostTurnsRule,
+  SkipTurnRule,
 };
 
 export default async (ruleIndex: number) => {
