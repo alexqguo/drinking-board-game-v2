@@ -1,6 +1,7 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler, AlertState, AlertDiceRollInfo, AlertDiceRoll } from 'src/types';
+import { RuleSchema, RuleHandler, AlertState, AlertDiceRollInfo } from 'src/types';
+import { requireDiceRolls } from 'src/engine/alert';
 import { formatString } from 'src/providers/TranslationProvider';
 import en from 'src/i18n/en_US.json'; // TODO - make locale a store value so the engine can use them
 
@@ -17,48 +18,17 @@ const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
     return;
   }
 
-  // Construct the initial data for firebase
-  const alertDiceRolls: AlertDiceRollInfo = {};
-  for (let i = 0; i < numRequired; i++) {
-    alertDiceRolls[`roll${i}`] = {
-      numRolls: 1,
-      result: '',
-    };
-  }
+  const diceRollInfo: AlertDiceRollInfo = await requireDiceRolls(numRequired);
+  const keys = Object.keys(diceRollInfo);
 
-  alertStore.update({ diceRolls: alertDiceRolls });
-
-  // If the current player closes their screen in the middle of this, when they join back the autorun 
-  // won't be set up since the rule already executed, leaving the rule unfinishable. Edge case, but should fix
-  autorun(reaction => {
-    const keys = Object.keys(alertStore.alert.diceRolls);
-    const { diceRolls } = alertStore.alert;
-    const hasFullResults = keys.every((key: string) => !!diceRolls[key].result);
-
-    if (hasFullResults) {
-      reaction.dispose();
-      playerStore.updateEffects(currentPlayer.id, {
-        skippedTurns: {
-          numTurns: Number(diceRolls[keys[0]].result),
-          message: formatString(en.lostTurn, { numTurns: diceRolls[keys[1]].result }),
-        }
-      })
-      
-      alertStore.update({ state: AlertState.CAN_CLOSE });
+  playerStore.updateEffects(currentPlayer.id, {
+    skippedTurns: {
+      numTurns: Number(diceRollInfo[keys[0]].result),
+      message: formatString(en.lostTurn, { numTurns: diceRollInfo[keys[1]].result }),
     }
   });
-
-  /*
-  Old code:
-  Game.modal.requireDiceRolls(this.diceRolls.numRequired, (rolls: number[]) => {
-    times(rolls[0], () => {
-      Game.currentPlayer.effects.skippedTurns.push(
-        Player.generateSkippedTurnText(`Drink ${rolls[1]}`)
-      );
-    });
-    Game.modal.enableClose();
-  });
-  */
+  
+  alertStore.update({ state: AlertState.CAN_CLOSE });
 };
 
 export default DrinkDuringLostTurnsRule;

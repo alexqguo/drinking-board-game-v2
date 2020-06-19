@@ -139,7 +139,10 @@ const GameEventHandler = () => {
 // Provide some hooks for UI components 
 const uiActions = {
   start: () => {
-    rootStore.gameStore.setGameState(GameState.GAME_START);
+    // Only start the game if it hasn't been started. When joining game state will already exist
+    if (rootStore.gameStore.game.state === GameState.NOT_STARTED) {
+      rootStore.gameStore.setGameState(GameState.GAME_START);
+    }
   },
   handleRoll: (roll: number) => {
     rootStore.gameStore.update({
