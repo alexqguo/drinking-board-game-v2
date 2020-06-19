@@ -33,10 +33,23 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
 
 export const requirePlayerSelection = (playerTarget: PlayerTarget): Promise<string[]> => {
   return new Promise((resolve) => {
-    const { gameStore, playerStore } = rootStore;
+    const { gameStore, playerStore, alertStore } = rootStore;
 
     switch(playerTarget) {
-      case PlayerTarget.custom: break;
+      case PlayerTarget.custom:
+        alertStore.update({
+          playerSelection: {
+            isRequired: true,
+            selectedId: '',
+          },
+        });
+        autorun(reaction => {
+          const id = alertStore.alert.playerSelection.selectedId;
+          if (id) {
+            reaction.dispose();
+            resolve([id]);
+          }
+        });
       case PlayerTarget.allOthers:
         resolve(playerStore.ids.filter((id: string) => id !== gameStore.game.currentPlayerId));
       case PlayerTarget.self:

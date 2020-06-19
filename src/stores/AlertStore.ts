@@ -33,5 +33,9 @@ export default class AlertStore {
     ruleIdx: -1,
     diceRolls: {},
     messageOverride: '',
+    playerSelection: {
+      isRequired: false,
+      selectedId: '',
+    },
   });
 }

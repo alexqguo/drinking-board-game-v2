@@ -62,12 +62,34 @@ export default () => {
             {alertStore.alert.diceRolls && Object.keys(alertStore.alert.diceRolls).map((key: string) => (
               <DiceRoll
                 key={key}
+                marginRight={16}
                 disabled={!gameStore.isMyTurn || !!alertStore.alert.diceRolls[key].result}
                 numRolls={alertStore.alert.diceRolls[key].numRolls}
                 rolls={normalizeRolls(alertStore.alert.diceRolls[key].result)}
                 onRoll={(rolls) => uiActions.handleAlertRoll(key, rolls)} 
               />
             ))}
+          </Paragraph>
+
+          <Paragraph>
+            {alertStore.alert.playerSelection.isRequired ? <>
+              {playerStore.ids.map((id: string) => 
+                <Button
+                  key={id}
+                  height={24}
+                  marginRight={16}
+                  onClick={() => uiActions.handleAlertPlayerSelection(id)}
+                  iconAfter={id === alertStore.alert.playerSelection.selectedId ? 'tick-circle' : false}
+                  disabled={
+                    !gameStore.isMyTurn 
+                    || id === gameStore.game.currentPlayerId 
+                    || !!alertStore.alert.playerSelection.selectedId
+                  }
+                >
+                  {playerStore.players.get(id)!.name}
+                </Button>
+              )}
+            </> : null}
           </Paragraph>
         </>
       : <></>}

@@ -173,6 +173,15 @@ const uiActions = {
   handleAlertRoll: (key: string, rolls: number[]) => {
     const { alertStore } = rootStore;
     alertStore.updateDiceRollResult(key, rolls.join('|'));
+  },
+  handleAlertPlayerSelection: (playerId: string) => {
+    const { alertStore } = rootStore;
+    alertStore.update({
+      playerSelection: {
+        isRequired: true, // Keep as true until the turn is over so the buttons don't disappear
+        selectedId: playerId,
+      }
+    })
   }
 };
 

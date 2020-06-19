@@ -41,6 +41,7 @@ export interface Alert {
   ruleIdx: number,
   state: AlertState,
   diceRolls: AlertDiceRollInfo,
+  playerSelection: AlertPlayerSelection,
   messageOverride: string,
 }
 
@@ -58,6 +59,11 @@ export type AlertDiceRollInfo = {
 export interface AlertDiceRoll {
   numRolls: number,
   result: string // pipe separated string
+}
+
+export interface AlertPlayerSelection {
+  isRequired: boolean,
+  selectedId: string, // Currently only support selecting one player
 }
 
 export enum GameState {

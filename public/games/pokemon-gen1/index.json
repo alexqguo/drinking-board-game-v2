@@ -60,7 +60,7 @@
         "type": "SpeedModifierRule",
         "modifier": ["*", 0.5],
         "numTurns": 1,
-        "playerTarget": "allOthers"
+        "playerTarget": "custom"
       },
       "position": [{
         "x": 262,
