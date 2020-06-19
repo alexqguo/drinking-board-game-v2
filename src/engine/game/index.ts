@@ -2,6 +2,7 @@ import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { GameState, TileSchema, AlertState } from 'src/types';
 import RuleEngine from 'src/engine/rules';
+import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore, alertStore } = rootStore;
@@ -38,9 +39,19 @@ const GameEventHandler = () => {
       gameStore.setGameState(GameState.MOVE_CALCULATE);
     },
     [GameState.MOVE_CALCULATE]: async () => {
-      const roll = gameStore.game.currentRoll!;
+      let roll = gameStore.game.currentRoll!;
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
       // TODO - check speed modifiers, roll augmentation
+
+      if (currentPlayer.effects.speedModifier.numTurns > 0) {
+        roll = getAdjustedRoll(roll, currentPlayer.effects.speedModifier);
+        playerStore.updateEffects(currentPlayer.id, {
+          speedModifier: {
+            ...currentPlayer.effects.speedModifier,
+            numTurns: currentPlayer.effects.speedModifier.numTurns - 1
+          },
+        });
+      }
       
       // TODO - check for mandatory spaces
       let firstMandatoryIndex = boardStore.boardSchema.tiles
@@ -51,8 +62,8 @@ const GameEventHandler = () => {
         });
 
       // TODO - check mandataorySkips
-      // const numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      const numSpacesToAdvance = 54;
+      const numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
+      // const numSpacesToAdvance = 54;
 
       // TODO - if user is going to land on their custom mandatory, clear it
       if (numSpacesToAdvance > 0) {

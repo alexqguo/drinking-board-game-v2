@@ -10,8 +10,8 @@ interface Props extends ButtonProps {
   onRoll: RollCallback,
 }
 
-const createRoll = () => Math.floor(Math.random() * 6) + 1;
-// const createRoll = () => 2;
+// const createRoll = () => Math.floor(Math.random() * 6) + 1;
+const createRoll = () => 3;
 
 // This is a controlled component
 export default ({ numRolls = 1, onRoll, rolls, ...rest }: Props) => {

@@ -1,5 +1,5 @@
 import { observable, computed, action } from 'mobx';
-import { Player, PlayerEffects } from 'src/types';
+import { Player, PlayerEffects, ModifierOperation } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
 
@@ -36,6 +36,11 @@ export default class PlayerStore {
     skippedTurns: {
       numTurns: 0,
       message: '',
+    },
+    speedModifier: {
+      numTurns: 0,
+      operation: ModifierOperation.equal,
+      modifier: -1
     },
   })
 }

@@ -1,5 +1,5 @@
 import { autorun } from 'mobx';
-import { AlertDiceRollInfo } from 'src/types';
+import { AlertDiceRollInfo, PlayerTarget } from 'src/types';
 import rootStore from 'src/stores';
 
 // May need to change this eventually to handle single click multi rolls
@@ -30,3 +30,18 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
     });
   });
 };
+
+export const requirePlayerSelection = (playerTarget: PlayerTarget): Promise<string[]> => {
+  return new Promise((resolve) => {
+    const { gameStore, playerStore } = rootStore;
+
+    switch(playerTarget) {
+      case PlayerTarget.custom: break;
+      case PlayerTarget.allOthers:
+        resolve(playerStore.ids.filter((id: string) => id !== gameStore.game.currentPlayerId));
+      case PlayerTarget.self:
+      default:
+        resolve([gameStore.game.currentPlayerId]);
+    }
+  });
+}

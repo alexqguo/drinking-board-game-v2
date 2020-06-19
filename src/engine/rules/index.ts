@@ -1,8 +1,11 @@
 import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState } from 'src/types';
+
+// Rule implementation imports
 import DisplayRule from 'src/engine/rules/DisplayRule';
 import ExtraTurnRule from 'src/engine/rules/ExtraTurnRule';
 import SkipTurnRule from 'src/engine/rules/SkipTurnRule';
+import SpeedModifierRule from 'src/engine/rules/SpeedModifierRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
@@ -13,9 +16,6 @@ MoveRule
   - dice rolls
     - ask for dice rolls, calculate new tile index, adjust player position
   - adjust player position
-
-SkipTurnRule
-- increment player skipped turn effect
 
 SpeedModifierRule
 (requires player target)
@@ -55,6 +55,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   ExtraTurnRule,
   DrinkDuringLostTurnsRule,
   SkipTurnRule,
+  SpeedModifierRule,
 };
 
 export default async (ruleIndex: number) => {

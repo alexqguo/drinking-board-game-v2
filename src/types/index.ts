@@ -21,42 +21,6 @@ export interface Board {
   value: string,
 }
 
-export interface BoardSchema {
-  tiles: TileSchema[],
-  zones: ZoneSchema[],
-}
-
-export interface TileSchema {
-  mandatory?: boolean,
-  rule: RuleSchema,
-  position: Point[],
-  zone?: string,
-}
-
-export interface RuleSchema {
-  displayText: string,
-  type: string,
-  diceRolls?: DiceRollSchema
-  numTurns?: number
-  // more
-}
-
-export interface DiceRollSchema {
-  numRequired: number,
-  // Others
-}
-
-export interface ZoneSchema {
-  name: string,
-  type: ZoneType,
-  rule: RuleSchema,
-}
-
-export enum ZoneType {
-  passive = 'passive',
-  active = 'active'
-}
-
 export interface SessionData {
   game: GameData,
   players: Player[],
@@ -134,7 +98,7 @@ export interface PlayerEffects {
   // customMandatoryTiles: number[],
   extraTurns: number,
   skippedTurns: LostTurnInfo,
-  // speedModifiers: SpeedModifier[],
+  speedModifier: SpeedModifier,
   // moveCondition: MoveCondition,
   // anchors: number,
   // rollAugmentation: RollAugmentation,
@@ -155,4 +119,67 @@ export interface Point {
   y: number,
 }
 
+export interface SpeedModifier {
+  operation: ModifierOperation,
+  modifier: number,
+  numTurns: number,
+}
+
 export type RuleHandler = (rule: RuleSchema) => void;
+
+////////////////////////////////////////////////////////////////
+// Schema interfaces. Anything living in the board JSON files
+////////////////////////////////////////////////////////////////
+export interface BoardSchema {
+  tiles: TileSchema[],
+  zones: ZoneSchema[],
+}
+
+export interface TileSchema {
+  mandatory?: boolean,
+  rule: RuleSchema,
+  position: Point[],
+  zone?: string,
+}
+
+export interface RuleSchema {
+  displayText: string,
+  type: string,
+  diceRolls?: DiceRollSchema
+  numTurns?: number
+  playerTarget?: PlayerTarget
+  modifier?: [ModifierOperation, number]
+  // more
+}
+
+export interface DiceRollSchema {
+  numRequired: number,
+  // Others
+}
+
+export interface ZoneSchema {
+  name: string,
+  type: ZoneType,
+  rule: RuleSchema,
+}
+
+////////////////////////////////////////////////////////////////
+// Shared between both schemas and engine code
+////////////////////////////////////////////////////////////////
+export enum ModifierOperation {
+  addition = '+',
+  multiplication = '*',
+  subtraction = '-',
+  equal = '=',
+}
+
+export enum PlayerTarget {
+  custom = 'custom',
+  self = 'self',
+  allOthers = 'allOthers',
+}
+
+export enum ZoneType {
+  passive = 'passive',
+  active = 'active'
+}
