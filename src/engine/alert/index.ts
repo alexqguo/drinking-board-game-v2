@@ -6,15 +6,17 @@ import rootStore from 'src/stores';
 export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo> => {
   return new Promise((resolve) => {
     const { alertStore } = rootStore;
-    const alertDiceRolls: AlertDiceRollInfo = {};
+    const { diceRolls } = alertStore.alert;
+    const newDiceRollInfo = { ...diceRolls };
+    const numExisting = Object.keys(newDiceRollInfo).length;
 
-    for (let i = 0; i < numRequired; i++) {
-      alertDiceRolls[`roll${i}`] = {
+    for (let i = numExisting; i < numExisting + numRequired; i++) {
+      newDiceRollInfo[`roll${i}`] = {
         numRolls: 1,
         result: '',
       };
     }
-    alertStore.update({ diceRolls: alertDiceRolls });
+    alertStore.update({ diceRolls: newDiceRollInfo });
 
     // If the current player closes their screen in the middle of this, when they join back the autorun 
     // won't be set up since the rule already executed, leaving the rule unfinishable. Edge case, but should fix

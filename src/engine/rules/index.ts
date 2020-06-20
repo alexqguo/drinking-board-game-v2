@@ -6,6 +6,7 @@ import DisplayRule from 'src/engine/rules/DisplayRule';
 import ExtraTurnRule from 'src/engine/rules/ExtraTurnRule';
 import SkipTurnRule from 'src/engine/rules/SkipTurnRule';
 import SpeedModifierRule from 'src/engine/rules/SpeedModifierRule';
+import RollUntilRule from 'src/engine/rules/RollUntilRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
@@ -17,10 +18,6 @@ MoveRule
     - ask for dice rolls, calculate new tile index, adjust player position
   - adjust player position
 
-SpeedModifierRule
-(requires player target)
-- generate modifier, append to player effects
-
 TeleportRule
 - Shouldn't this just consolidate into move rule?
 
@@ -29,9 +26,7 @@ GameOverRule
 
 DiceRollRule
 
-DrinkDuringLostTurnsRule
 ApplyMoveConditionRule
-RollUntilRule
 ChoiceRule
 SkipNextMandatoryRule
 ChallengeRule
@@ -53,6 +48,7 @@ export const validateRequiredFields = (...args: any[]): boolean => (
 const ruleMappings: { [key: string]: RuleHandler } = {
   DisplayRule,
   ExtraTurnRule,
+  RollUntilRule,
   DrinkDuringLostTurnsRule,
   SkipTurnRule,
   SpeedModifierRule,

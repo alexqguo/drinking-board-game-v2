@@ -155,6 +155,7 @@ export interface RuleSchema {
   numTurns?: number
   playerTarget?: PlayerTarget
   modifier?: [ModifierOperation, number]
+  criteria?: number[]
   // more
 }
 
