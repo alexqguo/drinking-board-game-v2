@@ -7,6 +7,7 @@ import ExtraTurnRule from 'src/engine/rules/ExtraTurnRule';
 import SkipTurnRule from 'src/engine/rules/SkipTurnRule';
 import SpeedModifierRule from 'src/engine/rules/SpeedModifierRule';
 import RollUntilRule from 'src/engine/rules/RollUntilRule';
+import MoveRule from 'src/engine/rules/MoveRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
@@ -17,9 +18,6 @@ MoveRule
   - dice rolls
     - ask for dice rolls, calculate new tile index, adjust player position
   - adjust player position
-
-TeleportRule
-- Shouldn't this just consolidate into move rule?
 
 GameOverRule
 - todo
@@ -39,15 +37,20 @@ RollAugmentRule
 
 */
 
-export const validateRequiredFields = (...args: any[]): boolean => (
+export const validateRequired = (...args: any[]): boolean => (
   args
     .filter(arg => typeof arg === 'undefined' || arg === null || arg === '')
     .length === 0
 );
 
+export const validateOneOf = (...args: any[]): boolean => (
+  args.reduce((acc: number, cur: any) => (acc + (!!cur ? 1 : 0)), 0) > 0
+);
+
 const ruleMappings: { [key: string]: RuleHandler } = {
   DisplayRule,
   ExtraTurnRule,
+  MoveRule,
   RollUntilRule,
   DrinkDuringLostTurnsRule,
   SkipTurnRule,
@@ -56,7 +59,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
 
 export default async (ruleIndex: number) => {
   const { alertStore, boardStore } = rootStore;
-  const rule: RuleSchema = boardStore.boardSchema.tiles[ruleIndex].rule;
+  const rule: RuleSchema = boardStore.schema.tiles[ruleIndex].rule;
 
   alertStore.update({
     open: true,
@@ -66,7 +69,7 @@ export default async (ruleIndex: number) => {
 
   let handler = ruleMappings[rule.type];
   if (!handler) {
-    console.warn(`No handler found for ${rule.type}, falling back to DisplayRule`);
+    console.error(`No handler found for ${rule.type}, falling back to DisplayRule`);
     handler = DisplayRule;
   }
   handler(rule);

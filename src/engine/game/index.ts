@@ -54,7 +54,7 @@ const GameEventHandler = () => {
       }
       
       // TODO - check for mandatory spaces
-      let firstMandatoryIndex = boardStore.boardSchema.tiles
+      let firstMandatoryIndex = boardStore.schema.tiles
         .slice(currentPlayer.tileIndex + 1, currentPlayer.tileIndex + 1 + roll)
         .findIndex((tile: TileSchema) => {
           return tile.mandatory;
@@ -62,8 +62,9 @@ const GameEventHandler = () => {
         });
 
       // TODO - check mandataorySkips
-      const numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
+      let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
       // const numSpacesToAdvance = 58; // asdf
+      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 25;
 
       // TODO - if user is going to land on their custom mandatory, clear it
       if (numSpacesToAdvance > 0) {

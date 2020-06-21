@@ -21,7 +21,7 @@ export default () => {
   const { gameStore, playerStore, boardStore, alertStore } = useContext(StoreContext);
   const i18n = useContext(TranslationContext);
   const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-  const currentTile = boardStore.boardSchema.tiles[alertStore.alert.ruleIdx];
+  const currentTile = boardStore.schema.tiles[alertStore.alert.ruleIdx];
   const rule = currentTile ? currentTile.rule : null;
 
   // { close } provided by evergreen-ui, not sure what its type is

@@ -52,8 +52,10 @@ export const requirePlayerSelection = (playerTarget: PlayerTarget): Promise<stri
             resolve([id]);
           }
         });
+        break;
       case PlayerTarget.allOthers:
         resolve(playerStore.ids.filter((id: string) => id !== gameStore.game.currentPlayerId));
+        break;
       case PlayerTarget.self:
       default:
         resolve([gameStore.game.currentPlayerId]);

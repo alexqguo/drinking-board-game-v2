@@ -149,13 +149,16 @@ export interface TileSchema {
 }
 
 export interface RuleSchema {
-  displayText: string,
   type: string,
+  displayText: string,
   diceRolls?: DiceRollSchema
   numTurns?: number
   playerTarget?: PlayerTarget
   modifier?: [ModifierOperation, number]
-  criteria?: number[]
+  criteria?: number[],
+  numSpaces?: number,
+  tileIndex?: number,
+  direction?: Direction,
   // more
 }
 
@@ -189,4 +192,9 @@ export enum PlayerTarget {
 export enum ZoneType {
   passive = 'passive',
   active = 'active'
+}
+
+export enum Direction {
+  forwards = 'forwards',
+  backwards = 'backwards'
 }

@@ -1,8 +1,7 @@
-import { autorun } from 'mobx';
 import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState, AlertDiceRollInfo } from 'src/types';
 import { requireDiceRolls } from 'src/engine/alert';
-import { validateRequiredFields } from 'src/engine/rules';
+import { validateRequired } from 'src/engine/rules';
 import { formatString } from 'src/providers/TranslationProvider';
 import en from 'src/i18n/en_US.json'; // TODO - make locale a store value so the engine can use them
 
@@ -10,7 +9,7 @@ import en from 'src/i18n/en_US.json'; // TODO - make locale a store value so the
 const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
   const { playerStore, gameStore, alertStore } = rootStore;
 
-  if (!validateRequiredFields(rule.diceRolls) || !rule.diceRolls?.numRequired) {
+  if (!validateRequired(rule.diceRolls) || !rule.diceRolls?.numRequired) {
     console.error('diceRolls with numRequired is a required field', rule);
     alertStore.update({ state: AlertState.CAN_CLOSE });
     return;

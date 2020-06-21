@@ -145,7 +145,7 @@ export default class RootStore {
   scrollToCurrentPlayer() {
     const { playerStore, gameStore, boardStore } = this;
     const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-    const position = getCenterPoint(boardStore.boardSchema.tiles[currentPlayer.tileIndex].position);
+    const position = getCenterPoint(boardStore.schema.tiles[currentPlayer.tileIndex].position);
     window.scrollTo({
       top: position.y - (window.outerHeight / 2),
       left: position.x - (window.outerWidth / 2),

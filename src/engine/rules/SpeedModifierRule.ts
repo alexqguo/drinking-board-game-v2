@@ -1,13 +1,13 @@
 import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState, SpeedModifier, ModifierOperation } from 'src/types';
-import { validateRequiredFields } from 'src/engine/rules';
+import { validateRequired } from 'src/engine/rules';
 import { requirePlayerSelection } from '../alert';
 
 const SpeedModifierRule: RuleHandler = async (rule: RuleSchema) => {
   const { numTurns, playerTarget, modifier } = rule;
   const { alertStore, playerStore } = rootStore;
 
-  if (!validateRequiredFields(numTurns, playerTarget, modifier)) {
+  if (!validateRequired(numTurns, playerTarget, modifier)) {
     console.error('numTurns, playerTarget and modifier are required fields', rule);
     alertStore.update({ state: AlertState.CAN_CLOSE });
     return;

@@ -12,7 +12,7 @@ interface Props {
 
 export default ({ player }: Props) => {
   const { boardStore } = useContext(StoreContext);
-  const position: Point = getCenterPoint(boardStore.boardSchema.tiles[player.tileIndex].position);
+  const position: Point = getCenterPoint(boardStore.schema.tiles[player.tileIndex].position);
 
   return (
     <Avatar 
