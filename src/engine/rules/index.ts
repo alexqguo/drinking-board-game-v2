@@ -11,13 +11,6 @@ import MoveRule from 'src/engine/rules/MoveRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
-MoveRule
-- Three variants: numSpaces, dice rolls, tileIndex
-  - numSpaces
-    - calculate new tile index, adjust player position
-  - dice rolls
-    - ask for dice rolls, calculate new tile index, adjust player position
-  - adjust player position
 
 GameOverRule
 - todo

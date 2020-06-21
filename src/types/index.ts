@@ -195,6 +195,6 @@ export enum ZoneType {
 }
 
 export enum Direction {
-  forwards = 'forwards',
-  backwards = 'backwards'
+  forward = 'forward',
+  back = 'back'
 }

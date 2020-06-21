@@ -64,7 +64,7 @@ const GameEventHandler = () => {
       // TODO - check mandataorySkips
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
       // const numSpacesToAdvance = 58; // asdf
-      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 25;
+      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 11;
 
       // TODO - if user is going to land on their custom mandatory, clear it
       if (numSpacesToAdvance > 0) {

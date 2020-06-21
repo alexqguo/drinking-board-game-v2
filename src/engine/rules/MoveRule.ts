@@ -7,10 +7,10 @@ import { clamp } from 'src/utils';
 const MoveRule: RuleHandler = async (rule: RuleSchema) => {
   const { alertStore, playerStore, boardStore } = rootStore;
 
-  if (!validateRequired(rule.playerTarget, rule.direction)
-    || !validateOneOf(rule.numSpaces, rule.diceRolls, rule.tileIndex)) {
-    console.error('playerTarget, direction are required fields. ' + 
-      'One of numSpaces, diceRolls, tileIndex is also required', rule);
+  if (!validateRequired(rule.playerTarget)
+    || !validateOneOf(rule.numSpaces, rule.direction, rule.diceRolls, rule.tileIndex)) {
+    console.error('playerTarget is a required field. ' + 
+      'One of numSpaces, diceRolls, tileIndex, direction is also required', rule);
     alertStore.update({ state: AlertState.CAN_CLOSE });
     return;
   }
@@ -39,7 +39,7 @@ const MoveRule: RuleHandler = async (rule: RuleSchema) => {
       const rollTotal = roll.result.split('|').reduce((acc: number, cur: string) => acc + Number(cur), 0);
       total += rollTotal;
     });
-    if (direction === Direction.backwards) total *= -1;
+    if (direction === Direction.back) total *= -1;
     
     movePlayer(targetPlayer, clamp(targetPlayer.tileIndex + total, 0, finalBoardIndex));
   } else if (typeof tileIndex === 'number') {

@@ -212,7 +212,8 @@
     }, {
       "rule": {
         "displayText": "Abra used Teleport! Teleport to the other Abra.",
-        "type": "TeleportRule",
+        "type": "MoveRule",
+        "playerTarget": "self",
         "tileIndex": 28
       },
       "position": [{
@@ -548,7 +549,8 @@
     },{
       "rule": {
         "displayText": "Abra used Teleport! Teleport to the other Abra.",
-        "type": "TeleportRule",
+        "type": "MoveRule",
+        "playerTarget": "self",
         "tileIndex": 11
       },
       "position": [{
@@ -1146,7 +1148,8 @@
           "outcomes": [{
             "rule": {
               "displayText": "You glitched! Restart at Pallet Town.",
-              "type": "TeleportRule",
+              "type": "MoveRule",
+              "playerTarget": "self",
               "tileIndex": 0
             },
             "criteria": [1, 2, 3, 4]
