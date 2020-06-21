@@ -1,5 +1,5 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler, AlertState, Player, AlertDiceRollInfo, Direction } from 'src/types';
+import { RuleSchema, RuleHandler, AlertState, Player, Direction } from 'src/types';
 import { validateOneOf, validateRequired } from 'src/engine/rules';
 import { requirePlayerSelection, requireDiceRolls } from 'src/engine/alert';
 import { clamp } from 'src/utils';

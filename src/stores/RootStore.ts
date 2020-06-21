@@ -10,8 +10,7 @@ import {
   GameState,
   BoardSchema,
   RestoreGameOptions,
-  Alert,
-  AlertState
+  Alert
 } from 'src/types';
 import { createId, getAppStage, getCenterPoint } from 'src/utils';
 import { db } from 'src/firebase';

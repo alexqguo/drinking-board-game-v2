@@ -13,21 +13,20 @@ import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule'
 
 /*
 
-GameOverRule
-- todo
-
+- tricky
 DiceRollRule
-
 ApplyMoveConditionRule
 ChoiceRule
-SkipNextMandatoryRule
 ChallengeRule
+GroupRollRule
+RollAugmentRule
+
+- simple
+SkipNextMandatoryRule
 AddMandatoryRule
 ReverseTurnOrderRule
-ProxyRule
-GroupRollRule
 AnchorRule
-RollAugmentRule
+ProxyRule
 
 */
 
