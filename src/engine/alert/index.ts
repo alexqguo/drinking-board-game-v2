@@ -1,6 +1,7 @@
 import { autorun } from 'mobx';
-import { AlertDiceRollInfo, PlayerTarget } from 'src/types';
+import { AlertDiceRollInfo, PlayerTarget, RuleSchema, AlertChoiceInfo } from 'src/types';
 import rootStore from 'src/stores';
+import { createId } from 'src/utils';
 
 // May need to change this eventually to handle single click multi rolls
 export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo> => {
@@ -21,8 +22,8 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
     // If the current player closes their screen in the middle of this, when they join back the autorun 
     // won't be set up since the rule already executed, leaving the rule unfinishable. Edge case, but should fix
     autorun(reaction => {
-      const keys = Object.keys(alertStore.alert.diceRolls);
       const { diceRolls } = alertStore.alert;
+      const keys = Object.keys(diceRolls);
       const hasFullResults = keys.every((key: string) => !!diceRolls[key].result);
   
       if (hasFullResults) {
@@ -32,6 +33,35 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
     });
   });
 };
+
+export const requireChoice = (rules: RuleSchema[]): Promise<RuleSchema> => {
+  return new Promise(resolve => {
+    const { alertStore } = rootStore;
+    const idToRule: { [key: string] : RuleSchema } = {};
+    const alertChoices: AlertChoiceInfo = {};
+    rules.forEach((r: RuleSchema) => {
+      const id = createId('choice');
+      idToRule[id] = r;
+      alertChoices[id] = {
+        isSelected: false,
+        displayText: r.displayText,
+      };
+    });
+
+    alertStore.update({ choice: alertChoices });
+
+    autorun(reaction => {
+      const { choice } = alertStore.alert;
+      const keys = Object.keys(choice);
+      const selectedChoiceId = keys.find((key: string) => choice[key].isSelected === true);
+
+      if (selectedChoiceId) {
+        reaction.dispose();
+        resolve(idToRule[selectedChoiceId]);
+      }
+    });
+  });
+}
 
 export const requirePlayerSelection = (playerTarget: PlayerTarget): Promise<string[]> => {
   return new Promise((resolve) => {

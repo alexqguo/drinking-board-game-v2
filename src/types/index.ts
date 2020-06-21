@@ -42,6 +42,7 @@ export interface Alert {
   state: AlertState,
   diceRolls: AlertDiceRollInfo,
   playerSelection: AlertPlayerSelection,
+  choice: AlertChoiceInfo,
   messageOverride: string,
 }
 
@@ -64,6 +65,15 @@ export interface AlertDiceRoll {
 export interface AlertPlayerSelection {
   isRequired: boolean,
   selectedId: string, // Currently only support selecting one player
+}
+
+export interface AlertChoiceInfo {
+  [key: string]: AlertChoice
+}
+
+export interface AlertChoice {
+  displayText: string,
+  isSelected: boolean,
 }
 
 export enum GameState {
@@ -159,6 +169,7 @@ export interface RuleSchema {
   numSpaces?: number,
   tileIndex?: number,
   direction?: Direction,
+  choices?: RuleSchema[],
   // more
 }
 

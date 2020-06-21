@@ -23,6 +23,11 @@ export default class AlertStore {
     db.ref(`${this.rootStore.prefix}/alert/diceRolls/${key}`).update({ result });
   }
 
+  // Selects
+  updateChoice = (choiceId: string, isSelected: boolean = true) => {
+    db.ref(`${this.rootStore.prefix}/alert/choice/${choiceId}`).update({ isSelected });
+  }
+
   clear = () => {
     this.rootStore.alertRef?.update(AlertStore.defaultAlert());
   }
@@ -37,5 +42,6 @@ export default class AlertStore {
       isRequired: false,
       selectedId: '',
     },
+    choice: {}
   });
 }

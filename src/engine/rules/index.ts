@@ -8,6 +8,7 @@ import SkipTurnRule from 'src/engine/rules/SkipTurnRule';
 import SpeedModifierRule from 'src/engine/rules/SpeedModifierRule';
 import RollUntilRule from 'src/engine/rules/RollUntilRule';
 import MoveRule from 'src/engine/rules/MoveRule';
+import ChoiceRule from 'src/engine/rules/ChoiceRule';
 import GameOverRule from 'src/engine/rules/GameOverRule';
 import AddMandatoryRule from 'src/engine/rules/AddMandatoryRule';
 import SkipNextMandatoryRule from 'src/engine/rules/SkipNextMandatoryRule';
@@ -24,7 +25,6 @@ GroupRollRule
 RollAugmentRule
 
 - simple
-
 ReverseTurnOrderRule
 AnchorRule
 ProxyRule
@@ -49,10 +49,21 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   AddMandatoryRule,
   GameOverRule,
   DrinkDuringLostTurnsRule,
+  ChoiceRule,
   SkipTurnRule,
   SpeedModifierRule,
   SkipNextMandatoryRule,
 };
+
+const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
+  let handler = ruleMappings[rule.type];
+  if (!handler) {
+    console.error(`No handler found for ${rule.type}, falling back to DisplayRule`);
+    handler = DisplayRule;
+  }
+
+  return handler;
+}
 
 export default async (ruleIndex: number) => {
   const { alertStore, boardStore } = rootStore;
@@ -64,10 +75,6 @@ export default async (ruleIndex: number) => {
     ruleIdx: ruleIndex,
   });
 
-  let handler = ruleMappings[rule.type];
-  if (!handler) {
-    console.error(`No handler found for ${rule.type}, falling back to DisplayRule`);
-    handler = DisplayRule;
-  }
+  const handler = getHandlerForRule(rule);
   handler(rule);
 };
