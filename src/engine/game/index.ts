@@ -65,6 +65,13 @@ const GameEventHandler = () => {
           return tile.mandatory;
           // TODO - OR anchor, OR custom mandatory
         });
+      
+      if (currentPlayer.effects.mandatorySkips > 0 && firstMandatoryIndex !== -1) {
+        await playerStore.updateEffects(currentPlayer.id, {
+          mandatorySkips: currentPlayer.effects.mandatorySkips - 1,
+        });
+        firstMandatoryIndex = -1;
+      }
 
       // TODO - check mandataorySkips
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;

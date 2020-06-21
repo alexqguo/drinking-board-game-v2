@@ -33,6 +33,7 @@ export default class PlayerStore {
 
   static defaultEffects = (): PlayerEffects => ({
     extraTurns: 0,
+    mandatorySkips: 0,
     skippedTurns: {
       numTurns: 0,
       message: '',

@@ -32,7 +32,8 @@
     "roll": "Roll",
     "skip": "Skip",
     "extraTurn": "Extra turn",
-    "missedTurn": "Missed turn"
+    "missedTurn": "Missed turn",
+    "skipMandatory": "Skip mandatory space"
   },
   "lostTurn": {
     "drink": "Drink {numTurns}",

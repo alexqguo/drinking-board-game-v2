@@ -9,6 +9,7 @@ import SpeedModifierRule from 'src/engine/rules/SpeedModifierRule';
 import RollUntilRule from 'src/engine/rules/RollUntilRule';
 import MoveRule from 'src/engine/rules/MoveRule';
 import GameOverRule from 'src/engine/rules/GameOverRule';
+import SkipNextMandatoryRule from 'src/engine/rules/SkipNextMandatoryRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
@@ -49,6 +50,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   DrinkDuringLostTurnsRule,
   SkipTurnRule,
   SpeedModifierRule,
+  SkipNextMandatoryRule,
 };
 
 export default async (ruleIndex: number) => {

@@ -100,7 +100,7 @@ export interface Player {
 }
 
 export interface PlayerEffects {
-  // mandatorySkips: number,
+  mandatorySkips: number,
   // customMandatoryTiles: number[],
   extraTurns: number,
   skippedTurns: LostTurnInfo,

@@ -15,6 +15,7 @@ export default () => {
     <div>
       {effects.extraTurns ? <Badge color="green">{playerStatus.extraTurn}</Badge> : null}
       {effects.skippedTurns.numTurns ? <Badge color="red">{playerStatus.missedTurn}</Badge> : null}
+      {effects.mandatorySkips ? <Badge color="green">{playerStatus.skipMandatory}</Badge> : null}
       {effects.speedModifier.numTurns ? 
         <Badge color="blue">{effects.speedModifier.operation}{effects.speedModifier.modifier}</Badge> 
       : null}
