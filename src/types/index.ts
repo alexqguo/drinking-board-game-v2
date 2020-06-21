@@ -116,7 +116,7 @@ export interface PlayerEffects {
   extraTurns: number,
   skippedTurns: LostTurnInfo,
   speedModifier: SpeedModifier,
-  // moveCondition: MoveCondition,
+  moveCondition: MoveCondition,
   // anchors: number,
   // rollAugmentation: RollAugmentation,
 }
@@ -124,6 +124,11 @@ export interface PlayerEffects {
 export interface LostTurnInfo {
   message: string,
   numTurns: number,
+}
+
+export interface MoveCondition {
+  tileIndex: number, // This is the condition of the rule located at tileIndex
+  numCurrentSuccesses: number,
 }
 
 export enum AppStage {
@@ -171,6 +176,7 @@ export interface RuleSchema {
   tileIndex?: number,
   direction?: Direction,
   choices?: ChoiceSchema[],
+  condition?: MoveConditionSchema,
   // more
 }
 
@@ -181,6 +187,7 @@ export interface BaseOutcomeSchema {
 export interface DiceRollSchema {
   numRequired: number,
   outcomes?: OutcomeSchema[],
+  type: DiceRollType
   // Others
 }
 
@@ -194,6 +201,15 @@ export interface ZoneSchema {
   name: string,
   type: ZoneType,
   rule: RuleSchema,
+}
+
+export interface MoveConditionSchema {
+  criteria: number[],
+  numSuccessesRequired: number,
+  immediate?: boolean,
+  consequence: RuleSchema,
+  description: string,
+  diceRolls?: DiceRollSchema,
 }
 
 ////////////////////////////////////////////////////////////////
@@ -220,4 +236,10 @@ export enum ZoneType {
 export enum Direction {
   forward = 'forward',
   back = 'back'
+}
+
+export enum DiceRollType {
+  cumulative = 'cumulative',
+  default = 'default',
+  allMatch = 'allMatch',
 }

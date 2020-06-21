@@ -44,5 +44,9 @@ export default class PlayerStore {
       operation: ModifierOperation.equal,
       modifier: -1
     },
+    moveCondition: {
+      tileIndex: -1,
+      numCurrentSuccesses: 0
+    },
   })
 }
