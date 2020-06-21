@@ -41,9 +41,20 @@ export default () => {
     const hasPlayerSelection = alert.playerSelection.isRequired;
     const hasChoice = !!alert.choice;
     const isChoiceDone = hasChoice && Object.keys(alert.choice).some((k: string) => alert.choice[k].isSelected);
+    let activeRule = rule;
+    if (alert.outcomeIdentifier) {
+      const identifiers = alert.outcomeIdentifier.split('|');
+      identifiers.forEach((identifier: string) => { // don't look
+        const [type, idxIdent] = identifier.split(':');
+        if (!(type === 'choice' || type === 'outcome')) return;
+        const idx = Number(idxIdent);
+        const baseSubPath = type === 'choice' ? activeRule?.choices : activeRule?.diceRolls?.outcomes;
+        activeRule = baseSubPath![idx].rule;
+      });
+    }
 
     return (
-      <Dialog
+    <Dialog
       isShown={alert.open}
       header={<Heading size={800}>{currentPlayer ? currentPlayer.name : ''}</Heading>}
       footer={footer}
@@ -59,11 +70,19 @@ export default () => {
         </Paragraph>
       : null}
 
-      {rule ? 
+      {rule ? <>
+        <Paragraph style={activeRule && activeRule !== rule ? null: displayTextStyles}>
+          {rule.displayText}
+        </Paragraph>
+      </>: null}
+
+      {activeRule ?
         <>
-          <Paragraph style={displayTextStyles}>
-            {rule.displayText}
-          </Paragraph>
+          {activeRule !== rule ? <>
+            <Paragraph style={displayTextStyles}>
+              {activeRule.displayText}
+            </Paragraph>
+          </> : null}
 
           <Paragraph>
             {hasDiceRoll && Object.keys(alert.diceRolls).map((key: string) => (

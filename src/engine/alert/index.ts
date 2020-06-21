@@ -1,5 +1,5 @@
 import { autorun } from 'mobx';
-import { AlertDiceRollInfo, PlayerTarget, RuleSchema, AlertChoiceInfo } from 'src/types';
+import { AlertDiceRollInfo, PlayerTarget, RuleSchema, AlertChoiceInfo, ChoiceSchema } from 'src/types';
 import rootStore from 'src/stores';
 import { createId } from 'src/utils';
 
@@ -34,17 +34,17 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
   });
 };
 
-export const requireChoice = (rules: RuleSchema[]): Promise<RuleSchema> => {
+export const requireChoice = (rules: ChoiceSchema[]): Promise<RuleSchema> => {
   return new Promise(resolve => {
     const { alertStore } = rootStore;
     const idToRule: { [key: string] : RuleSchema } = {};
     const alertChoices: AlertChoiceInfo = {};
-    rules.forEach((r: RuleSchema) => {
+    rules.forEach((c: ChoiceSchema) => {
       const id = createId('choice');
-      idToRule[id] = r;
+      idToRule[id] = c.rule;
       alertChoices[id] = {
         isSelected: false,
-        displayText: r.displayText,
+        displayText: c.rule.displayText,
       };
     });
 

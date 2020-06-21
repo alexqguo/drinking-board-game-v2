@@ -42,6 +42,7 @@ export default class AlertStore {
       isRequired: false,
       selectedId: '',
     },
-    choice: {}
+    choice: {},
+    outcomeIdentifier: '',
   });
 }

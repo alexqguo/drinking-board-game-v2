@@ -682,13 +682,17 @@
         "displayText": "What? Your Pokemon is evolving! Let it evolve: Drink 4 and skip the next gym. Stop evolution: Take an extra turn.",
         "type": "ChoiceRule",
         "choices": [{
-          "displayText": "Skip the next gym",
-          "type": "SkipNextMandatoryRule",
-          "numSpaces": 1
+          "rule": {
+            "displayText": "Skip the next gym",
+            "type": "SkipNextMandatoryRule",
+            "numSpaces": 1
+          }
         }, {
-          "displayText": "Take an extra turn",
-          "type": "ExtraTurnRule",
-          "numTurns": 1
+          "rule": {
+            "displayText": "Take an extra turn",
+            "type": "ExtraTurnRule",
+            "numTurns": 1
+          }
         }]
       },
       "position": [{
@@ -873,11 +877,15 @@
           "numRequired": 1
         },
         "choices": [{
-          "type": "ExtraTurnRule",
-          "displayText": "Take an extra turn"
+          "rule": {
+            "type": "ExtraTurnRule",
+            "displayText": "Take an extra turn"
+          }
         }, {
-          "type": "DisplayRule",
-          "displayText": "Drink 2"
+          "rule": {
+            "type": "DisplayRule",
+            "displayText": "Drink 2"
+          }
         }]
       },
       "position": [{

@@ -55,7 +55,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   SkipNextMandatoryRule,
 };
 
-const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
+export const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
   let handler = ruleMappings[rule.type];
   if (!handler) {
     console.error(`No handler found for ${rule.type}, falling back to DisplayRule`);

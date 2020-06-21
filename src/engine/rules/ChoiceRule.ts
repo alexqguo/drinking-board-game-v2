@@ -1,10 +1,10 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler, AlertState } from 'src/types';
-import { validateRequired } from 'src/engine/rules';
-import { requireDiceRolls, requireChoice } from '../alert';
+import { RuleSchema, RuleHandler, AlertState, ChoiceSchema } from 'src/types';
+import { validateRequired, getHandlerForRule } from 'src/engine/rules';
+import { requireDiceRolls, requireChoice } from 'src/engine/alert';
 
 const ChoiceRule: RuleHandler = async (rule: RuleSchema) => {
-  const { alertStore, playerStore, gameStore } = rootStore;
+  const { alertStore } = rootStore;
   const { choices, diceRolls } = rule;
 
   if (!validateRequired(choices)) {
@@ -19,9 +19,21 @@ const ChoiceRule: RuleHandler = async (rule: RuleSchema) => {
   }
 
   const choice = await requireChoice(choices!);
-  console.log(choice);
+  const choiceIndex = choices?.findIndex((c: ChoiceSchema) => c.rule === choice); // This is kinda shitty...
+  const handler = getHandlerForRule(choice);
 
-  alertStore.update({ state: AlertState.CAN_CLOSE });
+  // Trigger the next rule and reset the alert actions
+  await alertStore.update({
+    outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|choice:${choiceIndex}`,
+    choice: {},
+    diceRolls: {},
+    playerSelection: {
+      isRequired: false,
+      selectedId: '',
+    }
+  });
+
+  handler(choice);
 };
 
 export default ChoiceRule;

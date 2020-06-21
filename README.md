@@ -1,3 +1,16 @@
 # Drinking board game v2
 
-Work in progress.
+Parity:
+* Finish rule implementations
+  * With game engine turn calculation updates
+* Zones
+* Finish up remote games
+* Make extensions compataible
+* Improve animation of moving
+
+Additional features:
+* Rolls in an alert can have custom labels
+
+Schema changes:
+* TeleportRule is gone in favor of MoveRule with tileIndex
+* ChoiceRule schema is different, choices array item will be an object with a "rule" key rather than the rule directly

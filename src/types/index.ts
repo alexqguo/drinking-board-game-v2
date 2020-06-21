@@ -44,6 +44,7 @@ export interface Alert {
   playerSelection: AlertPlayerSelection,
   choice: AlertChoiceInfo,
   messageOverride: string,
+  outcomeIdentifier: string,
 }
 
 export enum AlertState {
@@ -169,13 +170,24 @@ export interface RuleSchema {
   numSpaces?: number,
   tileIndex?: number,
   direction?: Direction,
-  choices?: RuleSchema[],
+  choices?: ChoiceSchema[],
   // more
+}
+
+export interface BaseOutcomeSchema {
+  rule: RuleSchema
 }
 
 export interface DiceRollSchema {
   numRequired: number,
+  outcomes?: OutcomeSchema[],
   // Others
+}
+
+export interface ChoiceSchema extends BaseOutcomeSchema {}
+
+export interface OutcomeSchema extends BaseOutcomeSchema {
+  // criteria
 }
 
 export interface ZoneSchema {
