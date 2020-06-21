@@ -1,7 +1,7 @@
 import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState, SpeedModifier, ModifierOperation } from 'src/types';
 import { validateRequired } from 'src/engine/rules';
-import { requirePlayerSelection } from '../alert';
+import { requirePlayerSelection } from 'src/engine/alert';
 
 const SpeedModifierRule: RuleHandler = async (rule: RuleSchema) => {
   const { numTurns, playerTarget, modifier } = rule;

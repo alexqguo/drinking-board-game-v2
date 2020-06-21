@@ -33,7 +33,8 @@
     "skip": "Skip",
     "extraTurn": "Extra turn",
     "missedTurn": "Missed turn",
-    "skipMandatory": "Skip mandatory space"
+    "skipMandatory": "Skip mandatory space",
+    "customMandatory": "Stop at tile {idx}"
   },
   "lostTurn": {
     "drink": "Drink {numTurns}",

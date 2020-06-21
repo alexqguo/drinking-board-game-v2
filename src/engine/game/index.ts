@@ -46,42 +46,44 @@ const GameEventHandler = () => {
     [GameState.MOVE_CALCULATE]: async () => {
       let roll = gameStore.game.currentRoll!;
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+      const { effects, tileIndex } = currentPlayer;
       // TODO - check speed modifiers, roll augmentation
 
-      if (currentPlayer.effects.speedModifier.numTurns > 0) {
-        roll = getAdjustedRoll(roll, currentPlayer.effects.speedModifier);
+      if (effects.speedModifier.numTurns > 0) {
+        roll = getAdjustedRoll(roll, effects.speedModifier);
         playerStore.updateEffects(currentPlayer.id, {
           speedModifier: {
-            ...currentPlayer.effects.speedModifier,
-            numTurns: currentPlayer.effects.speedModifier.numTurns - 1
+            ...effects.speedModifier,
+            numTurns: effects.speedModifier.numTurns - 1
           },
         });
       }
       
-      // TODO - check for mandatory spaces
       let firstMandatoryIndex = boardStore.schema.tiles
-        .slice(currentPlayer.tileIndex + 1, currentPlayer.tileIndex + 1 + roll)
-        .findIndex((tile: TileSchema) => {
-          return tile.mandatory;
-          // TODO - OR anchor, OR custom mandatory
+        .slice(tileIndex + 1, tileIndex + 1 + roll)
+        .findIndex((tile: TileSchema, idx: number) => {
+          return tile.mandatory || effects.customMandatoryTileIndex === tileIndex + idx + 1;
+          // TODO - OR anchor
         });
       
-      if (currentPlayer.effects.mandatorySkips > 0 && firstMandatoryIndex !== -1) {
+      if (effects.mandatorySkips > 0 && firstMandatoryIndex !== -1) {
         await playerStore.updateEffects(currentPlayer.id, {
-          mandatorySkips: currentPlayer.effects.mandatorySkips - 1,
+          mandatorySkips: effects.mandatorySkips - 1,
         });
         firstMandatoryIndex = -1;
       }
 
-      // TODO - check mandataorySkips
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
       // const numSpacesToAdvance = 58; // asdf
       // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 11;
 
-      // TODO - if user is going to land on their custom mandatory, clear it
+      if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
+        await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
+      }
+
       if (numSpacesToAdvance > 0) {
         await playerStore.updatePlayer(currentPlayer.id, {
-          tileIndex: currentPlayer.tileIndex + numSpacesToAdvance,
+          tileIndex: tileIndex + numSpacesToAdvance,
         });
         gameStore.setGameState(GameState.MOVE_START);
       } else {

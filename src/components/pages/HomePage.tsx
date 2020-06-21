@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Heading, Paragraph, Button } from 'evergreen-ui';
 import { TranslationContext } from 'src/providers/TranslationProvider';
-import Alert from '../Alert';
+import Alert from 'src/components/Alert';
 
 export default () => {
   const i18n = useContext(TranslationContext);

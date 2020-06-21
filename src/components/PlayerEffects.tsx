@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useObserver } from 'mobx-react';
 import { Badge } from 'evergreen-ui';
-import { TranslationContext } from 'src/providers/TranslationProvider';
+import { TranslationContext, formatString } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import { PlayerEffects } from 'src/types';
 
@@ -18,6 +18,11 @@ export default () => {
       {effects.mandatorySkips ? <Badge color="green">{playerStatus.skipMandatory}</Badge> : null}
       {effects.speedModifier.numTurns ? 
         <Badge color="blue">{effects.speedModifier.operation}{effects.speedModifier.modifier}</Badge> 
+      : null}
+      {effects.customMandatoryTileIndex > -1 ? 
+        <Badge color="blue">
+          {formatString(playerStatus.customMandatory, { idx: `${effects.customMandatoryTileIndex}` })}
+        </Badge>
       : null}
     </div>
   ));

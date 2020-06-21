@@ -1,7 +1,7 @@
 import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState } from 'src/types';
 import { validateRequired } from 'src/engine/rules';
-import { requireDiceRolls } from '../alert';
+import { requireDiceRolls } from 'src/engine/alert';
 
 const RollUntilRule: RuleHandler = (rule: RuleSchema) => {
   const { alertStore } = rootStore;

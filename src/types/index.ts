@@ -101,7 +101,7 @@ export interface Player {
 
 export interface PlayerEffects {
   mandatorySkips: number,
-  // customMandatoryTiles: number[],
+  customMandatoryTileIndex: number,
   extraTurns: number,
   skippedTurns: LostTurnInfo,
   speedModifier: SpeedModifier,
