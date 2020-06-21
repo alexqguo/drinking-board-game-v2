@@ -8,6 +8,7 @@ import SkipTurnRule from 'src/engine/rules/SkipTurnRule';
 import SpeedModifierRule from 'src/engine/rules/SpeedModifierRule';
 import RollUntilRule from 'src/engine/rules/RollUntilRule';
 import MoveRule from 'src/engine/rules/MoveRule';
+import GameOverRule from 'src/engine/rules/GameOverRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
@@ -45,6 +46,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   ExtraTurnRule,
   MoveRule,
   RollUntilRule,
+  GameOverRule,
   DrinkDuringLostTurnsRule,
   SkipTurnRule,
   SpeedModifierRule,

@@ -93,8 +93,8 @@ export enum TurnOrder {
 export interface Player {
   id: string,
   name: string,
-  color: string,
   tileIndex: number,
+  hasWon: boolean,
   isActive?: boolean,
   effects: PlayerEffects,
 }

@@ -13,7 +13,12 @@ const GameEventHandler = () => {
     },
     [GameState.TURN_CHECK]: () => {
       // Can player take their turn
-      gameStore.setGameState(GameState.ZONE_CHECK);
+      const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+      if (currentPlayer.hasWon) {
+        gameStore.setGameState(GameState.TURN_END);
+      } else {
+        gameStore.setGameState(GameState.ZONE_CHECK);
+      }
     },
     [GameState.ZONE_CHECK]: () => {
       // Is player in a zone which needs action
@@ -64,7 +69,7 @@ const GameEventHandler = () => {
       // TODO - check mandataorySkips
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
       // const numSpacesToAdvance = 58; // asdf
-      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 11;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 11;
 
       // TODO - if user is going to land on their custom mandatory, clear it
       if (numSpacesToAdvance > 0) {
