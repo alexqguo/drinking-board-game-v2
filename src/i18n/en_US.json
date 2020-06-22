@@ -41,7 +41,7 @@
     "general": "Missed turn"
   },
   "moveCondition": {
-    "notMet": "{condition}. Your roll: {rollStr}",
+    "notMet": "{condition} - Your roll: {rollStr}",
     "met": "Successful roll. {cur}/{total}"
   }
 }

@@ -1,10 +1,10 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { GameState, TileSchema, AlertState, MoveConditionSchema } from 'src/types';
+import { GameState, TileSchema, AlertState, MoveConditionSchema, AlertDiceRoll } from 'src/types';
 import RuleEngine from 'src/engine/rules';
+import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 import { canPlayerMove } from 'src/engine/rules/ApplyMoveConditionRule';
-import PlayerStore from 'src/stores/PlayerStore';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore, alertStore } = rootStore;
@@ -26,7 +26,7 @@ const GameEventHandler = () => {
       // Is player in a zone which needs action
       gameStore.setGameState(GameState.TURN_START);
     },
-    [GameState.TURN_START]: () => {
+    [GameState.TURN_START]: async () => {
       rootStore.scrollToCurrentPlayer();
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
       const isSkipped = currentPlayer.effects.skippedTurns.numTurns > 0;
@@ -34,11 +34,36 @@ const GameEventHandler = () => {
       if (isSkipped) {
         gameStore.setGameState(GameState.LOST_TURN_START);
       } else {
+        const { moveCondition } = currentPlayer.effects;
+        const conditionSchema = boardStore.schema.tiles[moveCondition.tileIndex]?.rule.condition;
+        if (conditionSchema 
+          && conditionSchema.diceRolls 
+          && conditionSchema.diceRolls?.numRequired
+          && conditionSchema.diceRolls?.numRequired > 1) {
+          // TODO - open modal, require rolls. when rolls are done, 
+          alertStore.update({
+            open: true,
+            state: AlertState.REQUIRE_ACTION,
+            messageOverride: conditionSchema.description,
+          });
+          const rollInfo = await requireDiceRolls(conditionSchema.diceRolls.numRequired);
+          const rolls = getRollsFromAlertDiceRoll(rollInfo);
+          const moveResult = await canPlayerMove(currentPlayer.id, conditionSchema, rolls);
+          console.log(rolls);
+
+          if (!moveResult.canMove) {
+            setTimeout(() => { // Just pause so the modal doesn't dismiss immediately
+              alertStore.clear();
+              gameStore.setGameState(GameState.TURN_END);
+            }, 1200);
+          }
+        }
+
         gameStore.setGameState(GameState.ROLL_START);
       }
     },
     [GameState.ROLL_START]: () => {
-      // Not really anything special to do here I guess
+      // Not really anything special to do here, but PlayerStatus references game state to enable rolling
     },
     [GameState.ROLL_END]: async () => {
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
@@ -105,7 +130,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 8;
+      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 68;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -154,7 +179,10 @@ const GameEventHandler = () => {
         nextPlayerId = playerIds[nextPlayerIdx]; 
       }
 
-      gameStore.setCurrentPlayer(nextPlayerId);
+      console.log(`current player: ${currentPlayer.name}`);
+      console.log(`next player: ${playerStore.players.get(nextPlayerId)!.name}`);
+
+      await gameStore.setCurrentPlayer(nextPlayerId);
       gameStore.update({
         state: GameState.TURN_CHECK,
         currentRoll: null,
@@ -210,7 +238,10 @@ const uiActions = {
   alertClose: () => {
     const { alertStore, gameStore } = rootStore;
     alertStore.clear();
-    gameStore.setGameState(GameState.RULE_END);
+    
+    if (gameStore.game.state === GameState.RULE_TRIGGER) {
+      gameStore.setGameState(GameState.RULE_END);
+    }
     // TODO - will need to check here whether or not to trigger zone end or rule end
   },
   handleAlertRoll: (key: string, rolls: number[]) => {

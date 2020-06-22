@@ -34,6 +34,16 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
   });
 };
 
+// Really need to rethink this multiple rolls in one thing
+export const getRollsFromAlertDiceRoll = (info: AlertDiceRollInfo): number[] => {
+  let result: number[] = [];
+  Object.keys(info).forEach((key: string) => {
+    const diceRoll = info[key];
+    result = result.concat(diceRoll.result.split('|').map((x: string) => Number(x)));
+  });
+  return result;
+}
+
 export const requireChoice = (rules: ChoiceSchema[]): Promise<RuleSchema> => {
   return new Promise(resolve => {
     const { alertStore } = rootStore;

@@ -76,64 +76,58 @@ export default () => {
         </Paragraph>
       </>: null}
 
-      {activeRule ?
-        <>
-          {activeRule !== rule ? <>
-            <Paragraph style={displayTextStyles}>
-              {activeRule.displayText}
-            </Paragraph>
-          </> : null}
+      {activeRule && activeRule !== rule ? <>
+        <Paragraph style={displayTextStyles}>
+          {activeRule.displayText}
+        </Paragraph>
+      </> : null}
 
-          <Paragraph>
-            {hasDiceRoll && Object.keys(alert.diceRolls).map((key: string) => (
-              <DiceRoll
-                key={key}
-                marginRight={16}
-                disabled={!gameStore.isMyTurn || !!alert.diceRolls[key].result}
-                numRolls={alert.diceRolls[key].numRolls}
-                rolls={normalizeRolls(alert.diceRolls[key].result)}
-                onRoll={(rolls) => uiActions.handleAlertRoll(key, rolls)} 
-              />
-            ))}
-          </Paragraph>
+      {hasDiceRoll ? <Paragraph>
+        {Object.keys(alert.diceRolls).map((key: string) => (
+          <DiceRoll
+            key={key}
+            marginRight={16}
+            disabled={!gameStore.isMyTurn || !!alert.diceRolls[key].result}
+            numRolls={alert.diceRolls[key].numRolls}
+            rolls={normalizeRolls(alert.diceRolls[key].result)}
+            onRoll={(rolls) => uiActions.handleAlertRoll(key, rolls)} 
+          />
+        ))}
+      </Paragraph> : null}
 
-          <Paragraph>
-            {hasPlayerSelection ? <>
-              {playerStore.ids.map((id: string) => 
-                <Button
-                  key={id}
-                  height={24}
-                  marginRight={16}
-                  onClick={() => uiActions.handleAlertPlayerSelection(id)}
-                  iconAfter={id === alert.playerSelection.selectedId ? 'tick-circle' : false}
-                  disabled={
-                    !gameStore.isMyTurn 
-                    || id === gameStore.game.currentPlayerId 
-                    || !!alert.playerSelection.selectedId
-                  }
-                >
-                  {playerStore.players.get(id)!.name}
-                </Button>
-              )}
-            </> : null}
-          </Paragraph>
+      {hasPlayerSelection ? <Paragraph>
+        {playerStore.ids.map((id: string) => 
+          <Button
+            key={id}
+            height={24}
+            marginRight={16}
+            onClick={() => uiActions.handleAlertPlayerSelection(id)}
+            iconAfter={id === alert.playerSelection.selectedId ? 'tick-circle' : false}
+            disabled={
+              !gameStore.isMyTurn 
+              || id === gameStore.game.currentPlayerId 
+              || !!alert.playerSelection.selectedId
+            }
+          >
+            {playerStore.players.get(id)!.name}
+          </Button>
+        )}
+      </Paragraph> : null}
 
-          <Paragraph>
-            {hasChoice && Object.keys(alert.choice).map((choiceId: string) => (
-              <Button
-                key={choiceId}
-                height={24}
-                marginRight={16}
-                disabled={!gameStore.isMyTurn || isChoiceDone}
-                onClick={() => uiActions.handleAlertChoice(choiceId)}
-                iconAfter={alert.choice[choiceId].isSelected ? 'tick-circle' : false}
-              >
-                {alert.choice[choiceId].displayText}
-              </Button>
-            ))}
-          </Paragraph>
-        </>
-      : <></>}
+      {hasChoice ? <Paragraph>
+        {Object.keys(alert.choice).map((choiceId: string) => (
+          <Button
+            key={choiceId}
+            height={24}
+            marginRight={16}
+            disabled={!gameStore.isMyTurn || isChoiceDone}
+            onClick={() => uiActions.handleAlertChoice(choiceId)}
+            iconAfter={alert.choice[choiceId].isSelected ? 'tick-circle' : false}
+          >
+            {alert.choice[choiceId].displayText}
+          </Button>
+        ))}
+      </Paragraph> : null}
     </Dialog> 
     );
   });

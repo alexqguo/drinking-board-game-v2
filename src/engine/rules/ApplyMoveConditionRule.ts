@@ -7,7 +7,7 @@ import {
   DiceRollType,
   MoveConditionResult 
 } from 'src/types';
-import { requirePlayerSelection } from 'src/engine/alert';
+import { requirePlayerSelection, requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { validateRequired } from 'src/engine/rules';
 import PlayerStore from 'src/stores/PlayerStore';
 import { formatString } from 'src/providers/TranslationProvider';
@@ -95,7 +95,7 @@ export const canPlayerMove = async (
 }
 
 const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
-  const { playerStore, boardStore, alertStore } = rootStore;
+  const { playerStore, boardStore, alertStore, gameStore } = rootStore;
 
   if (!validateRequired(rule.condition)) {
     console.error('condition is a required field', rule);
@@ -114,6 +114,11 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
   });
   
   // TODO - do dice rolls now if condition.immediate
+  // Should only be used with self target
+  if (rule.condition?.immediate) {
+    const rolls = await requireDiceRolls(rule.condition.diceRolls?.numRequired || 1);
+    canPlayerMove(gameStore.game.currentPlayerId, rule.condition, getRollsFromAlertDiceRoll(rolls));
+  }
 
   alertStore.update({ state: AlertState.CAN_CLOSE });
 };
