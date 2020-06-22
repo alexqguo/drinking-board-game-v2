@@ -9,6 +9,7 @@ import SpeedModifierRule from 'src/engine/rules/SpeedModifierRule';
 import RollUntilRule from 'src/engine/rules/RollUntilRule';
 import MoveRule from 'src/engine/rules/MoveRule';
 import ChoiceRule from 'src/engine/rules/ChoiceRule';
+import DiceRollRule from 'src/engine/rules/DiceRollRule';
 import GameOverRule from 'src/engine/rules/GameOverRule';
 import AddMandatoryRule from 'src/engine/rules/AddMandatoryRule';
 import SkipNextMandatoryRule from 'src/engine/rules/SkipNextMandatoryRule';
@@ -18,7 +19,7 @@ import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule'
 /*
 
 - tricky
-DiceRollRule
+a bit of ApplyMoveConditionRule
 ChallengeRule
 GroupRollRule
 RollAugmentRule
@@ -37,7 +38,7 @@ export const validateRequired = (...args: any[]): boolean => (
 );
 
 export const validateOneOf = (...args: any[]): boolean => (
-  args.reduce((acc: number, cur: any) => (acc + (!!cur ? 1 : 0)), 0) > 0
+  args.reduce((acc: number, cur: any) => (acc + (!!cur || typeof cur === 'number' ? 1 : 0)), 0) > 0
 );
 
 const ruleMappings: { [key: string]: RuleHandler } = {
@@ -46,6 +47,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   MoveRule,
   RollUntilRule,
   AddMandatoryRule,
+  DiceRollRule,
   GameOverRule,
   DrinkDuringLostTurnsRule,
   ApplyMoveConditionRule,

@@ -190,16 +190,16 @@ export interface BaseOutcomeSchema {
 }
 
 export interface DiceRollSchema {
-  numRequired: number,
   outcomes?: OutcomeSchema[],
+  numRequired: number,
+  cumulative?: boolean,
   type: DiceRollType
-  // Others
 }
 
 export interface ChoiceSchema extends BaseOutcomeSchema {}
 
 export interface OutcomeSchema extends BaseOutcomeSchema {
-  // criteria
+  criteria: number[],
 }
 
 export interface ZoneSchema {

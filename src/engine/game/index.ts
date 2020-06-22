@@ -132,7 +132,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 5;
+      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 57;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -240,6 +240,10 @@ const uiActions = {
     
     if (gameStore.game.state === GameState.RULE_TRIGGER) {
       gameStore.setGameState(GameState.RULE_END);
+    } else if (gameStore.game.state === GameState.LOST_TURN_START) {
+      gameStore.setGameState(GameState.TURN_END);
+    } else {
+      console.error(`Alert was closed during ${gameStore.game.state} with no proper action`);
     }
     // TODO - will need to check here whether or not to trigger zone end or rule end
   },

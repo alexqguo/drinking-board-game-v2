@@ -1161,14 +1161,14 @@
               "tileIndex": 0
             },
             "criteria": [1, 2, 3, 4]
-          }],
-          "any": {
+          }, {
+            "isAny": true,
             "rule": {
               "type": "DisplayRule",
               "displayText": "Phew"
             },
             "criteria": [5, 6]
-          }
+          }]
         }
       },
       "position": [{
