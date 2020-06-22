@@ -19,7 +19,6 @@ import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule'
 
 - tricky
 DiceRollRule
-ApplyMoveConditionRule
 ChallengeRule
 GroupRollRule
 RollAugmentRule

@@ -49,13 +49,15 @@ const GameEventHandler = () => {
           const rollInfo = await requireDiceRolls(conditionSchema.diceRolls.numRequired);
           const rolls = getRollsFromAlertDiceRoll(rollInfo);
           const moveResult = await canPlayerMove(currentPlayer.id, conditionSchema, rolls);
-          console.log(rolls);
 
           if (!moveResult.canMove) {
             setTimeout(() => { // Just pause so the modal doesn't dismiss immediately
               alertStore.clear();
               gameStore.setGameState(GameState.TURN_END);
             }, 1200);
+            return;
+          } else {
+            alertStore.update({ state: AlertState.CAN_CLOSE });
           }
         }
 
@@ -130,7 +132,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 68;
+      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 5;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -178,9 +180,6 @@ const GameEventHandler = () => {
         const nextPlayerIdx = (currentPlayerIdx + 1) % playerIds.length;
         nextPlayerId = playerIds[nextPlayerIdx]; 
       }
-
-      console.log(`current player: ${currentPlayer.name}`);
-      console.log(`next player: ${playerStore.players.get(nextPlayerId)!.name}`);
 
       await gameStore.setCurrentPlayer(nextPlayerId);
       gameStore.update({
