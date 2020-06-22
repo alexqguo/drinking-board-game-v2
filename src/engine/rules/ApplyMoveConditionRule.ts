@@ -8,7 +8,7 @@ import {
   MoveConditionResult 
 } from 'src/types';
 import { requirePlayerSelection, requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
-import { validateRequired } from 'src/engine/rules';
+import { validateRequired, getHandlerForRule } from 'src/engine/rules';
 import PlayerStore from 'src/stores/PlayerStore';
 import { formatString } from 'src/providers/TranslationProvider';
 import en from 'src/i18n/en_US.json';
@@ -51,7 +51,8 @@ export const canPlayerMove = async (
     }
 
     if (condition.consequence) {
-      // TODO - execute the consequence rule
+      // TODO - execute the consequence rule. Need this for gen 2 zone
+      // const handler = getHandlerForRule(condition.consequence);
     }
     
     return {
