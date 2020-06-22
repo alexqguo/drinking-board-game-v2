@@ -131,6 +131,11 @@ export interface MoveCondition {
   numCurrentSuccesses: number,
 }
 
+export interface MoveConditionResult {
+  canMove: boolean,
+  message: string,
+}
+
 export enum AppStage {
   dev = 'dev',
   prod = 'prod',

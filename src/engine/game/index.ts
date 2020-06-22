@@ -1,8 +1,10 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { GameState, TileSchema, AlertState } from 'src/types';
+import { GameState, TileSchema, AlertState, MoveConditionSchema } from 'src/types';
 import RuleEngine from 'src/engine/rules';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
+import { canPlayerMove } from 'src/engine/rules/ApplyMoveConditionRule';
+import PlayerStore from 'src/stores/PlayerStore';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore, alertStore } = rootStore;
@@ -38,9 +40,38 @@ const GameEventHandler = () => {
     [GameState.ROLL_START]: () => {
       // Not really anything special to do here I guess
     },
-    [GameState.ROLL_END]: () => {
-      // const roll = gameStore.game.currentRoll;
-      // TODO - check move condition
+    [GameState.ROLL_END]: async () => {
+      const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+      const { moveCondition } = currentPlayer.effects;
+
+      if (moveCondition.tileIndex === -1) {
+        gameStore.setGameState(GameState.MOVE_CALCULATE);
+        return;
+      }
+
+      const roll = gameStore.game.currentRoll;
+      const conditionSchema: MoveConditionSchema = boardStore.schema.tiles[moveCondition.tileIndex].rule.condition!;
+      const { diceRolls } = conditionSchema;
+      
+      if (conditionSchema && (!diceRolls || !diceRolls.numRequired || diceRolls?.numRequired === 1)) {
+        const result = await canPlayerMove(currentPlayer.id, conditionSchema, [roll!]);
+        if (!result.canMove) {
+          alertStore.update({
+            open: true,
+            messageOverride: result.message,
+            state: AlertState.CAN_CLOSE
+          });
+
+          autorun(reaction => {
+            if (alertStore.alert.open === false) {
+              reaction.dispose();
+              gameStore.setGameState(GameState.TURN_END);
+            }
+          });
+          return;
+        }
+      }
+
       gameStore.setGameState(GameState.MOVE_CALCULATE);
     },
     [GameState.MOVE_CALCULATE]: async () => {
@@ -123,13 +154,11 @@ const GameEventHandler = () => {
         nextPlayerId = playerIds[nextPlayerIdx]; 
       }
 
-      setTimeout(() => {
-        gameStore.setCurrentPlayer(nextPlayerId);
-        gameStore.update({
-          state: GameState.TURN_CHECK,
-          currentRoll: null,
-        });
-      }, 1000);
+      gameStore.setCurrentPlayer(nextPlayerId);
+      gameStore.update({
+        state: GameState.TURN_CHECK,
+        currentRoll: null,
+      });
     },
     [GameState.LOST_TURN_START]: () => {
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;

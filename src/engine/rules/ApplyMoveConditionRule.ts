@@ -1,7 +1,17 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler, AlertState, AlertDiceRollInfo, MoveConditionSchema, DiceRollType } from 'src/types';
+import { 
+  RuleSchema,
+  RuleHandler,
+  AlertState,
+  MoveConditionSchema,
+  DiceRollType,
+  MoveConditionResult 
+} from 'src/types';
 import { requirePlayerSelection } from 'src/engine/alert';
 import { validateRequired } from 'src/engine/rules';
+import PlayerStore from 'src/stores/PlayerStore';
+import { formatString } from 'src/providers/TranslationProvider';
+import en from 'src/i18n/en_US.json';
 
 const isDiceRollSuccessful = (cond: MoveConditionSchema, rolls: number[]) => {
   const { diceRolls, criteria } = cond;
@@ -20,17 +30,68 @@ const isDiceRollSuccessful = (cond: MoveConditionSchema, rolls: number[]) => {
   return true;
 }
 
-const canPlayerMove = (playerId: string, conditionTileIndex: number, rolls: number[]) => {
-  const { playerStore, boardStore } = rootStore;
-  const condition: MoveConditionSchema | undefined = boardStore.schema.tiles[conditionTileIndex].rule.condition;
-  if (!condition) return true;
+export const canPlayerMove = async (
+  playerId: string, 
+  condition: MoveConditionSchema, 
+  rolls: number[]
+): Promise<MoveConditionResult> => {
+  const { playerStore } = rootStore;
 
   const isSuccessfulRoll = isDiceRollSuccessful(condition, rolls);
   if (!isSuccessfulRoll) {
+    /**
+     * A bit confusing. If successes are required, you still have to achieve the criteria on your next turn.
+     * However if successes are NOT required, even if you fail you will move normally on your next turn.
+     * So in that case we clear the condition even in a failure case.
+     */
+    if (!condition.numSuccessesRequired) {
+      await playerStore.updateEffects(playerId, {
+        moveCondition: PlayerStore.defaultEffects().moveCondition
+      });
+    }
 
+    if (condition.consequence) {
+      // TODO - execute the consequence rule
+    }
+    
+    return {
+      canMove: false,
+      message: formatString(en.moveCondition.notMet, {
+        condition: condition.description,
+        rollStr: rolls.join(', '),
+      }),
+    }
   }
 
   const player = playerStore.players.get(playerId)!;
+  const newSuccessCount = player.effects.moveCondition.numCurrentSuccesses + 1;
+
+  if (!condition.numSuccessesRequired || newSuccessCount >= condition.numSuccessesRequired) {
+    await playerStore.updateEffects(playerId, {
+      moveCondition: PlayerStore.defaultEffects().moveCondition,
+    });
+
+    return {
+      canMove: true,
+      message: '', // Game engine will ignore it
+    }
+  }
+
+  // Increment successes on player
+  await playerStore.updateEffects(playerId, {
+    moveCondition: {
+      ...player.effects.moveCondition,
+      numCurrentSuccesses: newSuccessCount,
+    },
+  });
+  
+  return {
+    canMove: false,
+    message: formatString(en.moveCondition.met, {
+      cur: `${newSuccessCount}`,
+      total: `${condition.numSuccessesRequired}`,
+    }),
+  };
 }
 
 const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
@@ -52,6 +113,8 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
     });
   });
   
+  // TODO - do dice rolls now if condition.immediate
+
   alertStore.update({ state: AlertState.CAN_CLOSE });
 };
 
