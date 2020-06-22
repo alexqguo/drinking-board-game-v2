@@ -66,6 +66,7 @@ export interface AlertDiceRoll {
 export interface AlertPlayerSelection {
   isRequired: boolean,
   selectedId: string, // Currently only support selecting one player
+  candidateIds: string[]
 }
 
 export interface AlertChoiceInfo {

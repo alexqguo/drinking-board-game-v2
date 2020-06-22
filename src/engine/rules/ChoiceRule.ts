@@ -30,6 +30,7 @@ const ChoiceRule: RuleHandler = async (rule: RuleSchema) => {
     playerSelection: {
       isRequired: false,
       selectedId: '',
+      candidateIds: [],
     }
   });
 

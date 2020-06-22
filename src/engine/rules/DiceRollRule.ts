@@ -3,6 +3,7 @@ import { RuleSchema, RuleHandler, AlertState, OutcomeSchema, DiceRollType } from
 import { validateRequired, getHandlerForRule } from 'src/engine/rules';
 import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { sumNumbers } from 'src/utils';
+import AlertStore from 'src/stores/AlertStore';
 
 const DiceRollRule: RuleHandler = async (rule: RuleSchema) => {
   const { alertStore } = rootStore;
@@ -45,10 +46,7 @@ const DiceRollRule: RuleHandler = async (rule: RuleSchema) => {
       outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|outcome:${outcomes?.indexOf(outcome)}`,
       choice: {},
       diceRolls: {},
-      playerSelection: {
-        isRequired: false,
-        selectedId: '',
-      }
+      playerSelection: AlertStore.defaultAlert().playerSelection
     });
     handler(outcome.rule);
   } else {

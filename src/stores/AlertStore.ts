@@ -41,6 +41,7 @@ export default class AlertStore {
     playerSelection: {
       isRequired: false,
       selectedId: '',
+      candidateIds: [],
     },
     choice: {},
     outcomeIdentifier: '',

@@ -42,6 +42,7 @@ export default () => {
     const hasChoice = !!alert.choice;
     const isChoiceDone = hasChoice && Object.keys(alert.choice).some((k: string) => alert.choice[k].isSelected);
     let activeRule = rule;
+
     if (alert.outcomeIdentifier) {
       const identifiers = alert.outcomeIdentifier.split('|');
       identifiers.forEach((identifier: string) => { // don't look
@@ -64,17 +65,17 @@ export default () => {
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEscapePress={false}
     >
-      {alert.messageOverride ?
-        <Paragraph style={displayTextStyles}>
-          {alert.messageOverride}
-        </Paragraph>
-      : null}
-
       {rule ? <>
         <Paragraph style={activeRule && activeRule !== rule ? null: displayTextStyles}>
           {rule.displayText}
         </Paragraph>
       </>: null}
+
+      {alert.messageOverride ?
+        <Paragraph style={displayTextStyles}>
+          {alert.messageOverride}
+        </Paragraph>
+      : null}
 
       {activeRule && activeRule !== rule ? <>
         <Paragraph style={displayTextStyles}>
@@ -96,18 +97,14 @@ export default () => {
       </Paragraph> : null}
 
       {hasPlayerSelection ? <Paragraph>
-        {playerStore.ids.map((id: string) => 
+        {alert.playerSelection.candidateIds.map((id: string) =>
           <Button
             key={id}
             height={24}
             marginRight={16}
             onClick={() => uiActions.handleAlertPlayerSelection(id)}
             iconAfter={id === alert.playerSelection.selectedId ? 'tick-circle' : false}
-            disabled={
-              !gameStore.isMyTurn 
-              || id === gameStore.game.currentPlayerId 
-              || !!alert.playerSelection.selectedId
-            }
+            disabled={!gameStore.isMyTurn || !!alert.playerSelection.selectedId}
           >
             {playerStore.players.get(id)!.name}
           </Button>

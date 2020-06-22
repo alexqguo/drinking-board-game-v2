@@ -12,6 +12,7 @@ import ChoiceRule from 'src/engine/rules/ChoiceRule';
 import DiceRollRule from 'src/engine/rules/DiceRollRule';
 import GameOverRule from 'src/engine/rules/GameOverRule';
 import AddMandatoryRule from 'src/engine/rules/AddMandatoryRule';
+import ChallengeRule from 'src/engine/rules/ChallengeRule';
 import SkipNextMandatoryRule from 'src/engine/rules/SkipNextMandatoryRule';
 import ApplyMoveConditionRule from 'src/engine/rules/ApplyMoveConditionRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
@@ -20,7 +21,6 @@ import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule'
 
 - tricky
 a bit of ApplyMoveConditionRule
-ChallengeRule
 GroupRollRule
 RollAugmentRule
 
@@ -52,6 +52,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   DrinkDuringLostTurnsRule,
   ApplyMoveConditionRule,
   ChoiceRule,
+  ChallengeRule,
   SkipTurnRule,
   SpeedModifierRule,
   SkipNextMandatoryRule,

@@ -73,9 +73,11 @@ export const requireChoice = (rules: ChoiceSchema[]): Promise<RuleSchema> => {
   });
 }
 
-export const requirePlayerSelection = (playerTarget: PlayerTarget): Promise<string[]> => {
+export const requirePlayerSelection = (playerTarget: PlayerTarget, candidates: string[] = []): Promise<string[]> => {
   return new Promise((resolve) => {
     const { gameStore, playerStore, alertStore } = rootStore;
+    const candidateIds = candidates.length ? 
+      candidates : playerStore.ids.filter((id: string) => id !== gameStore.game.currentPlayerId);
 
     switch(playerTarget) {
       case PlayerTarget.custom:
@@ -83,6 +85,7 @@ export const requirePlayerSelection = (playerTarget: PlayerTarget): Promise<stri
           playerSelection: {
             isRequired: true,
             selectedId: '',
+            candidateIds,
           },
         });
         autorun(reaction => {

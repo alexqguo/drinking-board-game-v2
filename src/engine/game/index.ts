@@ -132,7 +132,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 57;
+      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 44;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -255,6 +255,7 @@ const uiActions = {
     const { alertStore } = rootStore;
     alertStore.update({
       playerSelection: {
+        ...alertStore.alert.playerSelection,
         isRequired: true, // Keep as true until the turn is over so the buttons don't disappear
         selectedId: playerId,
       }
