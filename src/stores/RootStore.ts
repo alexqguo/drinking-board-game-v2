@@ -10,7 +10,8 @@ import {
   GameState,
   BoardSchema,
   RestoreGameOptions,
-  Alert
+  Alert,
+  TurnOrder
 } from 'src/types';
 import { createId, getAppStage, getCenterPoint } from 'src/utils';
 import { db } from 'src/firebase';
@@ -60,6 +61,7 @@ export default class RootStore {
       state: GameState.NOT_STARTED,
       currentPlayerId: playerData[0].id,
       currentRoll: null,
+      turnOrder: TurnOrder.normal
     };
 
     const initialSessionData: SessionData = {

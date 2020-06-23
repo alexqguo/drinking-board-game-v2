@@ -132,7 +132,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 44;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 44;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -166,7 +166,7 @@ const GameEventHandler = () => {
     },
     [GameState.TURN_END]: async () => {
       const playerIds = playerStore.ids;
-      const { currentPlayerId } = gameStore.game;
+      const { currentPlayerId, turnOrder } = gameStore.game;
       const currentPlayerIdx = playerIds.indexOf(currentPlayerId);
       const currentPlayer = playerStore.players.get(currentPlayerId)!;
       let nextPlayerId: string;
@@ -177,7 +177,10 @@ const GameEventHandler = () => {
           extraTurns: currentPlayer.effects.extraTurns - 1,
         });
       } else {
-        const nextPlayerIdx = (currentPlayerIdx + 1) % playerIds.length;
+        const pos = currentPlayerIdx + turnOrder;
+        const length = playerIds.length;
+        // Wrap back around if necessary
+        const nextPlayerIdx = (pos < 0 ? length - (-pos % length) : pos) % length;
         nextPlayerId = playerIds[nextPlayerIdx]; 
       }
 

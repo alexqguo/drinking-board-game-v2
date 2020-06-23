@@ -34,6 +34,7 @@ export interface GameData {
   state: GameState,
   currentPlayerId: string,
   currentRoll: number | null,
+  turnOrder: TurnOrder,
 }
 
 export interface Alert {

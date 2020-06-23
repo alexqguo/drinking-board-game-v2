@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { GameData, GameType, GameState } from 'src/types';
+import { GameData, GameType, GameState, TurnOrder } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 
 export default class GameStore {
@@ -12,6 +12,7 @@ export default class GameStore {
     state: GameState.NOT_STARTED,
     currentPlayerId: '',
     currentRoll: null,
+    turnOrder: TurnOrder.normal
   };
 
   constructor(rootStore: RootStore) {

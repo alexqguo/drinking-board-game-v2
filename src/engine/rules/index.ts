@@ -14,6 +14,7 @@ import GameOverRule from 'src/engine/rules/GameOverRule';
 import AddMandatoryRule from 'src/engine/rules/AddMandatoryRule';
 import ChallengeRule from 'src/engine/rules/ChallengeRule';
 import SkipNextMandatoryRule from 'src/engine/rules/SkipNextMandatoryRule';
+import ReverseTurnOrderRule from 'src/engine/rules/ReverseTurnOrderRule';
 import ApplyMoveConditionRule from 'src/engine/rules/ApplyMoveConditionRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
@@ -25,7 +26,6 @@ GroupRollRule
 RollAugmentRule
 
 - simple
-ReverseTurnOrderRule
 AnchorRule
 ProxyRule
 
@@ -52,6 +52,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   DrinkDuringLostTurnsRule,
   ApplyMoveConditionRule,
   ChoiceRule,
+  ReverseTurnOrderRule,
   ChallengeRule,
   SkipTurnRule,
   SpeedModifierRule,
