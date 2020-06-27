@@ -1,4 +1,4 @@
-import { BoardSchema, RuleSchema, TileSchema } from 'src/types';
+import { BoardSchema, RuleSchema, TileSchema, ZoneSchema } from 'src/types';
 
 // Technically has no reason to use mobx right now
 // It's all local and static data
@@ -15,6 +15,7 @@ export default class BoardStore {
     this.schema = schema;
   }
 
-  // This is slow and bad
+  // These are slow and bad
   getTileIndexForRule = (rule: RuleSchema) => this.schema.tiles.findIndex((t: TileSchema) => t.rule === rule);
+  getIndexForZone = (zone: ZoneSchema) => this.schema.zones.findIndex((z: ZoneSchema) => z === zone);
 }

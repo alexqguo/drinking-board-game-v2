@@ -5,7 +5,7 @@ import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
 import { uiActions } from 'src/engine/game';
-import { AlertState } from 'src/types';
+import { AlertState, AlertRuleType } from 'src/types';
 
 const displayTextStyles = {
   lineHeight: '32px',
@@ -19,9 +19,13 @@ const normalizeRolls = (input: string): number[] => {
 
 export default () => {
   const { gameStore, playerStore, boardStore, alertStore } = useContext(StoreContext);
+  const { alert } = alertStore;
+  const { schema } = boardStore;
+  const { zones, tiles } = schema;
+
   const i18n = useContext(TranslationContext);
   const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-  const currentTile = boardStore.schema.tiles[alertStore.alert.ruleIdx];
+  const currentTile = alert.ruleType === AlertRuleType.zone ? zones[alert.ruleIdx] : tiles[alert.ruleIdx];
   const rule = currentTile ? currentTile.rule : null;
 
   // { close } provided by evergreen-ui, not sure what its type is

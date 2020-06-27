@@ -32,9 +32,14 @@ export default () => {
       top={0}
       left={0}
     >
-      <Heading>{player.name}</Heading>
+      <Heading marginBottom={8}>{player.name}</Heading>
       <PlayerEffects />
-      <DiceRoll rolls={rolls} disabled={!isActionable} onRoll={onRoll} />
+      <DiceRoll 
+        rolls={rolls}
+        disabled={!isActionable}
+        onRoll={onRoll} 
+        marginRight={8}
+      />
       <Button 
         disabled={!isActionable}
         iconBefore="disable"

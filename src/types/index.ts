@@ -40,12 +40,18 @@ export interface GameData {
 export interface Alert {
   open: boolean,
   ruleIdx: number,
+  ruleType: AlertRuleType,
   state: AlertState,
   diceRolls: AlertDiceRollInfo,
   playerSelection: AlertPlayerSelection,
   choice: AlertChoiceInfo,
   messageOverride: string,
   outcomeIdentifier: string,
+}
+
+export enum AlertRuleType {
+  rule = 'rule',
+  zone = 'zone',
 }
 
 export enum AlertState {

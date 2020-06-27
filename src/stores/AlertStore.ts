@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { Alert, AlertState } from 'src/types';
+import { Alert, AlertState, AlertRuleType } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
 
@@ -36,6 +36,7 @@ export default class AlertStore {
     open: false,
     state: AlertState.PENDING,
     ruleIdx: -1,
+    ruleType: AlertRuleType.rule,
     diceRolls: {},
     messageOverride: '',
     playerSelection: {

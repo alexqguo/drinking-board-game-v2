@@ -1,7 +1,7 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { GameState, TileSchema, AlertState, MoveConditionSchema, AlertDiceRoll } from 'src/types';
-import RuleEngine from 'src/engine/rules';
+import { GameState, TileSchema, AlertState, MoveConditionSchema, ZoneType, ZoneSchema, RuleHandler, AlertRuleType } from 'src/types';
+import RuleEngine, { getHandlerForRule } from 'src/engine/rules';
 import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 import { canPlayerMove } from 'src/engine/rules/ApplyMoveConditionRule';
@@ -22,12 +22,29 @@ const GameEventHandler = () => {
         gameStore.setGameState(GameState.ZONE_CHECK);
       }
     },
-    [GameState.ZONE_CHECK]: () => {
+    [GameState.ZONE_CHECK]: async () => {
       // Is player in a zone which needs action
-      gameStore.setGameState(GameState.TURN_START);
+      const { schema } = boardStore;
+      const { tiles, zones } = schema;
+      const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+      const currentTile = tiles[currentPlayer.tileIndex];      
+      const currentZone: ZoneSchema = zones.find((z: ZoneSchema) => z.name === currentTile.zone)!;
+      rootStore.scrollToCurrentPlayer();
+
+      if (currentZone && currentZone.rule && currentZone.type === ZoneType.active) {
+        const handler: RuleHandler = getHandlerForRule(currentZone.rule);
+        await alertStore.update({
+          open: true,
+          state: AlertState.PENDING,
+          ruleIdx: boardStore.getIndexForZone(currentZone),
+          ruleType: AlertRuleType.zone,
+        });
+        handler(currentZone.rule);
+      } else {
+        gameStore.setGameState(GameState.TURN_START);
+      }
     },
     [GameState.TURN_START]: async () => {
-      rootStore.scrollToCurrentPlayer();
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
       const isSkipped = currentPlayer.effects.skippedTurns.numTurns > 0;
 
@@ -105,7 +122,7 @@ const GameEventHandler = () => {
       let roll = gameStore.game.currentRoll!;
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
       const { effects, tileIndex } = currentPlayer;
-      // TODO - check speed modifiers, roll augmentation
+      // TODO - check roll augmentation
 
       if (effects.speedModifier.numTurns > 0) {
         roll = getAdjustedRoll(roll, effects.speedModifier);
@@ -148,7 +165,7 @@ const GameEventHandler = () => {
       }
     },
     [GameState.MOVE_START]: () => {
-      // TODO - scroll to current player's new location
+      rootStore.scrollToCurrentPlayer();
       gameStore.setGameState(GameState.MOVE_END);
     },
     [GameState.MOVE_END]: () => {
@@ -237,18 +254,20 @@ const uiActions = {
   skipTurn: () => {
     rootStore.gameStore.setGameState(GameState.TURN_SKIP);
   },
-  alertClose: () => {
+  alertClose: async () => {
     const { alertStore, gameStore } = rootStore;
-    alertStore.clear();
+    await alertStore.clear();
     
     if (gameStore.game.state === GameState.RULE_TRIGGER) {
       gameStore.setGameState(GameState.RULE_END);
     } else if (gameStore.game.state === GameState.LOST_TURN_START) {
       gameStore.setGameState(GameState.TURN_END);
+    } else if (gameStore.game.state === GameState.ZONE_CHECK) {
+      gameStore.setGameState(GameState.TURN_START)
     } else {
       console.error(`Alert was closed during ${gameStore.game.state} with no proper action`);
+      gameStore.setGameState(GameState.TURN_END);
     }
-    // TODO - will need to check here whether or not to trigger zone end or rule end
   },
   handleAlertRoll: (key: string, rolls: number[]) => {
     const { alertStore } = rootStore;
