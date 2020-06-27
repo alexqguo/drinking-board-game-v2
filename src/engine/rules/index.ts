@@ -20,7 +20,6 @@ import ApplyMoveConditionRule from 'src/engine/rules/ApplyMoveConditionRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
-
 - tricky
 a bit of ApplyMoveConditionRule
 GroupRollRule
@@ -28,8 +27,6 @@ RollAugmentRule
 
 - simple
 AnchorRule
-ProxyRule
-
 */
 
 export const validateRequired = (...args: any[]): boolean => (
