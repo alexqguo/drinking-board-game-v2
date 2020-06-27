@@ -7,8 +7,8 @@ import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 import { canPlayerMove } from 'src/engine/rules/ApplyMoveConditionRule';
 import gen1 from 'src/games/pokemon-gen1';
 
-const GameEventHandler = (board: string) => {
-  const { gameStore, playerStore, boardStore, alertStore } = rootStore;
+const GameEventHandler = () => {
+  const { gameStore, playerStore, boardStore, alertStore, extension } = rootStore;
   let prevGameState = gameStore.game.state;
   const eventHandlers: { [key: string]: Function } = {
     [GameState.GAME_START]: () => {
@@ -225,13 +225,6 @@ const GameEventHandler = (board: string) => {
     }
   };
 
-  /**
-   * Eventually the game extensions will live separately as ES modules imported dynamically
-   */
-  let extension: GameExtensionInfo | null = null;
-  switch (board) {
-    case 'pokemon-gen1': extension = gen1(rootStore);
-  }
   if (extension) {
     for (let [key, value] of Object.entries(extension.gameEvents)) {
       // If a handler already exist for a game state, modify it

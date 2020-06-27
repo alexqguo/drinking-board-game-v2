@@ -46,5 +46,6 @@ export default class AlertStore {
     },
     choice: {},
     outcomeIdentifier: '',
+    customComponent: '',
   });
 }

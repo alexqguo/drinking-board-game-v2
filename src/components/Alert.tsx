@@ -18,7 +18,8 @@ const normalizeRolls = (input: string): number[] => {
 };
 
 export default () => {
-  const { gameStore, playerStore, boardStore, alertStore } = useContext(StoreContext);
+  const rootStore = useContext(StoreContext);
+  const { gameStore, playerStore, boardStore, alertStore } = rootStore;
   const { alert } = alertStore;
   const { schema } = boardStore;
   const { zones, tiles } = schema;
@@ -69,6 +70,10 @@ export default () => {
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEscapePress={false}
     >
+      {alert.customComponent ? <>
+        {rootStore.extension?.components[alert.customComponent]()}
+      </> : null}
+
       {rule ? <>
         <Paragraph style={activeRule && activeRule !== rule ? null: displayTextStyles}>
           {/* TODO - split on \n here if necessary */}

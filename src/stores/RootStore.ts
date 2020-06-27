@@ -11,11 +11,13 @@ import {
   BoardSchema,
   RestoreGameOptions,
   Alert,
-  TurnOrder
+  TurnOrder,
+  GameExtensionInfo
 } from 'src/types';
 import { createId, getAppStage, getCenterPoint } from 'src/utils';
 import { db } from 'src/firebase';
 import GameEventHandler from 'src/engine/game';
+import gen1 from 'src/games/pokemon-gen1';
 
 export default class RootStore {
   gameStore: GameStore;
@@ -24,6 +26,7 @@ export default class RootStore {
   boardStore: BoardStore;
   prefix: string = '';
   gameId: string = '';
+  extension: GameExtensionInfo | null = null;;
   gameRef: firebase.database.Reference | null = null;
   playerRef: firebase.database.Reference | null = null;
   alertRef: firebase.database.Reference | null = null;
@@ -74,9 +77,10 @@ export default class RootStore {
     await Promise.all([
       this.fetchBoard(board.value),
       this.fetchImage(board.value),
+      this.getExtension(board.value),
       db.ref(this.prefix).set(initialSessionData),
     ]);
-    GameEventHandler(board.value);
+    GameEventHandler();
 
     return gameId;
   }
@@ -137,10 +141,11 @@ export default class RootStore {
     await Promise.all([
       this.fetchBoard(board),
       this.fetchImage(board),
+      this.getExtension(board),
       this.gameRef?.once('value'), // Ensure stores are hydrated before redirecting
       this.playerRef?.once('value'),
     ]);
-    GameEventHandler(board);
+    GameEventHandler();
   }
 
   scrollToCurrentPlayer() {
@@ -152,5 +157,14 @@ export default class RootStore {
       left: position.x - (window.outerWidth / 2),
       behavior: 'smooth',
     });
+  }
+
+  /**
+   * Eventually the game extensions will live separately as ES modules imported dynamically
+   */
+  getExtension(boardName: string) {
+    switch (boardName) {
+      case 'pokemon-gen1': this.extension = gen1(this);
+    }
   }
 }
