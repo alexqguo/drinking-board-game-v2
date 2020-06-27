@@ -194,7 +194,7 @@ export interface RuleSchema {
   direction?: Direction,
   choices?: ChoiceSchema[],
   condition?: MoveConditionSchema,
-  // more
+  proxyRuleId?: string,
 }
 
 export interface BaseOutcomeSchema {

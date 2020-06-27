@@ -1,8 +1,8 @@
-import { GameState, GameExtensionInfo } from 'src/types';
+import { GameState, GameExtensionInfo, AlertState } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 
 export default (rootStore: RootStore): GameExtensionInfo => {
-  console.log('gen 1');
+  const { alertStore } = rootStore;
 
   return {
     gameEvents: {
@@ -12,6 +12,10 @@ export default (rootStore: RootStore): GameExtensionInfo => {
       [GameState.MOVE_END]: () => {
 
       },
+      pikachuProxyRule: () => {
+        console.log('pikachu rule!');
+        alertStore.update({ state: AlertState.CAN_CLOSE });
+      }
     },
   };
 }

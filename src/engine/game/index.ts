@@ -290,8 +290,9 @@ const uiActions = {
     } else if (gameStore.game.state === GameState.ZONE_CHECK) {
       gameStore.setGameState(GameState.TURN_START)
     } else {
-      console.error(`Alert was closed during ${gameStore.game.state} with no proper action`);
-      gameStore.setGameState(GameState.TURN_END);
+      // This will happen for ProxyRules, should figure out how to handle more nicely
+      console.warn(`Alert was closed during ${gameStore.game.state} with no proper action`);
+      gameStore.setGameState(GameState.RULE_END);
     }
   },
   handleAlertRoll: (key: string, rolls: number[]) => {

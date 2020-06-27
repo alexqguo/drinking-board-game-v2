@@ -10,6 +10,7 @@ import RollUntilRule from 'src/engine/rules/RollUntilRule';
 import MoveRule from 'src/engine/rules/MoveRule';
 import ChoiceRule from 'src/engine/rules/ChoiceRule';
 import DiceRollRule from 'src/engine/rules/DiceRollRule';
+import ProxyRule from 'src/engine/rules/ProxyRule';
 import GameOverRule from 'src/engine/rules/GameOverRule';
 import AddMandatoryRule from 'src/engine/rules/AddMandatoryRule';
 import ChallengeRule from 'src/engine/rules/ChallengeRule';
@@ -50,6 +51,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   DiceRollRule,
   GameOverRule,
   DrinkDuringLostTurnsRule,
+  ProxyRule,
   ApplyMoveConditionRule,
   ChoiceRule,
   ReverseTurnOrderRule,
