@@ -3,6 +3,10 @@ export enum GameType {
   remote = 'remote',
 }
 
+export interface GameExtensionInfo {
+  gameEvents: { [key: string]: Function },
+}
+
 export interface CreateGameOptions {
   playerNames: string[],
   // localPlayer: string,

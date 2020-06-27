@@ -1,12 +1,13 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { GameState, TileSchema, AlertState, MoveConditionSchema, ZoneType, ZoneSchema, RuleHandler, AlertRuleType } from 'src/types';
+import { GameState, TileSchema, AlertState, MoveConditionSchema, ZoneType, ZoneSchema, RuleHandler, AlertRuleType, GameExtensionInfo } from 'src/types';
 import RuleEngine, { getHandlerForRule } from 'src/engine/rules';
 import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 import { canPlayerMove } from 'src/engine/rules/ApplyMoveConditionRule';
+import gen1 from 'src/games/pokemon-gen1';
 
-const GameEventHandler = () => {
+const GameEventHandler = (board: string) => {
   const { gameStore, playerStore, boardStore, alertStore } = rootStore;
   let prevGameState = gameStore.game.state;
   const eventHandlers: { [key: string]: Function } = {
@@ -209,7 +210,6 @@ const GameEventHandler = () => {
     },
     [GameState.LOST_TURN_START]: () => {
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-      // decrement lost turns of player, set modal
       playerStore.updateEffects(currentPlayer.id, {
         skippedTurns: {
           ...currentPlayer.effects.skippedTurns,
@@ -224,6 +224,31 @@ const GameEventHandler = () => {
       });
     }
   };
+
+  /**
+   * Eventually the game extensions will live separately as ES modules imported dynamically
+   */
+  let extension: GameExtensionInfo | null = null;
+  switch (board) {
+    case 'pokemon-gen1': extension = gen1(rootStore);
+  }
+  if (extension) {
+    for (let [key, value] of Object.entries(extension.gameEvents)) {
+      // If a handler already exist for a game state, modify it
+      if (eventHandlers[key]) {
+        const previousHandler = eventHandlers[key];
+        // First run the custom handler, then run the predefined one
+        eventHandlers[key] = async () => {
+          await value();
+          previousHandler();
+        };
+
+      // This would really just be for proxy rules, but otherwise just add it to the list
+      } else {
+        eventHandlers[key] = value;
+      }
+    }
+  }
 
   autorun(() => {
     const { state } = gameStore.game;

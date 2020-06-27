@@ -71,6 +71,7 @@ export default () => {
     >
       {rule ? <>
         <Paragraph style={activeRule && activeRule !== rule ? null: displayTextStyles}>
+          {/* TODO - split on \n here if necessary */}
           {rule.displayText}
         </Paragraph>
       </>: null}

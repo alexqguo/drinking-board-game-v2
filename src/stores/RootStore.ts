@@ -43,7 +43,7 @@ export default class RootStore {
 
     const playerData: Player[] = playerNames.map((name: string) => {
       const id: string = createId('player');
-      // set localPlayerId if remote game and name === local player name
+      // TODO - set localPlayerId if remote game and name === local player name
 
       return {
         id,
@@ -76,7 +76,7 @@ export default class RootStore {
       this.fetchImage(board.value),
       db.ref(this.prefix).set(initialSessionData),
     ]);
-    GameEventHandler();
+    GameEventHandler(board.value);
 
     return gameId;
   }
@@ -140,7 +140,7 @@ export default class RootStore {
       this.gameRef?.once('value'), // Ensure stores are hydrated before redirecting
       this.playerRef?.once('value'),
     ]);
-    GameEventHandler();
+    GameEventHandler(board);
   }
 
   scrollToCurrentPlayer() {
