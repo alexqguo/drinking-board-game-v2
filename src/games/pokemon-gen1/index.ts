@@ -14,6 +14,7 @@ export default (rootStore: RootStore): GameExtensionInfo => {
       },
       pikachuProxyRule: () => {
         console.log('pikachu rule!');
+        // TODO - do the thing
         alertStore.update({ state: AlertState.CAN_CLOSE });
       }
     },

@@ -16,3 +16,8 @@ Schema changes:
 * ChoiceRule schema is different, choices array item will be an object with a "rule" key rather than the rule directly
 * "any" diceRoll outcome is removed, and the former "any" rule is just listed as an outcome. This would work in the old version too
 * Gen 1 Pikachu rule is now a ProxyRule
+
+Cleanup:
+* Move game extensions to external modules
+* Better handling of creating/joining game
+* Remove multi dice rolls in one click. Not used and lots of overhead

@@ -281,18 +281,25 @@ const uiActions = {
   },
   alertClose: async () => {
     const { alertStore, gameStore } = rootStore;
+    const { setGameState } = gameStore;
     await alertStore.clear();
-    
-    if (gameStore.game.state === GameState.RULE_TRIGGER) {
-      gameStore.setGameState(GameState.RULE_END);
-    } else if (gameStore.game.state === GameState.LOST_TURN_START) {
-      gameStore.setGameState(GameState.TURN_END);
-    } else if (gameStore.game.state === GameState.ZONE_CHECK) {
-      gameStore.setGameState(GameState.TURN_START)
-    } else {
-      // This will happen for ProxyRules, should figure out how to handle more nicely
-      console.warn(`Alert was closed during ${gameStore.game.state} with no proper action`);
-      gameStore.setGameState(GameState.RULE_END);
+    switch (gameStore.game.state) {
+      case (GameState.RULE_TRIGGER):
+        setGameState(GameState.RULE_END);
+        break;
+      case (GameState.LOST_TURN_START):
+        setGameState(GameState.TURN_END);
+        break;
+      case (GameState.ZONE_CHECK):
+        setGameState(GameState.TURN_START);
+        break;
+      case (GameState.GAME_START):
+        setGameState(GameState.TURN_CHECK);
+        break;
+      default:
+        // This will happen for ProxyRules, should figure out how to handle more nicely
+        console.warn(`Alert was closed during ${gameStore.game.state} with no proper action`);
+        gameStore.setGameState(GameState.RULE_END);
     }
   },
   handleAlertRoll: (key: string, rolls: number[]) => {
