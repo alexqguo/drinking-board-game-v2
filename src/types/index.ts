@@ -10,7 +10,7 @@ export interface GameExtensionInfo {
 
 export interface CreateGameOptions {
   playerNames: string[],
-  // localPlayer: string,
+  localPlayer: string,
   gameType: GameType,
   board: Board
 }

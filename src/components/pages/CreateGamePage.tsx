@@ -5,9 +5,11 @@ import {
   TextInput,
   Heading,
   SelectField,
+  Radio,
   Button,
   RadioGroup,
   DeleteIcon,
+  Pane,
 } from 'evergreen-ui';
 import useInput from 'src/hooks/useInput';
 import { TranslationContext } from 'src/providers/TranslationProvider';
@@ -22,7 +24,7 @@ export default () => {
   const [createdGameId, setCreatedGameId] = useState('');
   const [players, setPlayers] = useState<string[]>(['', '']);
   const [gameType, gameTypeBind] = useInput(GameType.local);
-  // const [localPlayer, localPlayerBind] = useInput(''); // Not yet
+  const [localPlayer, localPlayerBind] = useInput('');
 
   if (createdGameId) return <Redirect to={`/game/${createdGameId}`} />;
 
@@ -46,9 +48,9 @@ export default () => {
     const isValidGameType: boolean = gameType === GameType.local || gameType === GameType.remote;
     const hasEnoughPlayers: boolean = players.length >= 2;
     const hasValidNames: boolean = players.every(isValidName);
-    // Local player validation
+    const hasLocalPlayer: boolean = !!localPlayer && players.indexOf(localPlayer) !== -1;
 
-    return hasBoard && isValidGameType && hasEnoughPlayers && hasValidNames;
+    return hasBoard && isValidGameType && hasEnoughPlayers && hasValidNames && hasLocalPlayer;
   };
 
   const validateAndSubmit = async (e: Event) => {
@@ -56,13 +58,14 @@ export default () => {
     if (!isReadyToStart()) return;
 
     const options: CreateGameOptions = {
+      localPlayer,
       playerNames: players,
       gameType,
       board
     };
-    
-    const gameId = await store.createGame(options);
-    setCreatedGameId(gameId);
+    console.log(localPlayer)
+    // const gameId = await store.createGame(options);
+    // setCreatedGameId(gameId);
   }
 
   return (
@@ -112,6 +115,21 @@ export default () => {
         options={gameTypeOptions}
         onChange={value => gameTypeBind.onChangeVal(value)}
       />
+
+      {/* local player selection for remote games */}
+      {gameType === GameType.remote ? <>
+        <Pane role="group">
+          <FormField label={i18n.createGame.playingAs} />
+          {players.filter(p => !!p).map(p => (
+            <Radio
+              name="localPlayer"
+              label={p}
+              key={p}
+              onChange={e => localPlayerBind.onChange(e)}
+            />
+          ))}
+        </Pane>
+      </> : null}
 
       {/* submit */}
       <Button

@@ -12,7 +12,8 @@ import {
   RestoreGameOptions,
   Alert,
   TurnOrder,
-  GameExtensionInfo
+  GameExtensionInfo,
+  GameType
 } from 'src/types';
 import { createId, getAppStage, getCenterPoint } from 'src/utils';
 import { db } from 'src/firebase';
@@ -39,14 +40,17 @@ export default class RootStore {
   }
 
   async createGame(options: CreateGameOptions): Promise<string> {
-    const { playerNames, gameType, board } = options;
+    const { playerNames, gameType, board, localPlayer } = options;
     const gameId: string = createId('game');
     this.gameId = gameId;
     this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
 
     const playerData: Player[] = playerNames.map((name: string) => {
       const id: string = createId('player');
-      // TODO - set localPlayerId if remote game and name === local player name
+      if (gameType === GameType.remote && name === localPlayer) {
+        this.gameStore.setLocalPlayerId(id);
+        // TODO - isactive true
+      }
 
       return {
         id,

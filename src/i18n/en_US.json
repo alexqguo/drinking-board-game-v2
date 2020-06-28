@@ -16,7 +16,8 @@
     "gameType": "Are you playing locally or remotely?",
     "local": "Local",
     "remote": "Remote",
-    "start": "Start!"
+    "start": "Start!",
+    "playingAs": "Who are you playing as?"
   },
   "joinGame": {
     "title": "Join a game",
