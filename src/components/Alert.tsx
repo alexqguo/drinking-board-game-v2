@@ -29,17 +29,6 @@ export default () => {
   const currentTile = alert.ruleType === AlertRuleType.zone ? zones[alert.ruleIdx] : tiles[alert.ruleIdx];
   const rule = currentTile ? currentTile.rule : null;
 
-  // { close } provided by evergreen-ui, not sure what its type is
-  const footer = ({ close }: any) => (
-    <Button
-      appearance="primary" 
-      disabled={alertStore.alert.state !== AlertState.CAN_CLOSE || !gameStore.isMyTurn}
-      onClick={() => uiActions.alertClose(alert.nextGameState)}
-    >
-      {i18n.alert.done}
-    </Button>
-  );
-
   return useObserver(() => {
     const { alert } = alertStore;
     const hasDiceRoll = !!alert.diceRolls;
@@ -59,18 +48,29 @@ export default () => {
       });
     }
 
+    const header = <Heading size={800}>{alert.headingOverride || currentPlayer.name}</Heading>;
+    const footer = (
+      <Button
+        appearance="primary" 
+        disabled={alertStore.alert.state !== AlertState.CAN_CLOSE || !gameStore.isMyTurn}
+        onClick={() => uiActions.alertClose(alert.nextGameState)}
+      >
+        {i18n.alert.done}
+      </Button>
+    );
+
     const dialogProps = {
+      header,
+      footer,
       width: 700,
       isShown: alert.open,
       shouldCloseOnEscapePress: false,
       shouldCloseOnOverlayClick: false,
-      header: <Heading size={800}>{alert.headingOverride || currentPlayer.name}</Heading>,
-      footer,
       confirmLabel: i18n.alert.done,
     };
 
     if (alert.customComponent) {
-      dialogProps.footer = () => <></>;
+      dialogProps.footer = <></>;
     }
 
     return (
