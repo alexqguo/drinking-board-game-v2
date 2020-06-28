@@ -63,9 +63,8 @@ export default () => {
       gameType,
       board
     };
-    console.log(localPlayer)
-    // const gameId = await store.createGame(options);
-    // setCreatedGameId(gameId);
+    const gameId = await store.createGame(options);
+    setCreatedGameId(gameId);
   }
 
   return (

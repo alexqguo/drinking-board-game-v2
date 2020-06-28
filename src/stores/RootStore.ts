@@ -47,14 +47,16 @@ export default class RootStore {
 
     const playerData: Player[] = playerNames.map((name: string) => {
       const id: string = createId('player');
+      let isActive = false;
       if (gameType === GameType.remote && name === localPlayer) {
         this.gameStore.setLocalPlayerId(id);
-        // TODO - isactive true
+        isActive = true;
       }
 
       return {
         id,
         name,
+        isActive,
         tileIndex: 0,
         hasWon: false,
         effects: PlayerStore.defaultEffects(),
