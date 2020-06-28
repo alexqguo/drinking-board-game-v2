@@ -1,5 +1,5 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler, AlertState } from 'src/types';
+import { RuleSchema, RuleHandler, AlertState, GameState } from 'src/types';
 
 // Rule implementation imports
 import DisplayRule from 'src/engine/rules/DisplayRule';
@@ -75,6 +75,7 @@ export default async (ruleIndex: number) => {
   alertStore.update({
     open: true,
     state: AlertState.PENDING,
+    nextGameState: GameState.RULE_END,
     ruleIdx: ruleIndex,
   });
 

@@ -21,3 +21,5 @@ Cleanup:
 * Move game extensions to external modules
 * Better handling of creating/joining game
 * Remove multi dice rolls in one click. Not used and lots of overhead
+* Extensions need i18n support
+* Replace alert.CAN_CLOSE with something like nextState to indicate what the next state of the game should be

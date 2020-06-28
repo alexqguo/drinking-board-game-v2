@@ -37,6 +37,7 @@ const GameEventHandler = () => {
         await alertStore.update({
           open: true,
           state: AlertState.PENDING,
+          nextGameState: GameState.TURN_START,
           ruleIdx: boardStore.getIndexForZone(currentZone),
           ruleType: AlertRuleType.zone,
         });
@@ -219,6 +220,7 @@ const GameEventHandler = () => {
       alertStore.update({
         open: true,
         state: AlertState.CAN_CLOSE,
+        nextGameState: GameState.TURN_END,
         ruleIdx: -1,
         messageOverride: currentPlayer.effects.skippedTurns.message,
       });
@@ -272,28 +274,13 @@ const uiActions = {
   skipTurn: () => {
     rootStore.gameStore.setGameState(GameState.TURN_SKIP);
   },
-  alertClose: async () => {
+  alertClose: async (nextState: GameState) => {
+    if (!nextState) throw new Error('No nextState was defined when the modal closed.');
+    
     const { alertStore, gameStore } = rootStore;
     const { setGameState } = gameStore;
     await alertStore.clear();
-    switch (gameStore.game.state) {
-      case (GameState.RULE_TRIGGER):
-        setGameState(GameState.RULE_END);
-        break;
-      case (GameState.LOST_TURN_START):
-        setGameState(GameState.TURN_END);
-        break;
-      case (GameState.ZONE_CHECK):
-        setGameState(GameState.TURN_START);
-        break;
-      case (GameState.GAME_START):
-        setGameState(GameState.TURN_CHECK);
-        break;
-      default:
-        // This will happen for ProxyRules, should figure out how to handle more nicely
-        console.warn(`Alert was closed during ${gameStore.game.state} with no proper action`);
-        gameStore.setGameState(GameState.RULE_END);
-    }
+    setGameState(nextState);
   },
   handleAlertRoll: (key: string, rolls: number[]) => {
     const { alertStore } = rootStore;

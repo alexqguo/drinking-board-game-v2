@@ -47,10 +47,12 @@ export interface Alert {
   ruleIdx: number,
   ruleType: AlertRuleType,
   state: AlertState,
+  nextGameState: GameState,
   diceRolls: AlertDiceRollInfo,
   playerSelection: AlertPlayerSelection,
   choice: AlertChoiceInfo,
   messageOverride: string,
+  headingOverride: string,
   outcomeIdentifier: string,
   customComponent: string,
 }

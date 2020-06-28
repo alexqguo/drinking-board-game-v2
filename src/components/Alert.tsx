@@ -34,7 +34,7 @@ export default () => {
     <Button
       appearance="primary" 
       disabled={alertStore.alert.state !== AlertState.CAN_CLOSE || !gameStore.isMyTurn}
-      onClick={close}
+      onClick={() => uiActions.alertClose(alert.nextGameState)}
     >
       {i18n.alert.done}
     </Button>
@@ -59,17 +59,22 @@ export default () => {
       });
     }
 
+    const dialogProps = {
+      width: 700,
+      isShown: alert.open,
+      shouldCloseOnEscapePress: false,
+      shouldCloseOnOverlayClick: false,
+      header: <Heading size={800}>{alert.headingOverride || currentPlayer.name}</Heading>,
+      footer,
+      confirmLabel: i18n.alert.done,
+    };
+
+    if (alert.customComponent) {
+      dialogProps.footer = () => <></>;
+    }
+
     return (
-    <Dialog
-      isShown={alert.open}
-      header={<Heading size={800}>{currentPlayer ? currentPlayer.name : ''}</Heading>}
-      footer={footer}
-      width={700}
-      confirmLabel={i18n.alert.done}
-      onCloseComplete={uiActions.alertClose}
-      shouldCloseOnOverlayClick={false}
-      shouldCloseOnEscapePress={false}
-    >
+    <Dialog {...dialogProps} >
       {alert.customComponent ? <>
         {rootStore.extension?.components[alert.customComponent]()}
       </> : null}
