@@ -48,7 +48,8 @@ export default () => {
     const isValidGameType: boolean = gameType === GameType.local || gameType === GameType.remote;
     const hasEnoughPlayers: boolean = players.length >= 2;
     const hasValidNames: boolean = players.every(isValidName);
-    const hasLocalPlayer: boolean = !!localPlayer && players.indexOf(localPlayer) !== -1;
+    const hasLocalPlayer: boolean = gameType === GameType.local
+      || (!!localPlayer && players.indexOf(localPlayer) !== -1);
 
     return hasBoard && isValidGameType && hasEnoughPlayers && hasValidNames && hasLocalPlayer;
   };
@@ -58,10 +59,11 @@ export default () => {
     if (!isReadyToStart()) return;
 
     const options: CreateGameOptions = {
-      localPlayer,
-      playerNames: players,
+      board,
       gameType,
-      board
+      playerNames: players,
+      // Only pass localPlayer if it's a remote game
+      localPlayer: (gameType === GameType.remote ? localPlayer : undefined),
     };
     const gameId = await store.createGame(options);
     setCreatedGameId(gameId);
@@ -124,7 +126,8 @@ export default () => {
               name="localPlayer"
               label={p}
               key={p}
-              onChange={e => localPlayerBind.onChange(e)}
+              checked={localPlayer === p}
+              onChange={() => localPlayerBind.onChangeVal(p)}
             />
           ))}
         </Pane>
