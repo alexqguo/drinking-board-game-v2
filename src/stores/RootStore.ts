@@ -128,6 +128,20 @@ export default class RootStore {
     this.alertRef.on('value', (snap: firebase.database.DataSnapshot) => {
       this.alertStore.setAlert(snap.val() as Alert);
     });
+
+    // Browser warning message before leaving the page
+    window.addEventListener('beforeunload', (e: Event) => {
+      e.preventDefault();
+      e.returnValue = true;
+    });
+
+    // Set player to inactive when leaving the page
+    window.addEventListener('unload', async () => {
+      const { localPlayerId } = this.gameStore;
+      if (localPlayerId) {
+        await this.playerStore.updatePlayer(localPlayerId, { isActive: false });
+      }
+    });
   }
 
   async findSession(gameId: string): Promise<SessionData> {
