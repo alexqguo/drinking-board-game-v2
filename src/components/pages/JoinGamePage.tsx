@@ -1,16 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
 import {
-  Paragraph,
   Heading,
   FormField,
-  TextInput,
   Button,
-  TextInputField 
+  TextInputField, 
+  Radio,
+  Pane
 } from 'evergreen-ui';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { useParams, Redirect } from 'react-router-dom';
 import { GameType, Player, SessionData } from 'src/types';
 import { StoreContext } from 'src/providers/StoreProvider';
+import { db } from 'src/firebase';
+import RootStore from 'src/stores/RootStore';
 
 enum SearchStatus {
   idle,
@@ -52,6 +54,16 @@ export default () => {
           session,
           searchStatus: SearchStatus.found,
         });
+
+        // If it's a remote game, ensure we update state when session data changes
+        if (session.game.type === GameType.remote) {
+          db.ref(RootStore.createPrefix(gameId)).on('value', (snap: firebase.database.DataSnapshot) => {
+            updateState({
+              session: snap.val(),
+              searchStatus: SearchStatus.found,
+            });
+          });
+        }
       }
     } catch (e) {
       console.error(e);
@@ -75,11 +87,13 @@ export default () => {
   };
 
   const canJoin = () => {
-    if (!state.session) return false;
-    if (state.searchStatus !== SearchStatus.found) return false;
-    if (state.session?.game.type === GameType.local) return true;
-    // TODO - handle remote game types
-    return false;
+    const { session, searchStatus, selectedPlayerId } = state;
+    if (!session) return false;
+    if (searchStatus !== SearchStatus.found) return false;
+    if (session?.game.type === GameType.local) return true;
+    
+    const selectedPlayer = session.players.find((p: Player) => p.id === selectedPlayerId);
+    return selectedPlayer && !selectedPlayer.isActive;
   };
 
   useEffect(() => { if (gameId) search(gameId) }, []);
@@ -100,6 +114,23 @@ export default () => {
         disabled={state.searchStatus === SearchStatus.found || state.searchStatus === SearchStatus.searching}
         validationMessage={state.searchStatus === SearchStatus.notFound ? i18n.joinGame.notFound : null}
       />
+
+      {state.session && state.session.game && state.session.game.type === GameType.remote ? 
+        <FormField label={i18n.joinGame.selectPlayer}>
+          <Pane role="group">
+            {state.session.players.map((p: Player) => (
+              <Radio
+                name="remote-player-selection"
+                onChange={(e) => updateState({ selectedPlayerId: e.target.value })}
+                disabled={p.isActive}
+                label={p.name}
+                value={p.id} 
+                key={p.id}
+              />
+            ))}
+          </Pane>
+        </FormField>
+      : null}
       <Button
         disabled={!canJoin()}
         onClick={joinGame}

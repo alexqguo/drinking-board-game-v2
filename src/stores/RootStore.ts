@@ -43,7 +43,7 @@ export default class RootStore {
     const { playerNames, gameType, board, localPlayer } = options;
     const gameId: string = createId('game');
     this.gameId = gameId;
-    this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
+    this.prefix = RootStore.createPrefix(gameId);
 
     const playerData: Player[] = playerNames.map((name: string) => {
       const id: string = createId('player');
@@ -154,10 +154,11 @@ export default class RootStore {
   async restoreSession(options: RestoreGameOptions) {
     const { gameId, localPlayerId, board } = options;
     this.gameId = gameId;
-    this.prefix = `v2/sessions/${getAppStage()}/${gameId}`;
+    this.prefix = RootStore.createPrefix(gameId);
     this.gameStore.setLocalPlayerId(localPlayerId);
 
     this.subscribeToGame();
+    this.playerStore.updatePlayer(localPlayerId, { isActive: true });
     await Promise.all([
       this.fetchBoard(board),
       this.fetchImage(board),
@@ -186,5 +187,9 @@ export default class RootStore {
     switch (boardName) {
       case 'pokemon-gen1': this.extension = gen1(this);
     }
+  }
+
+  static createPrefix(gameId: string) {
+    return `v2/sessions/${getAppStage()}/${gameId}`;
   }
 }

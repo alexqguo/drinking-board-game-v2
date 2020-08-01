@@ -24,6 +24,7 @@
     "gameId": "Game ID",
     "searching": "Searching...",
     "notFound": "Could not find game",
+    "selectPlayer": "Who are you playing as?",
     "join": "Join"
   },
   "alert": {
