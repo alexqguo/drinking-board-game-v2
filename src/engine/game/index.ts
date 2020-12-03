@@ -5,7 +5,6 @@ import RuleEngine, { getHandlerForRule } from 'src/engine/rules';
 import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 import { canPlayerMove } from 'src/engine/rules/ApplyMoveConditionRule';
-import gen1 from 'src/games/pokemon-gen1';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore, alertStore, extension } = rootStore;

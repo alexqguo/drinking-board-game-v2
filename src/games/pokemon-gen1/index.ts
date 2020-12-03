@@ -3,6 +3,13 @@ import { GameState, GameExtensionInfo, AlertState } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 import pokemonSelection from 'src/games/pokemon-gen1/pokemonSelection';
 
+export const starters = Object.freeze({
+  pikachu: 'Pikachu',
+  squirtle: 'Squirtle',
+  bulbasaur: 'Bulbasaur',
+  charmander: 'Charmander',
+})
+
 export default (rootStore: RootStore): GameExtensionInfo => {
   const { alertStore } = rootStore;
   const isPokemonSelectionCompleted = observable.box(false);
@@ -35,7 +42,7 @@ export default (rootStore: RootStore): GameExtensionInfo => {
         });
       },
       [GameState.MOVE_END]: () => {
-
+        console.log('move ending?');
       },
       pikachuProxyRule: () => {
         console.log('pikachu rule!');

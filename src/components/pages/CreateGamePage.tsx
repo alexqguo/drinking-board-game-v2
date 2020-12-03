@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   FormField,
@@ -17,16 +17,40 @@ import { GameType, CreateGameOptions, Board } from 'src/types';
 import config from 'src/config';
 import { StoreContext } from 'src/providers/StoreProvider';
 
+const memoizedFetch = (function() {
+  const cache: Map<String, Object> = new Map();
+
+  return async (board: string) => {
+    const existingBoard = cache.get(board);
+    if (existingBoard) return existingBoard;
+
+    const boardParamsResp = await fetch(`games/${board}/params.json`);
+    const boardParams = await boardParamsResp.json();
+    cache.set(board, boardParams);
+  
+    return boardParams;
+  };
+})();
+
 export default () => {
   const store = useContext(StoreContext);
   const i18n = useContext(TranslationContext);
-  const [board, boardBind] = useInput(config.boards[0]);
+  const [board, boardBind] = useInput('');
   const [createdGameId, setCreatedGameId] = useState('');
   const [players, setPlayers] = useState<string[]>(['', '']);
   const [gameType, gameTypeBind] = useInput(GameType.local);
   const [localPlayer, localPlayerBind] = useInput('');
 
   if (createdGameId) return <Redirect to={`/game/${createdGameId}`} />;
+
+  useEffect(() => {
+    const fetchBoardParams = async () => {
+      const boardParams = await memoizedFetch(board);
+      console.log(boardParams);
+    };
+
+    if (board) fetchBoardParams();
+  }, [board]);
 
   const gameTypeOptions = [
     { label: i18n.createGame.local, value: GameType.local },
@@ -71,76 +95,79 @@ export default () => {
 
   return (
     <section>
-      <Heading size={800} is="h1">{i18n.createGame.title}</Heading>
+      <Pane padding={16}>
+        <Heading size={800} is="h1">{i18n.createGame.title}</Heading>
 
-      {/* game */}
-      <SelectField
-        value={board}
-        label={i18n.createGame.selectGame} 
-        onChange={boardBind.onChange}
-      >
-        {config.boards.map((board: Board) => (
-          <option value={board.value} key={board.value}>{board.name}</option>
-        ))}
-      </SelectField>
-
-      {/* players */}
-      <FormField label={i18n.createGame.players} />
-      {players.map((name: string, i: number) => (
-        <div key={`player-input-${i}`}>
-          <TextInput 
-            placeholder="name"
-            onChange={({ target }: { target: EventTarget }) => updatePlayerName(target, i)}
-            value={name}
-          />
-          {i >= 2 ? <DeleteIcon 
-            color="muted"
-            size={12}
-            style={{ cursor: 'pointer' }}
-            marginLeft={4}
-            onClick={() => removePlayer(i)}
-          /> : null}
-        </div>
-      ))}
-      <Button
-        disabled={players.length >= config.maxPlayers}
-        onClick={() => setPlayers([...players, ''])}
-      >
-        {i18n.createGame.addPlayer}
-      </Button>
-
-      {/* gametype */}
-      <RadioGroup
-        label={i18n.createGame.gameType}
-        value={gameType}
-        options={gameTypeOptions}
-        onChange={value => gameTypeBind.onChangeVal(value)}
-      />
-
-      {/* local player selection for remote games */}
-      {gameType === GameType.remote ? <>
-        <Pane role="group">
-          <FormField label={i18n.createGame.playingAs} />
-          {players.filter(p => !!p).map(p => (
-            <Radio
-              name="localPlayer"
-              label={p}
-              key={p}
-              checked={localPlayer === p}
-              onChange={() => localPlayerBind.onChangeVal(p)}
-            />
+        {/* game */}
+        <SelectField
+          value={board}
+          label={i18n.createGame.selectGame} 
+          onChange={boardBind.onChange}
+        >
+          <option disabled selected value=""></option>
+          {config.boards.map((board: Board) => (
+            <option value={board.value} key={board.value}>{board.name}</option>
           ))}
-        </Pane>
-      </> : null}
+        </SelectField>
 
-      {/* submit */}
-      <Button
-        disabled={!isReadyToStart()}
-        onClick={validateAndSubmit}
-        role="button"
-      >
-        {i18n.createGame.start}
-      </Button>
+        {/* players */}
+        <FormField label={i18n.createGame.players} />
+        {players.map((name: string, i: number) => (
+          <div key={`player-input-${i}`}>
+            <TextInput 
+              placeholder="name"
+              onChange={({ target }: { target: EventTarget }) => updatePlayerName(target, i)}
+              value={name}
+            />
+            {i >= 2 ? <DeleteIcon 
+              color="muted"
+              size={12}
+              style={{ cursor: 'pointer' }}
+              marginLeft={4}
+              onClick={() => removePlayer(i)}
+            /> : null}
+          </div>
+        ))}
+        <Button
+          disabled={players.length >= config.maxPlayers}
+          onClick={() => setPlayers([...players, ''])}
+        >
+          {i18n.createGame.addPlayer}
+        </Button>
+
+        {/* gametype */}
+        <RadioGroup
+          label={i18n.createGame.gameType}
+          value={gameType}
+          options={gameTypeOptions}
+          onChange={value => gameTypeBind.onChangeVal(value)}
+        />
+
+        {/* local player selection for remote games */}
+        {gameType === GameType.remote ? <>
+          <Pane role="group">
+            <FormField label={i18n.createGame.playingAs} />
+            {players.filter(p => !!p).map(p => (
+              <Radio
+                name="localPlayer"
+                label={p}
+                key={p}
+                checked={localPlayer === p}
+                onChange={() => localPlayerBind.onChangeVal(p)}
+              />
+            ))}
+          </Pane>
+        </> : null}
+
+        {/* submit */}
+        <Button
+          disabled={!isReadyToStart()}
+          onClick={validateAndSubmit}
+          role="button"
+        >
+          {i18n.createGame.start}
+        </Button>
+      </Pane>
     </section>
   );
 }
