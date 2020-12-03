@@ -158,7 +158,12 @@ export default class RootStore {
     this.gameStore.setLocalPlayerId(localPlayerId);
 
     this.subscribeToGame();
-    this.playerStore.updatePlayer(localPlayerId, { isActive: true });
+
+    // If localPlayerId exists, it's a remote game. If local, don't do anything here
+    if (localPlayerId) {
+      this.playerStore.updatePlayer(localPlayerId, { isActive: true });
+    }
+    
     await Promise.all([
       this.fetchBoard(board),
       this.fetchImage(board),

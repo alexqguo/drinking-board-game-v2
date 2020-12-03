@@ -20,6 +20,8 @@ import ApplyMoveConditionRule from 'src/engine/rules/ApplyMoveConditionRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 
 /*
+TODO:
+
 - tricky
 a bit of ApplyMoveConditionRule
 GroupRollRule
