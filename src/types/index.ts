@@ -26,6 +26,16 @@ export interface Board {
   value: string,
 }
 
+export interface BoardParams {
+  summary: string,
+  options: BoardParamOption[],
+}
+
+export interface BoardParamOption {
+  id: string,
+  displayName: string,
+}
+
 export interface SessionData {
   game: GameData,
   players: Player[],

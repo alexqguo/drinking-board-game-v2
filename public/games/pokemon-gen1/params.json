@@ -1,0 +1,14 @@
+{
+  "summary": "",
+  "isRequired": true,
+  "options": [{
+    "id": "squirtle",
+    "displayName": "Squirtle"
+  }, {
+    "id": "bulbasaur",
+    "displayName": "Bulbasaur"
+  }, {
+    "id": "charmander",
+    "displayName": "Charmander"
+  }]
+}
