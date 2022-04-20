@@ -14,7 +14,7 @@ export default () => {
   const { gameStore, playerStore } = useContext(StoreContext);
   const player: Player = playerStore.players.get(gameStore.playerStatusId)!;
   const isActionable = gameStore.isMyTurn && gameStore.game.state === GameState.ROLL_START && !gameStore.game.currentRoll; // Can you ever roll a 0?
-  
+
   const onRoll = (rolls: number[]) => {
     uiActions.handleRoll(rolls[0]);
     setRolls(rolls);
@@ -34,13 +34,13 @@ export default () => {
     >
       <Heading marginBottom={8}>{player.name}</Heading>
       <PlayerEffects />
-      <DiceRoll 
+      <DiceRoll
         rolls={rolls}
         disabled={!isActionable}
-        onRoll={onRoll} 
+        onRoll={onRoll}
         marginRight={8}
       />
-      <Button 
+      <Button
         disabled={!isActionable}
         iconBefore="disable"
         onClick={uiActions.skipTurn}

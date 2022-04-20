@@ -12,7 +12,7 @@ export interface CreateGameOptions {
   playerNames: string[],
   localPlayer: string,
   gameType: GameType,
-  board: Board
+  board: string,
 }
 
 export interface RestoreGameOptions {
@@ -79,7 +79,7 @@ export enum AlertState {
   REQUIRE_ACTION = 'REQUIRE_ACTION',
 }
 
-export type AlertDiceRollInfo = { 
+export type AlertDiceRollInfo = {
   [key: string]: AlertDiceRoll,
 };
 

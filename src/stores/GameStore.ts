@@ -1,4 +1,5 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, makeObservable } from 'mobx';
+import { update } from 'firebase/database';
 import { GameData, GameType, GameState, TurnOrder } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 
@@ -17,6 +18,7 @@ export default class GameStore {
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    makeObservable(this);
   }
 
   @action setGame = (game: GameData) => {
@@ -28,15 +30,15 @@ export default class GameStore {
   }
 
   setGameState = (state: GameState) => {
-    this.rootStore.gameRef?.update({ state });
+    update(this.rootStore.gameRef!, { state });
   }
 
   setCurrentPlayer = (playerId: string) => {
-    this.rootStore.gameRef?.update({ currentPlayerId: playerId });
+    update(this.rootStore.gameRef!, { currentPlayerId: playerId });
   }
 
   update = (game: Partial<GameData>) => {
-    this.rootStore.gameRef?.update(game);
+    update(this.rootStore.gameRef!, game);
   }
 
   @computed get isMyTurn() {

@@ -1,4 +1,5 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
+import { update, ref } from 'firebase/database';
 import { Alert, AlertState, AlertRuleType, GameState } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
@@ -9,6 +10,7 @@ export default class AlertStore {
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    makeObservable(this);
   }
 
   @action setAlert = (alert: Alert) => {
@@ -16,20 +18,20 @@ export default class AlertStore {
   }
 
   update = (alert: Partial<Alert>) => {
-    this.rootStore.alertRef?.update(alert);
+    update(this.rootStore.alertRef!, alert);
   }
 
   updateDiceRollResult = (key: string, result: string) => {
-    db.ref(`${this.rootStore.prefix}/alert/diceRolls/${key}`).update({ result });
+    update(ref(db, `${this.rootStore.prefix}/alert/diceRolls/${key}`), { result });
   }
 
   // Selects
   updateChoice = (choiceId: string, isSelected: boolean = true) => {
-    db.ref(`${this.rootStore.prefix}/alert/choice/${choiceId}`).update({ isSelected });
+    update(ref(db, `${this.rootStore.prefix}/alert/choice/${choiceId}`), { isSelected });
   }
 
   clear = () => {
-    this.rootStore.alertRef?.update(AlertStore.defaultAlert());
+    update(this.rootStore.alertRef!, AlertStore.defaultAlert());
   }
 
   static defaultAlert = () => ({

@@ -29,7 +29,7 @@ export default (rootStore: RootStore): GameExtensionInfo => {
           headingOverride: 'Choose your Pokemon!',
         });
 
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
           autorun(async (reaction) => {
             if (isPokemonSelectionCompleted.get() === true) {
               await alertStore.clear();

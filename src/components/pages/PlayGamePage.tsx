@@ -10,7 +10,7 @@ import PlayerStatus from 'src/components/PlayerStatus';
 import { uiActions } from 'src/engine/game';
 
 export default () => {
-  const { gameId } = useParams();
+  const { gameId } = useParams<{gameId?: string}>();
   const rootStore = useContext(StoreContext);
   const { gameStore, playerStore } = rootStore;
 

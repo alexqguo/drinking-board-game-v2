@@ -1,4 +1,13 @@
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, makeObservable } from 'mobx';
+import {
+  get,
+  ref,
+  query,
+  update,
+  equalTo,
+  orderByChild,
+  DataSnapshot,
+} from 'firebase/database';
 import { Player, PlayerEffects, ModifierOperation } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
@@ -9,6 +18,7 @@ export default class PlayerStore {
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    makeObservable(this);
   }
 
   @action setPlayer = (player: Player) => {
@@ -20,15 +30,17 @@ export default class PlayerStore {
   }
 
   updatePlayer = async (id: string, playerData: Partial<Player>) => {
-    const playerSnap = await this.rootStore.playerRef?.orderByChild('id').equalTo(id).once('value');
+    const playerSnap: DataSnapshot = await get(query(this.rootStore.playerRef!, orderByChild('id'), equalTo(id)));
+    // const playerSnap = await this.rootStore.playerRef?.orderByChild('id').equalTo(id).once('value');
     const [key] = Object.entries(playerSnap!.val())[0];
-    db.ref(`${this.rootStore.prefix}/players/${key}`).update(playerData);
+    update(ref(db, `${this.rootStore.prefix}/players/${key}`), playerData);
   }
 
   updateEffects = async (id: string, newEffects: Partial<PlayerEffects>) => {
-    const playerSnap = await this.rootStore.playerRef?.orderByChild('id').equalTo(id).once('value');
+    const playerSnap: DataSnapshot = await get(query(this.rootStore.playerRef!, orderByChild('id'), equalTo(id)));
+    // const playerSnap = await this.rootStore.playerRef?.orderByChild('id').equalTo(id).once('value');
     const [key] = Object.entries(playerSnap!.val())[0];
-    db.ref(`${this.rootStore.prefix}/players/${key}/effects`).update(newEffects);
+    update(ref(db, `${this.rootStore.prefix}/players/${key}/effects`), newEffects);
   };
 
   static defaultEffects = (): PlayerEffects => ({

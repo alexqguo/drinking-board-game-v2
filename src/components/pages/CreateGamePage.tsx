@@ -33,7 +33,7 @@ const memoizedFetch = (function() {
     const boardParamsResp = await fetch(`games/${board}/params.json`);
     const boardParams = await boardParamsResp.json();
     cache.set(board, boardParams);
-  
+
     return boardParams;
   };
 })();
@@ -42,7 +42,7 @@ export default () => {
   const store = useContext(StoreContext);
   const i18n = useContext(TranslationContext);
   const [board, boardBind] = useInput('');
-  const [boardParams, setBoardParams] = useState<BoardParamOption[] | null>(null);
+  // const [boardParams, setBoardParams] = useState<BoardParamOption[] | null>(null);
   const [createdGameId, setCreatedGameId] = useState('');
   const [players, setPlayers] = useState<PlayerData[]>([{ name: '' }, { name: '' }]);
   const [gameType, gameTypeBind] = useInput(GameType.local);
@@ -50,14 +50,14 @@ export default () => {
 
   if (createdGameId) return <Redirect to={`/game/${createdGameId}`} />;
 
-  useEffect(() => {
-    const fetchBoardParams = async () => {
-      const boardParams = (await memoizedFetch(board) as BoardParams);
-      setBoardParams(boardParams.options);
-    };
+  // useEffect(() => {
+  //   const fetchBoardParams = async () => {
+  //     const boardParams = (await memoizedFetch(board) as BoardParams);
+  //     setBoardParams(boardParams.options);
+  //   };
 
-    if (board) fetchBoardParams();
-  }, [board]);
+  //   if (board) fetchBoardParams();
+  // }, [board]);
 
   const gameTypeOptions = [
     { label: i18n.createGame.local, value: GameType.local },
@@ -103,8 +103,6 @@ export default () => {
     setCreatedGameId(gameId);
   }
 
-  console.log(players);
-
   return (
     <section>
       <Pane padding={16}>
@@ -114,7 +112,7 @@ export default () => {
         <SelectField
           width={280}
           value={board}
-          label={i18n.createGame.selectGame} 
+          label={i18n.createGame.selectGame}
           onChange={boardBind.onChange}
         >
           <option disabled selected value=""></option>
@@ -127,13 +125,13 @@ export default () => {
         <FormField label={i18n.createGame.players} />
         {players.map((player: PlayerData, i: number) => (
           <Pane key={`player-input-${i}`} marginBottom={8}>
-            <TextInput 
+            <TextInput
               placeholder="name"
               onChange={({ target }: { target: HTMLInputElement }) => updatePlayer('name', target.value, i)}
               value={player.name}
             />
 
-            {i >= 2 ? <DeleteIcon 
+            {i >= 2 ? <DeleteIcon
               color="muted"
               size={12}
               style={{ cursor: 'pointer' }}
@@ -141,14 +139,14 @@ export default () => {
               onClick={() => removePlayer(i)}
             /> : null}
 
-            {boardParams ? <SegmentedControl
+            {/* {boardParams ? <SegmentedControl
               marginTop={2}
               height={24}
               width={280}
               options={boardParams.map(bp => ({ label: bp.displayName, value: bp.id }))}
               onChange={(val) => updatePlayer('boardParam', val as string, i)}
               value={player.boardParam || ''}
-            /> : null}
+            /> : null} */}
           </Pane>
         ))}
         <Button

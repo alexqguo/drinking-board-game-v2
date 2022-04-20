@@ -1,3 +1,14 @@
+import {
+  get,
+  ref,
+  child,
+  update,
+  onValue,
+  onChildAdded,
+  onChildChanged,
+  DataSnapshot,
+  DatabaseReference,
+} from 'firebase/database';
 import GameStore from 'src/stores/GameStore';
 import PlayerStore from 'src/stores/PlayerStore';
 import AlertStore from 'src/stores/AlertStore';
@@ -28,9 +39,9 @@ export default class RootStore {
   prefix: string = '';
   gameId: string = '';
   extension: GameExtensionInfo | null = null;;
-  gameRef: firebase.database.Reference | null = null;
-  playerRef: firebase.database.Reference | null = null;
-  alertRef: firebase.database.Reference | null = null;
+  gameRef: DatabaseReference | null = null;
+  playerRef: DatabaseReference | null = null;
+  alertRef: DatabaseReference | null = null;
 
   constructor() {
     this.gameStore = new GameStore(this);
@@ -64,9 +75,9 @@ export default class RootStore {
     });
 
     const gameData: GameData = {
+      board,
       id: gameId,
       type: gameType,
-      board: board.value,
       state: GameState.NOT_STARTED,
       currentPlayerId: playerData[0].id,
       currentRoll: null,
@@ -81,10 +92,10 @@ export default class RootStore {
 
     this.subscribeToGame();
     await Promise.all([
-      this.fetchBoard(board.value),
-      this.fetchImage(board.value),
-      this.getExtension(board.value),
-      db.ref(this.prefix).set(initialSessionData),
+      this.fetchBoard(board),
+      this.fetchImage(board),
+      this.getExtension(board),
+      update(ref(db, this.prefix), initialSessionData)
     ]);
     GameEventHandler();
 
@@ -111,21 +122,21 @@ export default class RootStore {
   }
 
   subscribeToGame() {
-    this.gameRef = db.ref(`${this.prefix}/game`);
-    this.gameRef.on('value', (snap: firebase.database.DataSnapshot) => {
+    this.gameRef = ref(db, `${this.prefix}/game`);
+    onValue(this.gameRef, (snap: DataSnapshot) => {
       this.gameStore.setGame(snap.val() as GameData);
-    });
-
-    this.playerRef = db.ref(`${this.prefix}/players`);
-    this.playerRef.on('child_added', (snap: firebase.database.DataSnapshot) => {
-      this.playerStore.setPlayer(snap.val() as Player);
-    });
-    this.playerRef.on('child_changed', (snap: firebase.database.DataSnapshot) => {
-      this.playerStore.setPlayer(snap.val() as Player);
     })
 
-    this.alertRef = db.ref(`${this.prefix}/alert`);
-    this.alertRef.on('value', (snap: firebase.database.DataSnapshot) => {
+    this.playerRef = ref(db, `${this.prefix}/players`);
+    onChildAdded(this.playerRef, (snap: DataSnapshot) => {
+      this.playerStore.setPlayer(snap.val() as Player);
+    });
+    onChildChanged(this.playerRef, (snap: DataSnapshot) => {
+      this.playerStore.setPlayer(snap.val() as Player);
+    });
+
+    this.alertRef = ref(db, `${this.prefix}/alert`);
+    onValue(this.alertRef, (snap: DataSnapshot) => {
       this.alertStore.setAlert(snap.val() as Alert);
     });
 
@@ -147,7 +158,8 @@ export default class RootStore {
   async findSession(gameId: string): Promise<SessionData> {
     // Means you can't look up prod games in dev mode. Which is fine, for now
     const path = `v2/sessions/${getAppStage()}/${gameId}`;
-    const snap: firebase.database.DataSnapshot = await db.ref(path).once('value');
+    const snap: DataSnapshot = await get(child(ref(db), path));
+
     return snap.val();
   }
 
@@ -163,13 +175,13 @@ export default class RootStore {
     if (localPlayerId) {
       this.playerStore.updatePlayer(localPlayerId, { isActive: true });
     }
-    
+
     await Promise.all([
       this.fetchBoard(board),
       this.fetchImage(board),
       this.getExtension(board),
-      this.gameRef?.once('value'), // Ensure stores are hydrated before redirecting
-      this.playerRef?.once('value'),
+      get(child(this.gameRef!, '/')), // Ensure stores are hydrated before redirecting
+      get(child(this.playerRef!, '/')),
     ]);
     GameEventHandler();
   }

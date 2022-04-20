@@ -11,6 +11,7 @@ const GameEventHandler = () => {
   let prevGameState = gameStore.game.state;
   const eventHandlers: { [key: string]: Function } = {
     [GameState.GAME_START]: () => {
+      console.log('game start')
       gameStore.setGameState(GameState.TURN_CHECK);
     },
     [GameState.TURN_CHECK]: () => {
@@ -27,7 +28,7 @@ const GameEventHandler = () => {
       const { schema } = boardStore;
       const { tiles, zones } = schema;
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-      const currentTile = tiles[currentPlayer.tileIndex];      
+      const currentTile = tiles[currentPlayer.tileIndex];
       const currentZone: ZoneSchema = zones.find((z: ZoneSchema) => z.name === currentTile.zone)!;
       rootStore.scrollToCurrentPlayer();
 
@@ -54,11 +55,11 @@ const GameEventHandler = () => {
       } else {
         const { moveCondition } = currentPlayer.effects;
         const conditionSchema = boardStore.schema.tiles[moveCondition.tileIndex]?.rule.condition;
-        if (conditionSchema 
-          && conditionSchema.diceRolls 
+        if (conditionSchema
+          && conditionSchema.diceRolls
           && conditionSchema.diceRolls?.numRequired
           && conditionSchema.diceRolls?.numRequired > 1) {
-          // TODO - open modal, require rolls. when rolls are done, 
+          // TODO - open modal, require rolls. when rolls are done,
           alertStore.update({
             open: true,
             state: AlertState.REQUIRE_ACTION,
@@ -97,7 +98,7 @@ const GameEventHandler = () => {
       const roll = gameStore.game.currentRoll;
       const conditionSchema: MoveConditionSchema = boardStore.schema.tiles[moveCondition.tileIndex].rule.condition!;
       const { diceRolls } = conditionSchema;
-      
+
       if (conditionSchema && (!diceRolls || !diceRolls.numRequired || diceRolls?.numRequired === 1)) {
         const result = await canPlayerMove(currentPlayer.id, conditionSchema, [roll!]);
         if (!result.canMove) {
@@ -134,14 +135,14 @@ const GameEventHandler = () => {
           },
         });
       }
-      
+
       let firstMandatoryIndex = boardStore.schema.tiles
         .slice(tileIndex + 1, tileIndex + 1 + roll)
         .findIndex((tile: TileSchema, idx: number) => {
           return tile.mandatory || effects.customMandatoryTileIndex === tileIndex + idx + 1;
           // TODO - OR anchor
         });
-      
+
       if (effects.mandatorySkips > 0 && firstMandatoryIndex !== -1) {
         await playerStore.updateEffects(currentPlayer.id, {
           mandatorySkips: effects.mandatorySkips - 1,
@@ -199,7 +200,7 @@ const GameEventHandler = () => {
         const length = playerIds.length;
         // Wrap back around if necessary
         const nextPlayerIdx = (pos < 0 ? length - (-pos % length) : pos) % length;
-        nextPlayerId = playerIds[nextPlayerIdx]; 
+        nextPlayerId = playerIds[nextPlayerIdx];
       }
 
       await gameStore.setCurrentPlayer(nextPlayerId);
@@ -256,7 +257,7 @@ const GameEventHandler = () => {
 };
 
 // This file should be the only thing updating game.gameState.
-// Provide some hooks for UI components 
+// Provide some hooks for UI components
 const uiActions = {
   start: () => {
     // Only start the game if it hasn't been started. When joining game state will already exist
@@ -275,7 +276,7 @@ const uiActions = {
   },
   alertClose: async (nextState: GameState) => {
     if (!nextState) throw new Error('No nextState was defined when the modal closed.');
-    
+
     const { alertStore, gameStore } = rootStore;
     const { setGameState } = gameStore;
     await alertStore.clear();

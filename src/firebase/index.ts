@@ -1,6 +1,6 @@
-import * as firebase from 'firebase/app';
-import 'firebase/analytics';
-import 'firebase/database';
+import { FirebaseApp, initializeApp } from 'firebase/app';
+import { Database, getDatabase } from 'firebase/database';
+import { initializeAnalytics } from 'firebase/analytics';
 
 const config = {
   apiKey: 'AIzaSyDQxVG0YgF30AJq-fpclM2sdecM-umH-zw',
@@ -13,6 +13,6 @@ const config = {
   measurementId: 'G-EMDCRKRSE5',
 };
 
-export const app: firebase.app.App = firebase.initializeApp(config);
-export const db: firebase.database.Database = firebase.database();
-firebase.analytics();
+export const app: FirebaseApp = initializeApp(config);
+export const db: Database = getDatabase(app);
+initializeAnalytics(app);
