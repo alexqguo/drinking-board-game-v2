@@ -1,14 +1,14 @@
 import rootStore from 'src/stores';
-import { 
+import {
   RuleSchema,
   RuleHandler,
   AlertState,
   MoveConditionSchema,
   DiceRollType,
-  MoveConditionResult 
+  MoveConditionResult
 } from 'src/types';
 import { requirePlayerSelection, requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
-import { validateRequired, getHandlerForRule } from 'src/engine/rules';
+import { validateRequired } from 'src/engine/rules';
 import PlayerStore from 'src/stores/PlayerStore';
 import { formatString } from 'src/providers/TranslationProvider';
 import en from 'src/i18n/en_US.json';
@@ -31,8 +31,8 @@ const isDiceRollSuccessful = (cond: MoveConditionSchema, rolls: number[]) => {
 }
 
 export const canPlayerMove = async (
-  playerId: string, 
-  condition: MoveConditionSchema, 
+  playerId: string,
+  condition: MoveConditionSchema,
   rolls: number[]
 ): Promise<MoveConditionResult> => {
   const { playerStore } = rootStore;
@@ -54,7 +54,7 @@ export const canPlayerMove = async (
       // TODO - execute the consequence rule. Need this for gen 2 zone
       // const handler = getHandlerForRule(condition.consequence);
     }
-    
+
     return {
       canMove: false,
       message: formatString(en.moveCondition.notMet, {
@@ -85,7 +85,7 @@ export const canPlayerMove = async (
       numCurrentSuccesses: newSuccessCount,
     },
   });
-  
+
   return {
     canMove: false,
     message: formatString(en.moveCondition.met, {
@@ -113,7 +113,7 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
       }
     });
   });
-  
+
   // TODO - do dice rolls now if condition.immediate
   // Should only be used with self target
   if (rule.condition?.immediate) {

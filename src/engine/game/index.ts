@@ -1,6 +1,6 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { GameState, TileSchema, AlertState, MoveConditionSchema, ZoneType, ZoneSchema, RuleHandler, AlertRuleType, GameExtensionInfo } from 'src/types';
+import { GameState, TileSchema, AlertState, MoveConditionSchema, ZoneType, ZoneSchema, RuleHandler, AlertRuleType, AlertAction } from 'src/types';
 import RuleEngine, { getHandlerForRule } from 'src/engine/rules';
 import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
@@ -151,7 +151,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 44;
+      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 18;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -277,14 +277,22 @@ const uiActions = {
   alertClose: async (nextState: GameState) => {
     if (!nextState) throw new Error('No nextState was defined when the modal closed.');
 
-    const { alertStore, gameStore } = rootStore;
+    const { alertStore, gameStore, actionStore } = rootStore;
     const { setGameState } = gameStore;
-    await alertStore.clear();
+    await Promise.all([
+      alertStore.clear(),
+      actionStore.clear(),
+    ]);
     setGameState(nextState);
   },
+  // Will be deprecated in favor of handleActionRoll
   handleAlertRoll: (key: string, rolls: number[]) => {
     const { alertStore } = rootStore;
     alertStore.updateDiceRollResult(key, rolls.join('|'));
+  },
+  handleActionRoll: (roll: number, action: AlertAction) => {
+    const { actionStore } = rootStore;
+    actionStore.updateAction(action.id, { value: roll });
   },
   handleAlertPlayerSelection: (playerId: string) => {
     const { alertStore } = rootStore;

@@ -4,6 +4,7 @@ import { Dialog, Heading, Paragraph, Button } from 'evergreen-ui';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
+import AlertActions from 'src/components/AlertActions';
 import { uiActions } from 'src/engine/game';
 import { AlertState, AlertRuleType } from 'src/types';
 
@@ -51,7 +52,7 @@ export default () => {
     const header = <Heading size={800}>{alert.headingOverride || currentPlayer.name}</Heading>;
     const footer = (
       <Button
-        appearance="primary" 
+        appearance="primary"
         disabled={alertStore.alert.state !== AlertState.CAN_CLOSE || !gameStore.isMyTurn}
         onClick={() => uiActions.alertClose(alert.nextGameState)}
       >
@@ -106,7 +107,7 @@ export default () => {
             disabled={!gameStore.isMyTurn || !!alert.diceRolls[key].result}
             numRolls={alert.diceRolls[key].numRolls}
             rolls={normalizeRolls(alert.diceRolls[key].result)}
-            onRoll={(rolls) => uiActions.handleAlertRoll(key, rolls)} 
+            onRoll={(rolls) => uiActions.handleAlertRoll(key, rolls)}
           />
         ))}
       </Paragraph> : null}
@@ -140,7 +141,9 @@ export default () => {
           </Button>
         ))}
       </Paragraph> : null}
-    </Dialog> 
+
+      <AlertActions />
+    </Dialog>
     );
   });
 }

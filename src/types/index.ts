@@ -39,7 +39,8 @@ export interface BoardParamOption {
 export interface SessionData {
   game: GameData,
   players: Player[],
-  alert: Alert
+  alert: Alert,
+  actions: AlertAction[],
 }
 
 export interface GameData {
@@ -65,6 +66,23 @@ export interface Alert {
   headingOverride: string,
   outcomeIdentifier: string,
   customComponent: string,
+}
+
+export interface AlertAction {
+  id: string,
+  playerId: string,
+  type: ActionType,
+  status: ActionStatus,
+  value: any,
+}
+
+export enum ActionType {
+  roll = 'roll',
+}
+
+export enum ActionStatus {
+  ready = 'ready', // User can do the action now
+  dependent = 'dependent', // This action is waiting for ones before it
 }
 
 export enum AlertRuleType {
@@ -184,7 +202,15 @@ export interface SpeedModifier {
   numTurns: number,
 }
 
-export type RuleHandler = (rule: RuleSchema) => void;
+export type RuleHandler = {
+  (rule: RuleSchema): void,
+
+  /**
+   * Rule handlers can optionally have a postActionHandler function, which takes a list of the existing
+   * actions in order to calculate next step
+   */
+  postActionHandler?: (rule: RuleSchema, actions: AlertAction[]) => void
+};
 
 ////////////////////////////////////////////////////////////////
 // Schema interfaces. Anything living in the board JSON files

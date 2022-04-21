@@ -8,11 +8,13 @@ import {
   onChildChanged,
   DataSnapshot,
   DatabaseReference,
+  onChildRemoved,
 } from 'firebase/database';
 import GameStore from 'src/stores/GameStore';
 import PlayerStore from 'src/stores/PlayerStore';
 import AlertStore from 'src/stores/AlertStore';
 import BoardStore from 'src/stores/BoardStore';
+import ActionStore from 'src/stores/ActionStore';
 import {
   CreateGameOptions,
   SessionData,
@@ -24,7 +26,8 @@ import {
   Alert,
   TurnOrder,
   GameExtensionInfo,
-  GameType
+  GameType,
+  AlertAction
 } from 'src/types';
 import { createId, getAppStage, getCenterPoint } from 'src/utils';
 import { db } from 'src/firebase';
@@ -36,17 +39,20 @@ export default class RootStore {
   playerStore: PlayerStore;
   alertStore: AlertStore;
   boardStore: BoardStore;
+  actionStore: ActionStore;
   prefix: string = '';
   gameId: string = '';
   extension: GameExtensionInfo | null = null;;
   gameRef: DatabaseReference | null = null;
   playerRef: DatabaseReference | null = null;
   alertRef: DatabaseReference | null = null;
+  actionRef: DatabaseReference | null = null;
 
   constructor() {
     this.gameStore = new GameStore(this);
     this.playerStore = new PlayerStore(this);
     this.alertStore = new AlertStore(this);
+    this.actionStore = new ActionStore(this);
     this.boardStore = new BoardStore();
   }
 
@@ -85,6 +91,7 @@ export default class RootStore {
     };
 
     const initialSessionData: SessionData = {
+      actions: [],
       game: gameData,
       players: playerData,
       alert: AlertStore.defaultAlert(),
@@ -128,16 +135,25 @@ export default class RootStore {
     })
 
     this.playerRef = ref(db, `${this.prefix}/players`);
-    onChildAdded(this.playerRef, (snap: DataSnapshot) => {
+    const setPlayerCb = (snap: DataSnapshot) => {
       this.playerStore.setPlayer(snap.val() as Player);
-    });
-    onChildChanged(this.playerRef, (snap: DataSnapshot) => {
-      this.playerStore.setPlayer(snap.val() as Player);
-    });
+    }
+    onChildAdded(this.playerRef, setPlayerCb);
+    onChildChanged(this.playerRef, setPlayerCb);
 
     this.alertRef = ref(db, `${this.prefix}/alert`);
     onValue(this.alertRef, (snap: DataSnapshot) => {
       this.alertStore.setAlert(snap.val() as Alert);
+    });
+
+    this.actionRef = ref(db, `${this.prefix}/actions`);
+    const setActionCb = (snap: DataSnapshot) => {
+      this.actionStore.setAction(snap.val() as AlertAction);
+    }
+    onChildAdded(this.actionRef, setActionCb);
+    onChildChanged(this.actionRef, setActionCb);
+    onChildRemoved(this.actionRef, (snap: DataSnapshot) => {
+      this.actionStore.removeAction(snap.val() as AlertAction);
     });
 
     // Browser warning message before leaving the page

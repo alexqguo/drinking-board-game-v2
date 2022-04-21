@@ -19,13 +19,13 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
     }
     alertStore.update({ diceRolls: newDiceRollInfo });
 
-    // If the current player closes their screen in the middle of this, when they join back the autorun 
+    // If the current player closes their screen in the middle of this, when they join back the autorun
     // won't be set up since the rule already executed, leaving the rule unfinishable. Edge case, but should fix
     autorun(reaction => {
       const { diceRolls } = alertStore.alert;
       const keys = Object.keys(diceRolls);
       const hasFullResults = keys.every((key: string) => !!diceRolls[key].result);
-  
+
       if (hasFullResults) {
         reaction.dispose();
         resolve(diceRolls);
@@ -33,6 +33,12 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
     });
   });
 };
+
+export const requireDiceTest = (numRequired: number): Promise<AlertDiceRollInfo> => {
+  return new Promise(resolve => {
+
+  });
+}
 
 // Really need to rethink this multiple rolls in one thing
 export const getRollsFromAlertDiceRoll = (info: AlertDiceRollInfo): number[] => {
@@ -76,7 +82,7 @@ export const requireChoice = (rules: ChoiceSchema[]): Promise<RuleSchema> => {
 export const requirePlayerSelection = (playerTarget: PlayerTarget, candidates: string[] = []): Promise<string[]> => {
   return new Promise((resolve) => {
     const { gameStore, playerStore, alertStore } = rootStore;
-    const candidateIds = candidates.length ? 
+    const candidateIds = candidates.length ?
       candidates : playerStore.ids.filter((id: string) => id !== gameStore.game.currentPlayerId);
 
     switch(playerTarget) {
