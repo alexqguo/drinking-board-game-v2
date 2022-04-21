@@ -34,12 +34,6 @@ export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo
   });
 };
 
-export const requireDiceTest = (numRequired: number): Promise<AlertDiceRollInfo> => {
-  return new Promise(resolve => {
-
-  });
-}
-
 // Really need to rethink this multiple rolls in one thing
 export const getRollsFromAlertDiceRoll = (info: AlertDiceRollInfo): number[] => {
   let result: number[] = [];

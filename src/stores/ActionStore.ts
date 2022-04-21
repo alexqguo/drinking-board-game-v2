@@ -46,6 +46,8 @@ export default class ActionStore {
      * will rehydrate the actions one by one, so the logic needs to take that into account as well.
      *
      * Only execute this logic if it is your turn in the game.
+     * --> Maybe consider putting this check individually in each postActionHandler. Could run into weird edge
+     *     cases for things like group roll rule.
      */
     if (this.rootStore.gameStore.isMyTurn) {
       const curRule: RuleSchema = boardStore.getTileOrZoneRuleForAlert(alertStore.alert);

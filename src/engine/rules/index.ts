@@ -22,6 +22,21 @@ import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule'
 /*
 TODO:
 
+- Action refactor
+SpeedModifierRule -> player selection
+RollUntilRule -> dice
+MoveRule -> player + dice
+ChoiceRule -> choice + dice
+DiceRollRule -> dice
+ChallengeRule -> player selection
+ApplyMoveConditionRule -> dice + player
+  - once this is done, the following can probably be deleted
+    - requirePlayerSelection
+    - requireChoice
+    - requireDiceRolls
+    - (hopefully) getRollsFromAlertDiceRoll
+    - so basically, all of engine/alert/index.ts
+
 - tricky
 a bit of ApplyMoveConditionRule
 GroupRollRule
