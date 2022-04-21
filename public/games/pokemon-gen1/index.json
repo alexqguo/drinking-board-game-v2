@@ -398,7 +398,8 @@
         "displayText": "I want to ride my BICYCLE! BICYCLE! BICYCLE! On your next turn, roll the die and move twice that number.",
         "type": "SpeedModifierRule",
         "modifier": ["*", 2],
-        "numTurns": 1
+        "numTurns": 1,
+        "playerTarget": "self"
       },
       "position": [{
         "x": 1766,

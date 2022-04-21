@@ -94,7 +94,6 @@ export default class ActionStore {
       acc[key!] = cur;
       return acc;
     }, {});
-    console.log('new actions', updateObj)
     return update(this.rootStore.actionRef!, updateObj);
   }
 

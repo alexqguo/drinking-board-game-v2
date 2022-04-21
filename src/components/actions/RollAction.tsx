@@ -2,12 +2,7 @@ import React from 'react';
 import { ActionStatus, AlertAction } from 'src/types';
 import DiceRoll from 'src/components/DiceRoll';
 import { uiActions } from 'src/engine/game';
-
-interface ActionProps {
-  action: AlertAction,
-  actions: AlertAction[],
-  isMyTurn: boolean,
-};
+import { ActionProps, isActionDisabled } from './utils';
 
 /**
  * Handles dice roll actions in the alert. This is technically a controlled component, but with
@@ -24,16 +19,7 @@ const RollAction = ({
   actions,
   isMyTurn,
 }: ActionProps) => {
-  /**
-   * The action is disabled if:
-   * - It was already completed
-   * - It's for a different player
-   * - The action is a dependent action and prior actions are not completed yet
-   */
-  const curIndex = actions.indexOf(action);
-  const priorActionsIncomplete = actions.some((a, idx) => idx < curIndex && !a.value);
-  const isBlocked = action.status === ActionStatus.dependent && priorActionsIncomplete;
-  const isDisabled = !isMyTurn || !!action.value || isBlocked;
+  const isDisabled = isActionDisabled(action, actions, isMyTurn);
   const rollValue = action.value ? [action.value] : [];
 
   return (

@@ -74,10 +74,12 @@ export interface AlertAction {
   type: ActionType,
   status: ActionStatus,
   value: any,
+  candidateIds?: string[],
 }
 
 export enum ActionType {
   roll = 'roll',
+  playerSelection = 'playerSelection',
 }
 
 export enum ActionStatus {

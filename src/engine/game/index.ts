@@ -151,7 +151,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 58;
+      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 3;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -293,6 +293,10 @@ const uiActions = {
   handleActionRoll: (roll: number, action: AlertAction) => {
     const { actionStore } = rootStore;
     actionStore.updateAction(action.id, { value: roll });
+  },
+  handleActionSelection: (selectionId: string, action: AlertAction) => {
+    const { actionStore } = rootStore;
+    actionStore.updateAction(action.id, { value: selectionId });
   },
   handleAlertPlayerSelection: (playerId: string) => {
     const { alertStore } = rootStore;

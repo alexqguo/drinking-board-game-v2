@@ -46,6 +46,10 @@ export default class GameStore {
     return this.localPlayerId === this.game.currentPlayerId;
   }
 
+  @computed get otherPlayerIds() {
+    return this.rootStore.playerStore.ids.filter((id: string) => id !== this.game.currentPlayerId);
+  }
+
   /**
    * Player to show in the status section
    * Local games: Current player

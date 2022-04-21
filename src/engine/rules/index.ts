@@ -23,7 +23,6 @@ import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule'
 TODO:
 
 - Action refactor
-SpeedModifierRule -> player selection
 MoveRule -> player + dice
 ChoiceRule -> choice + dice
 DiceRollRule -> dice

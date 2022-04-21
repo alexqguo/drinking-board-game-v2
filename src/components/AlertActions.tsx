@@ -4,14 +4,16 @@ import { Pane } from 'evergreen-ui';
 import { StoreContext } from 'src/providers/StoreProvider';
 import { ActionType, AlertAction } from 'src/types';
 import RollAction from 'src/components/actions/RollAction';
+import PlayerSelectAction from 'src/components/actions/PlayerSelectAction';
 
 const actionTypeComponentMap = Object.freeze({
   [ActionType.roll]: RollAction,
+  [ActionType.playerSelection]: PlayerSelectAction,
 });
 
 export default () => {
   const rootStore = useContext(StoreContext);
-  const { actionStore, gameStore } = rootStore;
+  const { actionStore, gameStore, playerStore } = rootStore;
 
   const renderActionComponentForAction = (action: AlertAction) => {
     const Component = actionTypeComponentMap[action.type];
@@ -20,6 +22,7 @@ export default () => {
         action={action}
         actions={actionStore.actionList}
         isMyTurn={gameStore.isMyTurn}
+        players={playerStore.players}
       />
     );
   };
