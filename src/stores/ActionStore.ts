@@ -28,7 +28,11 @@ export default class ActionStore {
     makeObservable(this);
   }
 
-  @action setAction = (action: AlertAction) => {
+  @action setActionChildAdded = (action: AlertAction) => {
+    this.actions.set(action.id, action);
+  }
+
+  @action setActionChildChanged = (action: AlertAction) => {
     const { alertStore, boardStore } = this.rootStore;
     this.actions.set(action.id, action);
 
@@ -42,14 +46,20 @@ export default class ActionStore {
      * This could mean adding another action, setting a player effect, or allowing the modal to be closed because
      * all of the actions are completed.
      *
-     * NOTE: This will run whenever an action is updated, which INCLUDES when you join an ongoing game. RootStore
-     * will rehydrate the actions one by one, so the logic needs to take that into account as well.
+     * NOTE: This will run whenever an action is updated, which DOES NOT INCLUDE when you join an ongoing game.
+     * This will assume that when the user took their last action, they stayed online long enough for this
+     * function to execute after the firebase updates came back. As mentioned above, if they disconnect in this time,
+     * the game will likely end up stuck.
+     *
+     * This could potentially be worked around by adding an additional call upon joining a game. Alternatively,
+     * could add this handler also to the child_added event, but that invokes individually for every action that
+     * is added when you rejoin a game, and thus the state will not be complete.
      *
      * Only execute this logic if it is your turn in the game.
      * --> Maybe consider putting this check individually in each postActionHandler. Could run into weird edge
      *     cases for things like group roll rule.
      */
-    if (this.rootStore.gameStore.isMyTurn) {
+     if (this.rootStore.gameStore.isMyTurn) {
       const curRule: RuleSchema = boardStore.getTileOrZoneRuleForAlert(alertStore.alert);
       const { postActionHandler = () => {} } = getHandlerForRule(curRule);
       postActionHandler(curRule, this.actionList);
@@ -79,9 +89,12 @@ export default class ActionStore {
    */
   createNewActions = async (actions: AlertAction[]) => {
     const updateObj = actions.reduce((acc: { [key: string]: AlertAction }, cur: AlertAction) => {
-      acc[cur.id] = cur;
+      // Always se a push as the key, otherwise ordering will be fucked up
+      const key = push(this.rootStore.actionRef!).key;
+      acc[key!] = cur;
       return acc;
     }, {});
+    console.log('new actions', updateObj)
     return update(this.rootStore.actionRef!, updateObj);
   }
 

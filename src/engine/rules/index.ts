@@ -24,7 +24,6 @@ TODO:
 
 - Action refactor
 SpeedModifierRule -> player selection
-RollUntilRule -> dice
 MoveRule -> player + dice
 ChoiceRule -> choice + dice
 DiceRollRule -> dice

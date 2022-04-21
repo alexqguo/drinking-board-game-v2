@@ -147,11 +147,12 @@ export default class RootStore {
     });
 
     this.actionRef = ref(db, `${this.prefix}/actions`);
-    const setActionCb = (snap: DataSnapshot) => {
-      this.actionStore.setAction(snap.val() as AlertAction);
-    }
-    onChildAdded(this.actionRef, setActionCb);
-    onChildChanged(this.actionRef, setActionCb);
+    onChildAdded(this.actionRef, (snap: DataSnapshot) => {
+      this.actionStore.setActionChildAdded(snap.val() as AlertAction);
+    });
+    onChildChanged(this.actionRef, (snap: DataSnapshot) => {
+      this.actionStore.setActionChildChanged(snap.val() as AlertAction);
+    });
     onChildRemoved(this.actionRef, (snap: DataSnapshot) => {
       this.actionStore.removeAction(snap.val() as AlertAction);
     });
@@ -197,7 +198,7 @@ export default class RootStore {
       this.fetchImage(board),
       this.getExtension(board),
       get(child(this.gameRef!, '/')), // Ensure stores are hydrated before redirecting
-      get(child(this.playerRef!, '/')),
+      get(child(this.playerRef!, '/')), // Honestly not sure why specifically these two are here
     ]);
     GameEventHandler();
   }
