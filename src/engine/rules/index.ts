@@ -25,7 +25,6 @@ TODO:
 - Action refactor
 MoveRule -> player + dice
 ChoiceRule -> choice + dice
-DiceRollRule -> dice
 ChallengeRule -> player selection
 ApplyMoveConditionRule -> dice + player
   - once this is done, the following can probably be deleted

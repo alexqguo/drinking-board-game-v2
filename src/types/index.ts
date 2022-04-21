@@ -260,6 +260,7 @@ export interface ChoiceSchema extends BaseOutcomeSchema {}
 
 export interface OutcomeSchema extends BaseOutcomeSchema {
   criteria: number[],
+  isAny?: boolean,
 }
 
 export interface ZoneSchema {

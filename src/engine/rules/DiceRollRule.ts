@@ -1,12 +1,19 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler, AlertState, OutcomeSchema, DiceRollType } from 'src/types';
+import {
+  RuleSchema,
+  RuleHandler,
+  AlertState,
+  OutcomeSchema,
+  DiceRollType,
+  AlertAction,
+  ActionStatus,
+  ActionType,
+} from 'src/types';
 import { validateRequired, getHandlerForRule } from 'src/engine/rules';
-import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
-import { sumNumbers } from 'src/utils';
-import AlertStore from 'src/stores/AlertStore';
+import { createId, sumNumbers } from 'src/utils';
 
 const DiceRollRule: RuleHandler = async (rule: RuleSchema) => {
-  const { alertStore } = rootStore;
+  const { gameStore, alertStore, actionStore } = rootStore;
   const { diceRolls } = rule;
 
   if (!validateRequired(rule.diceRolls)) {
@@ -15,42 +22,68 @@ const DiceRollRule: RuleHandler = async (rule: RuleSchema) => {
     return;
   }
 
-  const getOutcome = (rolls: number[]): OutcomeSchema | null => {
-    let resultOutcome: OutcomeSchema | null = null;
-    const { outcomes } = diceRolls!;
-    if (!diceRolls || !outcomes) return null;
-
-    const rollsToCheck: number[] = diceRolls.type === DiceRollType.cumulative ?
-      [sumNumbers(rolls)] : rolls;
-
-    // (from old version) TODO: check type here for allMatch
-    rollsToCheck.forEach((r: number) => {
-      outcomes?.forEach((outcome: OutcomeSchema) => {
-        if (outcome.criteria.length && outcome.criteria.indexOf(r) !== -1) {
-          resultOutcome = outcome;
-        }
-      });
+  const { numRequired } = diceRolls!;
+  const actions: AlertAction[] = [];
+  for(let i = 0; i < numRequired; i++) {
+    actions.push({
+      id: createId('alert'),
+      playerId: gameStore.game.currentPlayerId,
+      status: ActionStatus.dependent,
+      type: ActionType.roll,
+      value: null,
     });
+  }
+  await actionStore.createNewActions(actions);
+};
 
-    return resultOutcome;
+const getOutcome = (rule: RuleSchema, rolls: number[]): OutcomeSchema | null => {
+  const { diceRolls } = rule;
+  const { outcomes } = diceRolls!;
+  if (!diceRolls || !outcomes) return null;
+
+  let resultOutcome: OutcomeSchema | null = null;
+  const rollsToCheck: number[] = diceRolls.type === DiceRollType.cumulative ?
+    [sumNumbers(rolls)] : rolls;
+
+  // Using tradition for loops in order to return early for an isAny match
+  for (let i = 0; i < rollsToCheck.length; i++) {
+    const roll = rollsToCheck[i];
+    for (let j = 0; j < outcomes.length; j++) {
+      const outcome = outcomes[j];
+
+      // (from old version) TODO: check type here for allMatch. Not used in DiceRollRule currently
+      if (outcome.criteria.length && outcome.criteria.indexOf(roll) !== -1) {
+        resultOutcome = outcome;
+
+        // If there is an any rule, return it immediately because that is the match
+        if (outcome.isAny) {
+          return outcome;
+        }
+      }
+    }
   }
 
-  const { outcomes } = diceRolls!;
-  const rollInfo = await requireDiceRolls(diceRolls?.numRequired || 1);
-  const rolls = getRollsFromAlertDiceRoll(rollInfo);
-  const outcome = getOutcome(rolls);
+  return resultOutcome;
+}
 
-  if (outcome) {
-    const handler = getHandlerForRule(outcome.rule);
-    await alertStore.update({
-      outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|outcome:${outcomes?.indexOf(outcome)}`,
-      choice: {},
-      diceRolls: {},
-      playerSelection: AlertStore.defaultAlert().playerSelection
-    });
-    handler(outcome.rule);
-  } else {
-    alertStore.update({ state: AlertState.CAN_CLOSE });
+DiceRollRule.postActionHandler = async (rule: RuleSchema, actions: AlertAction[]) => {
+  const { alertStore } = rootStore;
+  const { outcomes } = rule.diceRolls!;
+  const isDoneRolling = actions.filter(a => !!a.value).length === rule.diceRolls?.numRequired;
+
+  if (isDoneRolling) {
+    const rolls = actions.map(a => a.value);
+    const outcome = getOutcome(rule, rolls);
+
+    if (outcome) {
+      const handler = getHandlerForRule(outcome.rule);
+      await alertStore.update({
+        outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|outcome:${outcomes?.indexOf(outcome)}`,
+      });
+      handler(outcome.rule);
+    } else {
+      alertStore.update({ state: AlertState.CAN_CLOSE });
+    }
   }
 };
 

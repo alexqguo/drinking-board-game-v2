@@ -115,7 +115,6 @@ export default () => {
           label={i18n.createGame.selectGame}
           onChange={boardBind.onChange}
         >
-          <option disabled selected value=""></option>
           {config.boards.map((board: Board) => (
             <option value={board.value} key={board.value}>{board.name}</option>
           ))}
