@@ -5,13 +5,18 @@ import {
   AlertState,
   MoveConditionSchema,
   DiceRollType,
-  MoveConditionResult
+  MoveConditionResult,
+  AlertAction,
+  PlayerTarget,
+  ActionType,
+  ActionStatus
 } from 'src/types';
-import { requirePlayerSelection, requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { validateRequired } from 'src/engine/rules';
 import PlayerStore from 'src/stores/PlayerStore';
 import { formatString } from 'src/providers/TranslationProvider';
 import en from 'src/i18n/en_US.json';
+import { createId } from 'src/utils';
+import ActionStore from 'src/stores/ActionStore';
 
 const isDiceRollSuccessful = (cond: MoveConditionSchema, rolls: number[]) => {
   const { diceRolls, criteria } = cond;
@@ -96,7 +101,7 @@ export const canPlayerMove = async (
 }
 
 const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
-  const { playerStore, boardStore, alertStore, gameStore } = rootStore;
+  const { playerStore, boardStore, alertStore, gameStore, actionStore } = rootStore;
 
   if (!validateRequired(rule.condition)) {
     console.error('condition is a required field', rule);
@@ -104,24 +109,70 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
     return;
   }
 
-  const playerIds = await requirePlayerSelection(rule.playerTarget!);
-  playerIds.forEach((playerId: string) => {
-    playerStore.updateEffects(playerId, {
-      moveCondition: {
-        tileIndex: boardStore.getTileIndexForRule(rule),
-        numCurrentSuccesses: 0,
-      }
-    });
-  });
+  const { playerTarget } = rule;
+  const actions: AlertAction[] = [];
 
-  // TODO - do dice rolls now if condition.immediate
-  // Should only be used with self target
-  if (rule.condition?.immediate) {
-    const rolls = await requireDiceRolls(rule.condition.diceRolls?.numRequired || 1);
-    canPlayerMove(gameStore.game.currentPlayerId, rule.condition, getRollsFromAlertDiceRoll(rolls));
+  if (playerTarget === PlayerTarget.custom) {
+    actions.push({
+      id: createId('action'),
+      type: ActionType.playerSelection,
+      status: ActionStatus.ready,
+      playerId: gameStore.game.currentPlayerId,
+      value: null,
+      candidateIds: gameStore.otherPlayerIds
+    });
+  } else {
+    const playerIds = (playerTarget === PlayerTarget.allOthers ?
+      gameStore.otherPlayerIds : [gameStore.game.currentPlayerId]);
+    playerIds.forEach((playerId: string) => {
+      playerStore.updateEffects(playerId, {
+        moveCondition: {
+          tileIndex: boardStore.getTileIndexForRule(rule),
+          numCurrentSuccesses: 0,
+        }
+      });
+    });
   }
 
-  alertStore.update({ state: AlertState.CAN_CLOSE });
+  // Should only be used with self target
+  if (rule.condition?.immediate) {
+    actions.push(...ActionStore.createNDiceRollActionObjects({
+      n: rule.condition.diceRolls?.numRequired || 1,
+      playerId: gameStore.game.currentPlayerId,
+      status: ActionStatus.dependent,
+    }));
+  }
+
+  if (actions.length) {
+    actionStore.createNewActions(actions);
+  } else {
+    alertStore.update({ state: AlertState.CAN_CLOSE });
+  }
+};
+ApplyMoveConditionRule.postActionHandler = async (rule: RuleSchema, actions: AlertAction[]) => {
+  const { playerStore, boardStore, alertStore, gameStore } = rootStore;
+  const isDone = actions.every(a => !!a.value);
+
+  if (isDone) {
+    if (rule.condition?.immediate) {
+      // TODO - Currently this is only supported with self targets, but if that ever changes
+      // this should be updated to account for there being player selection actions here
+      const rolls = actions.map(a => a.value);
+
+      await canPlayerMove(gameStore.game.currentPlayerId, rule.condition, rolls);
+    } else {
+      // Player is selected, add effects. There should only be one action here
+      const playerId = actions[0].value;
+      await playerStore.updateEffects(playerId, {
+        moveCondition: {
+          tileIndex: boardStore.getTileIndexForRule(rule),
+          numCurrentSuccesses: 0,
+        }
+      });
+    }
+
+    alertStore.update({ state: AlertState.CAN_CLOSE });
+  }
 };
 
 export default ApplyMoveConditionRule;

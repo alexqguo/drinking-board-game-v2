@@ -23,8 +23,6 @@ import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule'
 TODO:
 
 - Action refactor
-ChoiceRule -> choice + dice
-ApplyMoveConditionRule -> dice + player
   - once this is done, the following can probably be deleted
     - requirePlayerSelection
     - requireChoice

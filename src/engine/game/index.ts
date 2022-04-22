@@ -70,10 +70,13 @@ const GameEventHandler = () => {
           const moveResult = await canPlayerMove(currentPlayer.id, conditionSchema, rolls);
 
           if (!moveResult.canMove) {
-            setTimeout(() => { // Just pause so the modal doesn't dismiss immediately
-              alertStore.clear();
-              gameStore.setGameState(GameState.TURN_END);
-            }, 1200);
+            await new Promise<void>(resolve => {
+              setTimeout(() => { // Just pause so the modal doesn't dismiss immediately
+                alertStore.clear();
+                gameStore.setGameState(GameState.TURN_END);
+                resolve();
+              }, 1200);
+            })
             return;
           } else {
             alertStore.update({ state: AlertState.CAN_CLOSE });
@@ -105,14 +108,8 @@ const GameEventHandler = () => {
           alertStore.update({
             open: true,
             messageOverride: result.message,
-            state: AlertState.CAN_CLOSE
-          });
-
-          autorun(reaction => {
-            if (alertStore.alert.open === false) {
-              reaction.dispose();
-              gameStore.setGameState(GameState.TURN_END);
-            }
+            state: AlertState.CAN_CLOSE,
+            nextGameState: GameState.TURN_END,
           });
           return;
         }
@@ -151,7 +148,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 43;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 68;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -277,6 +274,7 @@ const uiActions = {
   alertClose: async (nextState: GameState) => {
     if (!nextState) throw new Error('No nextState was defined when the modal closed.');
 
+    console.log('closing alert with next state of ', nextState)
     const { alertStore, gameStore, actionStore } = rootStore;
     const { setGameState } = gameStore;
     await Promise.all([
