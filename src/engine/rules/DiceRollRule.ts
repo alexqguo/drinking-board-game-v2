@@ -11,6 +11,7 @@ import {
 } from 'src/types';
 import { validateRequired, getHandlerForRule } from 'src/engine/rules';
 import { createId, sumNumbers } from 'src/utils';
+import ActionStore from 'src/stores/ActionStore';
 
 const DiceRollRule: RuleHandler = async (rule: RuleSchema) => {
   const { gameStore, alertStore, actionStore } = rootStore;
@@ -23,16 +24,11 @@ const DiceRollRule: RuleHandler = async (rule: RuleSchema) => {
   }
 
   const { numRequired } = diceRolls!;
-  const actions: AlertAction[] = [];
-  for(let i = 0; i < numRequired; i++) {
-    actions.push({
-      id: createId('alert'),
-      playerId: gameStore.game.currentPlayerId,
-      status: ActionStatus.dependent,
-      type: ActionType.roll,
-      value: null,
-    });
-  }
+  const actions = ActionStore.createNDiceRollActionObjects({
+    n: numRequired,
+    status: ActionStatus.dependent,
+    playerId: gameStore.game.currentPlayerId,
+  });
   await actionStore.createNewActions(actions);
 };
 

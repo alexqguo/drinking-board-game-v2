@@ -13,8 +13,9 @@ import {
 } from 'firebase/database';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
-import { AlertAction, RuleSchema } from 'src/types';
+import { ActionStatus, ActionType, AlertAction, RuleSchema } from 'src/types';
 import { getHandlerForRule } from 'src/engine/rules';
+import { createId } from 'src/utils';
 
 /**
  * For actions in the alert modal, such as dice rolls or player selections
@@ -110,4 +111,23 @@ export default class ActionStore {
   pushAction = async (newAction: AlertAction): Promise<void> => {
     return set(push(this.rootStore.actionRef!), newAction);
   }
+
+  static createNDiceRollActionObjects = ({
+    n,
+    playerId,
+    status = ActionStatus.ready,
+  }: { n: number, playerId: string, status?: ActionStatus }): AlertAction[] => {
+    const actions: AlertAction[] = [];
+    for (let i = 0; i < n; i++) {
+      actions.push({
+        id: createId('action'),
+        status,
+        playerId,
+        type: ActionType.roll,
+        value: null,
+      });
+    }
+
+    return actions;
+  };
 }

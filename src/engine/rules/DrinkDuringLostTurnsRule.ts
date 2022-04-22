@@ -1,10 +1,9 @@
 import rootStore from 'src/stores';
 import { AlertAction, RuleSchema, RuleHandler, AlertState, AlertDiceRollInfo, ActionType, ActionStatus } from 'src/types';
-import { requireDiceRolls } from 'src/engine/alert';
 import { validateRequired } from 'src/engine/rules';
 import { formatString } from 'src/providers/TranslationProvider';
-import { createId } from 'src/utils';
 import en from 'src/i18n/en_US.json'; // TODO - make locale a store value so the engine can use them
+import ActionStore from 'src/stores/ActionStore';
 
 // TODO - this should probably be incorporated into DiceRollRule. It's basically only used for SS Anne
 const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
@@ -17,16 +16,11 @@ const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
   }
 
   const { numRequired } = rule.diceRolls; // Really this should just be hardcoded to 2
-  const actions: AlertAction[] = [];
-  for(let i = 0; i < numRequired; i++) {
-    actions.push({
-      id: createId('alert'),
-      playerId: gameStore.game.currentPlayerId,
-      status: ActionStatus.dependent,
-      type: ActionType.roll,
-      value: null,
-    });
-  }
+  const actions = ActionStore.createNDiceRollActionObjects({
+    n: numRequired,
+    status: ActionStatus.dependent,
+    playerId: gameStore.game.currentPlayerId,
+  });
   await actionStore.createNewActions(actions);
 };
 
