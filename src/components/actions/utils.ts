@@ -1,4 +1,4 @@
-import { AlertAction, ActionStatus, Player } from "src/types";
+import { AlertAction, ActionStatus, Player, RuleSchema } from "src/types";
 
 /**
  * The action is disabled if:
@@ -21,4 +21,5 @@ export interface ActionProps {
   actions: AlertAction[],
   isMyTurn: boolean,
   players: Map<string, Player>,
+  rule: RuleSchema | null,
 }

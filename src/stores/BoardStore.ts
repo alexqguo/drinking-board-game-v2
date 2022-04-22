@@ -15,7 +15,8 @@ export default class BoardStore {
     this.schema = schema;
   }
 
-  getTileOrZoneRuleForAlert = (alert: Alert): RuleSchema => {
+  getTileOrZoneRuleForAlert = (alert: Alert): RuleSchema | null => {
+    if (alert.ruleIdx < 0) return null;
     if (alert.ruleType === AlertRuleType.zone) return this.schema.zones[alert.ruleIdx].rule;
     return this.schema.tiles[alert.ruleIdx].rule;
   }

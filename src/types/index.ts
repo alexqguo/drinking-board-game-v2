@@ -80,6 +80,7 @@ export interface AlertAction {
 export enum ActionType {
   roll = 'roll',
   playerSelection = 'playerSelection',
+  choice = 'choice',
 }
 
 export enum ActionStatus {

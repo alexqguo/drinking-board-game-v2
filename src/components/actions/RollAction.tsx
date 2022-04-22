@@ -23,15 +23,12 @@ const RollAction = ({
   const rollValue = action.value ? [action.value] : [];
 
   return (
-    <>
-      <DiceRoll
-        numRolls={1}
-        rolls={rollValue}
-        disabled={isDisabled}
-        onRoll={(rolls: number[]) => { uiActions.handleActionRoll(rolls[0], action) }}
-      />
-      {JSON.stringify(action)}
-    </>
+    <DiceRoll
+      numRolls={1}
+      rolls={rollValue}
+      disabled={isDisabled}
+      onRoll={(rolls: number[]) => { uiActions.handleActionRoll(rolls[0], action) }}
+    />
   )
 };
 

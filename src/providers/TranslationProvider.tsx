@@ -14,7 +14,7 @@ export const formatString = (baseString: string, variables: { [key: string]: str
 }
 export const TranslationProvider = ({ children }: any) => {
   const [translations, setTranslations] = useState(en);
-  
+
   return (
     <TranslationContext.Provider value={translations}>
       {children}

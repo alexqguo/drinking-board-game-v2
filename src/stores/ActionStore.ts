@@ -61,7 +61,7 @@ export default class ActionStore {
      *     cases for things like group roll rule.
      */
      if (this.rootStore.gameStore.isMyTurn) {
-      const curRule: RuleSchema = boardStore.getTileOrZoneRuleForAlert(alertStore.alert);
+      const curRule: RuleSchema | null = boardStore.getTileOrZoneRuleForAlert(alertStore.alert)!;
       const { postActionHandler = () => {} } = getHandlerForRule(curRule);
       postActionHandler(curRule, this.actionList);
     }

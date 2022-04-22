@@ -1,21 +1,20 @@
-import React, { useContext } from 'react';
-import { Text,Button, Paragraph } from 'evergreen-ui'
-import { uiActions } from 'src/engine/game';
-import { TranslationContext } from 'src/providers/TranslationProvider';
+import React from 'react';
+import { Paragraph, Button } from 'evergreen-ui';
 import { ActionProps, isActionDisabled } from './utils';
+import { uiActions } from 'src/engine/game';
 
-const PlayerSelectAction = ({
+const ChoiceAction = ({
+  rule,
   action,
   actions,
   isMyTurn,
-  players,
 }: ActionProps) => {
-  const i18n = useContext(TranslationContext);
   const isDisabled = isActionDisabled(action, actions, isMyTurn);
+  const choices = rule!.choices!;
 
   return (
     <Paragraph>
-      <Text marginRight={8}>{i18n.actions.playerSelection}</Text>
+      {/* ID is the choice index in this case */}
       {action.candidateIds?.map((id: string) => (
         <Button
           key={id}
@@ -25,12 +24,11 @@ const PlayerSelectAction = ({
           onClick={() => uiActions.handleActionSelection(id, action)}
           iconAfter={!!action.value && id === action.value ? 'tick-circle' : false}
         >
-          {players.get(id)?.name}
+          {choices[Number(id)].rule.displayText}
         </Button>
       ))}
-      {JSON.stringify(action)}
     </Paragraph>
   );
 };
 
-export default PlayerSelectAction;
+export default ChoiceAction;

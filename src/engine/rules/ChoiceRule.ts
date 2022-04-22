@@ -1,10 +1,11 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler, AlertState, ChoiceSchema } from 'src/types';
+import { RuleSchema, RuleHandler, AlertState, ChoiceSchema, AlertAction, ActionType, ActionStatus } from 'src/types';
 import { validateRequired, getHandlerForRule } from 'src/engine/rules';
-import { requireDiceRolls, requireChoice } from 'src/engine/alert';
+import ActionStore from 'src/stores/ActionStore';
+import { createId } from 'src/utils';
 
 const ChoiceRule: RuleHandler = async (rule: RuleSchema) => {
-  const { alertStore } = rootStore;
+  const { alertStore, gameStore, actionStore } = rootStore;
   const { choices, diceRolls } = rule;
 
   if (!validateRequired(choices)) {
@@ -13,28 +14,44 @@ const ChoiceRule: RuleHandler = async (rule: RuleSchema) => {
     return;
   }
 
+  const actions: AlertAction[] = [];
+
   if (diceRolls) {
     // I think this is only used for the Sabrina space on gen 1. There's no actual effect
-    await requireDiceRolls(diceRolls.numRequired);
+    actions.push(...ActionStore.createNDiceRollActionObjects({
+      n: diceRolls.numRequired,
+      playerId: gameStore.game.currentPlayerId,
+    }));
   }
 
-  const choice = await requireChoice(choices!);
-  const choiceIndex = choices?.findIndex((c: ChoiceSchema) => c.rule === choice); // This is kinda shitty...
-  const handler = getHandlerForRule(choice);
+  const choiceIndexes: string[] = choices!.map((c: ChoiceSchema, i: number) => String(i));
 
-  // Trigger the next rule and reset the alert actions
-  await alertStore.update({
-    outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|choice:${choiceIndex}`,
-    choice: {},
-    diceRolls: {},
-    playerSelection: {
-      isRequired: false,
-      selectedId: '',
-      candidateIds: [],
-    }
+  actions.push({
+    id: createId('choice'),
+    playerId: gameStore.game.currentPlayerId,
+    type: ActionType.choice,
+    status: ActionStatus.dependent,
+    value: null,
+    candidateIds: choiceIndexes,
   });
+  actionStore.createNewActions(actions);
+};
 
-  handler(choice);
+ChoiceRule.postActionHandler = async (rule: RuleSchema, actions: AlertAction[]) => {
+  const { alertStore } = rootStore;
+  const isDone = actions.every(a => !!a.value);
+
+  if (isDone) {
+    const choiceIndex = Number(actions.find(a => a.type === ActionType.choice)?.value);
+    const choice = rule.choices![choiceIndex];
+    const handler = getHandlerForRule(choice.rule);
+
+    await alertStore.update({
+      outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|choice:${choiceIndex}`,
+    });
+
+    handler(choice.rule);
+  }
 };
 
 export default ChoiceRule;
