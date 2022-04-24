@@ -20,21 +20,6 @@ import ApplyMoveConditionRule from 'src/engine/rules/ApplyMoveConditionRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 import StarterSelectionRule from 'src/engine/rules/StarterSelectionRule';
 
-/*
-TODO:
-
-Remove the following:
-  - requireDiceRolls
-  - (hopefully) getRollsFromAlertDiceRoll
-
-Gen 2/3:
-- a bit of ApplyMoveConditionRule
-- GroupRollRule
-- RollAugmentRule
-- AnchorRule
-- more?
-*/
-
 export const validateRequired = (...args: any[]): boolean => (
   args
     .filter(arg => typeof arg === 'undefined' || arg === null || arg === '')

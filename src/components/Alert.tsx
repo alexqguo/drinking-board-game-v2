@@ -33,9 +33,6 @@ export default () => {
   return useObserver(() => {
     const { alert } = alertStore;
     const hasDiceRoll = !!alert.diceRolls;
-    const hasPlayerSelection = alert.playerSelection.isRequired;
-    const hasChoice = !!alert.choice;
-    const isChoiceDone = hasChoice && Object.keys(alert.choice).some((k: string) => alert.choice[k].isSelected);
     let activeRule = rule;
 
     if (alert.outcomeIdentifier) {
@@ -74,16 +71,8 @@ export default () => {
       confirmLabel: i18n.alert.done,
     };
 
-    if (alert.customComponent) {
-      dialogProps.footer = <></>;
-    }
-
     return (
-    <Dialog {...dialogProps} >
-      {alert.customComponent ? <>
-        {rootStore.extension?.components[alert.customComponent]()}
-      </> : null}
-
+    <Dialog {...dialogProps}>
       {rule ? <>
         <Paragraph style={activeRule && activeRule !== rule ? null: displayTextStyles}>
           {/* TODO - split on \n here if necessary */}
@@ -103,6 +92,7 @@ export default () => {
         </Paragraph>
       </> : null}
 
+      {/* TODO- Should be removed. See note in requireDiceRolls implementation */}
       {hasDiceRoll ? <Paragraph>
         {Object.keys(alert.diceRolls).map((key: string) => (
           <DiceRoll
@@ -115,37 +105,6 @@ export default () => {
           />
         ))}
       </Paragraph> : null}
-
-      {hasPlayerSelection ? <Paragraph>
-        {alert.playerSelection.candidateIds.map((id: string) =>
-          <Button
-            key={id}
-            height={24}
-            marginRight={16}
-            onClick={() => uiActions.handleAlertPlayerSelection(id)}
-            iconAfter={id === alert.playerSelection.selectedId ? 'tick-circle' : false}
-            disabled={!gameStore.isMyTurn || !!alert.playerSelection.selectedId}
-          >
-            {playerStore.players.get(id)!.name}
-          </Button>
-        )}
-      </Paragraph> : null}
-
-      {hasChoice ? <Paragraph>
-        {Object.keys(alert.choice).map((choiceId: string) => (
-          <Button
-            key={choiceId}
-            height={24}
-            marginRight={16}
-            disabled={!gameStore.isMyTurn || isChoiceDone}
-            onClick={() => uiActions.handleAlertChoice(choiceId)}
-            iconAfter={alert.choice[choiceId].isSelected ? 'tick-circle' : false}
-          >
-            {alert.choice[choiceId].displayText}
-          </Button>
-        ))}
-      </Paragraph> : null}
-
       <AlertActions />
     </Dialog>
     );

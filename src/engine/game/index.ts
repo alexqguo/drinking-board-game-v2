@@ -299,19 +299,6 @@ const uiActions = {
     const { actionStore } = rootStore;
     actionStore.updateAction(action.id, { value: selectionId });
   },
-  handleAlertPlayerSelection: (playerId: string) => {
-    const { alertStore } = rootStore;
-    alertStore.update({
-      playerSelection: {
-        ...alertStore.alert.playerSelection,
-        isRequired: true, // Keep as true until the turn is over so the buttons don't disappear
-        selectedId: playerId,
-      }
-    });
-  },
-  handleAlertChoice: (choiceId: string) => {
-    rootStore.alertStore.updateChoice(choiceId);
-  }
 };
 
 export default GameEventHandler;

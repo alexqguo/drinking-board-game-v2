@@ -5,7 +5,6 @@ export enum GameType {
 
 export interface GameExtensionInfo {
   gameEvents: { [key: string]: Function },
-  components: { [key: string]: Function }
 }
 
 export interface CreateGameOptions {
@@ -50,12 +49,9 @@ export interface Alert {
   state: AlertState,
   nextGameState: GameState,
   diceRolls: AlertDiceRollInfo,
-  playerSelection: AlertPlayerSelection,
-  choice: AlertChoiceInfo,
   messageOverride: string,
   headingOverride: string,
   outcomeIdentifier: string,
-  customComponent: string,
 }
 
 export interface AlertAction {

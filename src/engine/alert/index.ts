@@ -2,6 +2,11 @@ import { autorun } from 'mobx';
 import { AlertDiceRollInfo } from 'src/types';
 import rootStore from 'src/stores';
 
+/**
+ * TODO- remove this in favor of actions. The only place it's used is for move conditions that
+ * require more than one dice roll. Which I believe is just Elite Four in gen 3 (though that specific
+ * implementation should arguably apply to all gens).
+ */
 // May need to change this eventually to handle single click multi rolls
 export const requireDiceRolls = (numRequired: number): Promise<AlertDiceRollInfo> => {
   return new Promise((resolve) => {

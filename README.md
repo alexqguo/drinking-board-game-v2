@@ -1,5 +1,24 @@
 # Drinking board game v2
 
+## TODOs
+
+Boards:
+* Add back Gen2/3 boards
+  * A bit of ApplyMoveConditionRule
+  * GroupRollRule
+  * RollAugmentRule
+  * AnchorRule
+  * more?
+  * Remove `requireDiceRolls`
+* Add Zelda board
+
+Cleanup:
+* Move game extensions to external modules?
+* Better handling of creating/joining game
+* Remove multi dice rolls in one click. Not used and lots of overhead
+* Alert state is a bit messy
+* Extensions need i18n support
+
 Parity:
 * Finish rule implementations
   * With game engine turn calculation updates
@@ -8,22 +27,16 @@ Parity:
 * Make extensions compataible
 * Improve animation of moving
 
-Additional features:
+New features:
 * Rolls in an alert can have custom labels
 
-Schema changes:
+## Schema changes
 * TeleportRule is gone in favor of MoveRule with tileIndex
 * ChoiceRule schema is different, choices array item will be an object with a "rule" key rather than the rule directly
 * "any" diceRoll outcome is removed, and the former "any" rule is just listed as an outcome. This would work in the old version too
-* Gen 1 Pikachu rule is now a ProxyRule
-
-Cleanup:
-* Move game extensions to external modules
-* Better handling of creating/joining game
-* Remove multi dice rolls in one click. Not used and lots of overhead
-* Extensions need i18n support
-* Replace alert.CAN_CLOSE with something like nextState to indicate what the next state of the game should be
-* Can replace the proxy rules with a general StealPlayerEffect rule which provides a JSON key for the player effect, and either a custom player target to steal from, or hardcode it (for the Pikachu one in gen1)
+* New rule types
+  * `StarterSelectionRule`
+  * `UpdateStarterRule`
 
 ## JSON structure
 Too lazy to put together a proper schema, will eventually create one (maybe use https://app.quicktype.io/#l=schema). But overall the structure looks something like this. All fields mandatory unless otherwise specified.
@@ -297,11 +310,6 @@ Specifies a target player for a rule.
 Possible values: `self`, `custom`, `allOthers`
 
 ### Zone
-asdf
+TODO
 
 ---
-
-Alert refactor
-* instead of just being a big json of what the alert state is, use an action queue
-* anything that any user can do is represented as an "action". alert store holds a list of actions
-  *

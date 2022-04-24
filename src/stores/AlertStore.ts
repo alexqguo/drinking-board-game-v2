@@ -43,13 +43,6 @@ export default class AlertStore {
     diceRolls: {},
     messageOverride: '',
     headingOverride: '',
-    playerSelection: {
-      isRequired: false,
-      selectedId: '',
-      candidateIds: [],
-    },
-    choice: {},
     outcomeIdentifier: '',
-    customComponent: '',
   });
 }
