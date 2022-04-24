@@ -4,9 +4,6 @@ export const boards: Board[] = [
   {
     name: 'Pokemon gen. 1',
     value: 'pokemon-gen1',
-  }, {
-    name: 'Other',
-    value: 'other',
   }
 ];
 

@@ -7,6 +7,7 @@ import {
   TextInputField,
   Radio,
   Pane,
+  Text,
   Paragraph
 } from 'evergreen-ui';
 import { TranslationContext } from 'src/providers/TranslationProvider';
@@ -15,6 +16,7 @@ import { GameType, Player, SessionData } from 'src/types';
 import { StoreContext } from 'src/providers/StoreProvider';
 import { db } from 'src/firebase';
 import RootStore from 'src/stores/RootStore';
+import CenterLayout from 'src/components/CenterLayout';
 
 enum SearchStatus {
   idle,
@@ -106,44 +108,55 @@ export default () => {
     return <Redirect to={`/game/${state.gameId}`} />;
   }
   return (
-    <section>
-      <Heading is="h1" size={800}>
-        {i18n.joinGame.title}
-      </Heading>
-      <TextInputField
-        label={i18n.joinGame.gameId}
-        onChange={(e: Event) => onInputChange(e)}
-        width="50%"
-        value={state.searchStatus === SearchStatus.searching ? i18n.joinGame.searching : state.gameId}
-        disabled={state.searchStatus === SearchStatus.found || state.searchStatus === SearchStatus.searching}
-        validationMessage={state.searchStatus === SearchStatus.notFound ? i18n.joinGame.notFound : null}
-      />
+    <CenterLayout>
+      <>
+        <Heading is="h1" size={800} marginBottom={16}>
+          {i18n.joinGame.title}
+        </Heading>
 
-      {state.session && state.session.game && state.session.game.type === GameType.remote ?
-        <FormField label={i18n.joinGame.selectPlayer}>
-          <Pane role="group">
-            {state.session.players.map((p: Player) => (
-              <Radio
-                name="remote-player-selection"
-                onChange={(e) => updateState({ selectedPlayerId: e.target.value })}
-                disabled={p.isActive}
-                label={p.name}
-                value={p.id}
-                key={p.id}
-              />
-            ))}
-          </Pane>
-        </FormField>
-      : null}
-      <Button
-        disabled={!canJoin()}
-        onClick={joinGame}
-      >
-        {i18n.joinGame.join}
-      </Button>
-      <Paragraph>
-        <a href="/">Home</a>
-      </Paragraph>
-    </section>
+        <Paragraph marginBottom={16}>
+          {i18n.joinGame.explanation}
+        </Paragraph>
+
+        <TextInputField
+          label={i18n.joinGame.gameId}
+          onChange={(e: Event) => onInputChange(e)}
+          width="100%"
+          value={state.searchStatus === SearchStatus.searching ? i18n.joinGame.searching : state.gameId}
+          disabled={state.searchStatus === SearchStatus.found || state.searchStatus === SearchStatus.searching}
+          validationMessage={state.searchStatus === SearchStatus.notFound ? i18n.joinGame.notFound : null}
+        />
+
+        {state.session && state.session.game && state.session.game.type === GameType.remote ?
+          <FormField label={i18n.joinGame.selectPlayer}>
+            <Pane role="group">
+              {state.session.players.map((p: Player) => (
+                <Radio
+                  name="remote-player-selection"
+                  onChange={(e) => updateState({ selectedPlayerId: e.target.value })}
+                  disabled={p.isActive}
+                  label={p.name}
+                  value={p.id}
+                  key={p.id}
+                />
+              ))}
+            </Pane>
+          </FormField>
+        : null}
+
+        <Button
+          disabled={!canJoin()}
+          onClick={joinGame}
+        >
+          {i18n.joinGame.join}
+        </Button>
+
+        <Pane marginTop={16}>
+          <Text size={300}>
+            <a href="/">{i18n.home.backLink}</a>
+          </Text>
+        </Pane>
+      </>
+    </CenterLayout>
   );
 }

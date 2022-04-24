@@ -2,13 +2,14 @@
   "testString": "Hello test string",
   "home": {
     "title": "Welcome!",
-    "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "explanation": "This site takes popular drinking board games (such as the Pokemon ones), and allows you to play them online without having to print them out on a gigantic piece of paper. You can even play the game remotely using the link that's provided once you start a session. Try playing with your friends!",
     "createGame": "Create a game",
-    "joinGame": "Join a game"
+    "joinGame": "Join a game",
+    "backLink": "Go back"
   },
   "createGame": {
     "title": "Start a game",
-    "selectGame": "Select a game:",
+    "selectGame": "Select a board",
     "enterPlayers": "Enter players:",
     "name": "Name",
     "players": "Players",
@@ -17,7 +18,8 @@
     "local": "Local",
     "remote": "Remote",
     "start": "Start!",
-    "playingAs": "Who are you playing as?"
+    "playingAs": "Who are you playing as?",
+    "explanation": "Currently only Pokemon gen. 1 is supported, but others will be added soon! You must have between 2-10 players. Playing locally: Everyone is playing the game on a single computer. Playing remotely: Each player in the game uses their own device to control only their turns."
   },
   "joinGame": {
     "title": "Join a game",
@@ -25,7 +27,8 @@
     "searching": "Searching...",
     "notFound": "Could not find game",
     "selectPlayer": "Who are you playing as?",
-    "join": "Join"
+    "join": "Join",
+    "explanation": "Join a game started by one of your friends. Paste the GameID into the text box below if it did not autofill, select who you're playing as, and press join!"
   },
   "alert": {
     "done": "Done",

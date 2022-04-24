@@ -10,12 +10,15 @@ import {
   RadioGroup,
   DeleteIcon,
   Pane,
+  Text,
+  Paragraph,
 } from 'evergreen-ui';
 import useInput from 'src/hooks/useInput';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { GameType, CreateGameOptions, Board } from 'src/types';
 import config from 'src/config';
 import { StoreContext } from 'src/providers/StoreProvider';
+import CenterLayout from 'src/components/CenterLayout';
 
 interface PlayerData {
   name: string,
@@ -78,13 +81,16 @@ export default () => {
   }
 
   return (
-    <section>
-      <Pane margin={16}>
-        <Heading size={800} is="h1">{i18n.createGame.title}</Heading>
+    <CenterLayout>
+      <>
+        <Heading size={800} is="h1" marginBottom={16}>{i18n.createGame.title}</Heading>
+
+        <Paragraph marginBottom={16}>
+          {i18n.createGame.explanation}
+        </Paragraph>
 
         {/* game */}
         <SelectField
-          width={280}
           value={board}
           label={i18n.createGame.selectGame}
           onChange={boardBind.onChange}
@@ -153,7 +159,13 @@ export default () => {
         >
           {i18n.createGame.start}
         </Button>
-      </Pane>
-    </section>
+
+        <Pane marginTop={16}>
+          <Text size={300}>
+            <a href="/">{i18n.home.backLink}</a>
+          </Text>
+        </Pane>
+      </>
+    </CenterLayout>
   );
 }
