@@ -209,7 +209,7 @@ Executes a rule defined by the game extension and not the engine.
 ```
 
 #### ApplyMoveConditionRule
-Something
+TODO
 ```
 {
   type: "ApplyMoveConditio",
@@ -218,25 +218,28 @@ Something
 ```
 
 #### ChoiceRule
-Something
+Player is presented with a multiple options of what rule to execute.
 ```
 {
   type: "ChoiceRule",
   displayText: string,
+  choices: [{
+    rule: RuleSchema
+  }, { ... }]
 }
 ```
 
 #### ReverseTurnOrderRule
-Something
+Reverses the turn order in the game.
 ```
 {
-  type: "ReverseTurnOrderR",
+  type: "ReverseTurnOrderRule",
   displayText: string,
 }
 ```
 
 #### ChallengeRule
-Something
+Basically a custom rule for Pokemon Gen 1. *Challenge someone to a chugging contest. First to finish gets an extra turn, last to finish loses a turn.* The "challenge" happens offline and the player selects the outcome.
 ```
 {
   type: "ChallengeRule",
@@ -245,29 +248,36 @@ Something
 ```
 
 #### SkipTurnRule
-Something
+Player loses their next turn(s).
 ```
 {
   type: "SkipTurnRule",
   displayText: string,
+  numTurns: number,
 }
 ```
 
 #### SpeedModifierRule
-Something
+Affects the dice rolls of players in the game.
 ```
 {
   type: "SpeedModifierRule",
   displayText: string,
+  playerTarget: PlayerTarget,
+  numTurns: number,
+  modifier: [
+    <one of "*", "-", "+">, number
+  ]
 }
 ```
 
 #### SkipNextMandatoryRule
-Something
+Allows the player to skip the next mandatory space(s). Note that if you land directly on a mandatory space you still must perform what it says.
 ```
 {
   type: "SkipNextMandatory",
   displayText: string,
+  numSpaces: number
 }
 ```
 

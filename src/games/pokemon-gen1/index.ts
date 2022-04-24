@@ -21,26 +21,26 @@ export default (rootStore: RootStore): GameExtensionInfo => {
 
   return {
     gameEvents: {
-      [GameState.GAME_START]: () => {
-        alertStore.update({
-          open: true,
-          nextGameState: GameState.TURN_CHECK,
-          customComponent: 'pokemonSelection',
-          headingOverride: 'Choose your Pokemon!',
-        });
+      // [GameState.GAME_START]: () => {
+      //   alertStore.update({
+      //     open: true,
+      //     nextGameState: GameState.TURN_CHECK,
+      //     customComponent: 'pokemonSelection',
+      //     headingOverride: 'Choose your Pokemon!',
+      //   });
 
-        return new Promise<void>(resolve => {
-          autorun(async (reaction) => {
-            if (isPokemonSelectionCompleted.get() === true) {
-              await alertStore.clear();
-              // await alertStore.update({ open: false, });
-              // alertStore.clear();
-              reaction.dispose();
-              resolve();
-            }
-          });
-        });
-      },
+      //   return new Promise<void>(resolve => {
+      //     autorun(async (reaction) => {
+      //       if (isPokemonSelectionCompleted.get() === true) {
+      //         await alertStore.clear();
+      //         // await alertStore.update({ open: false, });
+      //         // alertStore.clear();
+      //         reaction.dispose();
+      //         resolve();
+      //       }
+      //     });
+      //   });
+      // },
       [GameState.MOVE_END]: () => {
         console.log('move ending?');
       },

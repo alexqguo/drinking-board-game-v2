@@ -1,7 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { useObserver } from 'mobx-react';
-import { Pane, Heading, Button, Text } from 'evergreen-ui';
-import { Player, GameState } from 'src/types';
+import {
+  Pane,
+  Heading,
+  Button,
+  Paragraph,
+  UnorderedList,
+  ListItem,
+  CaretRightIcon,
+} from 'evergreen-ui';
+import { Player, GameState, GameType } from 'src/types';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
@@ -48,8 +56,23 @@ export default () => {
         {i18n.playerStatus.skip}
       </Button>
 
-      <br />
-      <Text size={300}>{gameStore.game.id}</Text>
+      <UnorderedList listStyle="none" size={300} marginTop={16}>
+        {playerStore.ids.map((id: string) => (
+          <ListItem
+            margin="0"
+            color="muted"
+            icon={id === gameStore.game.currentPlayerId ? CaretRightIcon : null}
+          >
+            {playerStore.players.get(id)!.name}
+          </ListItem>
+        ))}
+      </UnorderedList>
+
+      <Paragraph size={300} marginTop={8}>
+        <a href={`/#/join/${gameStore.game.id}`} target="_blank" rel="noreferrer">
+          {gameStore.game.id}
+        </a>
+      </Paragraph>
       {/* list all players, highlight active, maybe just for remote games */}
     </Pane>
   ));

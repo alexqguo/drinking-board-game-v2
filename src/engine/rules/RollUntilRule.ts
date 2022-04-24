@@ -1,7 +1,6 @@
 import rootStore from 'src/stores';
 import { RuleSchema, RuleHandler, AlertState, AlertAction, ActionStatus, ActionType } from 'src/types';
 import { validateRequired } from 'src/engine/rules';
-import { requireDiceRolls } from 'src/engine/alert';
 import { createId } from 'src/utils';
 
 const RollUntilRule: RuleHandler = async (rule: RuleSchema) => {

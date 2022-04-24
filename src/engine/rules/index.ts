@@ -22,21 +22,16 @@ import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule'
 /*
 TODO:
 
-- Action refactor
-  - once this is done, the following can probably be deleted
-    - requirePlayerSelection
-    - requireChoice
-    - requireDiceRolls
-    - (hopefully) getRollsFromAlertDiceRoll
-    - so basically, all of engine/alert/index.ts
+Remove the following:
+  - requireDiceRolls
+  - (hopefully) getRollsFromAlertDiceRoll
 
-- tricky
-a bit of ApplyMoveConditionRule
-GroupRollRule
-RollAugmentRule
-
-- simple
-AnchorRule
+Gen 2/3:
+- a bit of ApplyMoveConditionRule
+- GroupRollRule
+- RollAugmentRule
+- AnchorRule
+- more?
 */
 
 export const validateRequired = (...args: any[]): boolean => (

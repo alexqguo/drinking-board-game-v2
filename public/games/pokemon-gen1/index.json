@@ -3,7 +3,7 @@
     {
       "rule": {
         "displayText": "Pick one, dude.",
-        "type": "DisplayRule"
+        "type": "StarterSelectionRule"
       },
       "position": [{
         "x": 262,

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useObserver } from 'mobx-react';
-import { Dialog, Heading, Paragraph, Button } from 'evergreen-ui';
-import { TranslationContext } from 'src/providers/TranslationProvider';
+import { Dialog, Heading, Paragraph, Button, Text } from 'evergreen-ui';
+import { TranslationContext, formatString } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
 import AlertActions from 'src/components/AlertActions';
@@ -50,14 +50,18 @@ export default () => {
     }
 
     const header = <Heading size={800}>{alert.headingOverride || currentPlayer.name}</Heading>;
-    const footer = (
+    const footer = gameStore.isMyTurn ? (
       <Button
         appearance="primary"
-        disabled={alertStore.alert.state !== AlertState.CAN_CLOSE || !gameStore.isMyTurn}
+        disabled={alertStore.alert.state !== AlertState.CAN_CLOSE}
         onClick={() => uiActions.alertClose(alert.nextGameState)}
       >
         {i18n.alert.done}
       </Button>
+    ) : (
+      <Text color="muted" size={300}>
+        <em>{formatString(i18n.alert.waiting, { playerName: currentPlayer.name })}</em>
+      </Text>
     );
 
     const dialogProps = {

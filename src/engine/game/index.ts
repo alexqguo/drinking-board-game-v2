@@ -11,8 +11,11 @@ const GameEventHandler = () => {
   let prevGameState = gameStore.game.state;
   const eventHandlers: { [key: string]: Function } = {
     [GameState.GAME_START]: () => {
-      console.log('game start')
-      gameStore.setGameState(GameState.TURN_CHECK);
+      if (false) {
+        // If the first tile is a starter select rule, execute it
+      } else {
+        gameStore.setGameState(GameState.TURN_CHECK);
+      }
     },
     [GameState.TURN_CHECK]: () => {
       // Can player take their turn
@@ -200,9 +203,9 @@ const GameEventHandler = () => {
         nextPlayerId = playerIds[nextPlayerIdx];
       }
 
-      await gameStore.setCurrentPlayer(nextPlayerId);
       gameStore.update({
         state: GameState.TURN_CHECK,
+        currentPlayerId: nextPlayerId,
         currentRoll: null,
       });
     },

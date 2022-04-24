@@ -10,11 +10,10 @@ import {
   RadioGroup,
   DeleteIcon,
   Pane,
-  SegmentedControl,
 } from 'evergreen-ui';
 import useInput from 'src/hooks/useInput';
 import { TranslationContext } from 'src/providers/TranslationProvider';
-import { GameType, CreateGameOptions, Board, BoardParams, BoardParamOption } from 'src/types';
+import { GameType, CreateGameOptions, Board } from 'src/types';
 import config from 'src/config';
 import { StoreContext } from 'src/providers/StoreProvider';
 
@@ -23,41 +22,16 @@ interface PlayerData {
   boardParam?: string, // Generic starting params for any game schemaa
 }
 
-const memoizedFetch = (function() {
-  const cache: Map<String, Object> = new Map();
-
-  return async (board: string) => {
-    const existingBoard = cache.get(board);
-    if (existingBoard) return existingBoard;
-
-    const boardParamsResp = await fetch(`games/${board}/params.json`);
-    const boardParams = await boardParamsResp.json();
-    cache.set(board, boardParams);
-
-    return boardParams;
-  };
-})();
-
 export default () => {
   const store = useContext(StoreContext);
   const i18n = useContext(TranslationContext);
   const [board, boardBind] = useInput('pokemon-gen1');
-  // const [boardParams, setBoardParams] = useState<BoardParamOption[] | null>(null);
   const [createdGameId, setCreatedGameId] = useState('');
   const [players, setPlayers] = useState<PlayerData[]>([{ name: '' }, { name: '' }]);
   const [gameType, gameTypeBind] = useInput(GameType.local);
   const [localPlayer, localPlayerBind] = useInput('');
 
   if (createdGameId) return <Redirect to={`/game/${createdGameId}`} />;
-
-  // useEffect(() => {
-  //   const fetchBoardParams = async () => {
-  //     const boardParams = (await memoizedFetch(board) as BoardParams);
-  //     setBoardParams(boardParams.options);
-  //   };
-
-  //   if (board) fetchBoardParams();
-  // }, [board]);
 
   const gameTypeOptions = [
     { label: i18n.createGame.local, value: GameType.local },
@@ -83,7 +57,7 @@ export default () => {
     const hasEnoughPlayers: boolean = players.length >= 2;
     const hasValidNames: boolean = players.every(isValidName);
     const hasLocalPlayer: boolean = gameType === GameType.local
-      || (!!localPlayer && players.indexOf(localPlayer) !== -1);
+      || (!!localPlayer && players.map(p => p.name).indexOf(localPlayer) !== -1);
 
     return hasBoard && isValidGameType && hasEnoughPlayers && hasValidNames && hasLocalPlayer;
   };
@@ -137,15 +111,6 @@ export default () => {
               marginLeft={4}
               onClick={() => removePlayer(i)}
             /> : null}
-
-            {/* {boardParams ? <SegmentedControl
-              marginTop={2}
-              height={24}
-              width={280}
-              options={boardParams.map(bp => ({ label: bp.displayName, value: bp.id }))}
-              onChange={(val) => updatePlayer('boardParam', val as string, i)}
-              value={player.boardParam || ''}
-            /> : null} */}
           </Pane>
         ))}
         <Button
@@ -168,7 +133,7 @@ export default () => {
         {gameType === GameType.remote ? <>
           <Pane role="group">
             <FormField label={i18n.createGame.playingAs} />
-            {players.filter(p => !!p).map(p => (
+            {players.filter(p => !!p.name).map(p => (
               <Radio
                 name="localPlayer"
                 label={p.name}

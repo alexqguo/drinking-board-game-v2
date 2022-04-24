@@ -11,7 +11,6 @@ import {
   ActionStatus,
 } from 'src/types';
 import { validateOneOf, validateRequired } from 'src/engine/rules';
-import { requirePlayerSelection, requireDiceRolls } from 'src/engine/alert';
 import { clamp, createId, sumNumbers } from 'src/utils';
 import ActionStore from 'src/stores/ActionStore';
 

@@ -28,7 +28,8 @@
     "join": "Join"
   },
   "alert": {
-    "done": "Done"
+    "done": "Done",
+    "waiting": "Waiting for {playerName}..."
   },
   "playerStatus": {
     "roll": "Roll",
