@@ -9,7 +9,7 @@ import {
   ListItem,
   CaretRightIcon,
 } from 'evergreen-ui';
-import { Player, GameState } from 'src/types';
+import { Player, GameState, GameType } from 'src/types';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
@@ -69,12 +69,13 @@ export default () => {
         ))}
       </UnorderedList>
 
-      <Paragraph size={300} marginTop={8}>
-        <a href={`/#/join/${gameStore.game.id}`} target="_blank" rel="noreferrer">
-          {gameStore.game.id}
-        </a>
-      </Paragraph>
-      {/* list all players, highlight active, maybe just for remote games */}
+      {gameStore.game.type === GameType.remote ? (
+        <Paragraph size={300} marginTop={8}>
+          <a href={`/#/join/${gameStore.game.id}`} target="_blank" rel="noreferrer">
+            {gameStore.game.id}
+          </a>
+        </Paragraph>
+      ) : null}
     </Pane>
   ));
 }

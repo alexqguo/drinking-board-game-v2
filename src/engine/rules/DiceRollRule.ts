@@ -7,10 +7,9 @@ import {
   DiceRollType,
   AlertAction,
   ActionStatus,
-  ActionType,
 } from 'src/types';
 import { validateRequired, getHandlerForRule } from 'src/engine/rules';
-import { createId, sumNumbers } from 'src/utils';
+import { sumNumbers } from 'src/utils';
 import ActionStore from 'src/stores/ActionStore';
 
 const DiceRollRule: RuleHandler = async (rule: RuleSchema) => {

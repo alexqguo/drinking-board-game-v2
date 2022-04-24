@@ -3,7 +3,6 @@ import {
   RuleSchema,
   RuleHandler,
   AlertState,
-  Player,
   Direction,
   PlayerTarget,
   AlertAction,

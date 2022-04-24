@@ -1,5 +1,4 @@
 import React from 'react';
-import { ActionStatus, AlertAction } from 'src/types';
 import DiceRoll from 'src/components/DiceRoll';
 import { uiActions } from 'src/engine/game';
 import { ActionProps, isActionDisabled } from './utils';

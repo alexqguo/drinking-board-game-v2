@@ -1,5 +1,5 @@
 import rootStore from 'src/stores';
-import { AlertAction, RuleSchema, RuleHandler, AlertState, AlertDiceRollInfo, ActionType, ActionStatus } from 'src/types';
+import { AlertAction, RuleSchema, RuleHandler, AlertState, ActionStatus } from 'src/types';
 import { validateRequired } from 'src/engine/rules';
 import { formatString } from 'src/providers/TranslationProvider';
 import en from 'src/i18n/en_US.json'; // TODO - make locale a store value so the engine can use them
