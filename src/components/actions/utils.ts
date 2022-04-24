@@ -22,4 +22,5 @@ export interface ActionProps {
   isMyTurn: boolean,
   players: Map<string, Player>,
   rule: RuleSchema | null,
+  localPlayerId: string,
 }

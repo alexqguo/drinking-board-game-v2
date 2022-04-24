@@ -2,8 +2,9 @@
   "tiles": [
     {
       "rule": {
-        "displayText": "Pick one, dude.",
-        "type": "StarterSelectionRule"
+        "displayText": "PALLET TOWN. Pick one, dude.",
+        "type": "StarterSelectionRule",
+        "starters": ["Charmander", "Bulbasaur", "Squirtle"]
       },
       "position": [{
         "x": 262,

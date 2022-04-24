@@ -275,9 +275,19 @@ Affects the dice rolls of players in the game.
 Allows the player to skip the next mandatory space(s). Note that if you land directly on a mandatory space you still must perform what it says.
 ```
 {
-  type: "SkipNextMandatory",
+  type: "SkipNextMandatoryRule",
   displayText: string,
   numSpaces: number
+}
+```
+
+#### StarterSelectionRule
+Meant to be used ONLY when the game starts. Placed on tile 0. Prompts a modal at the beginning of the game that each player is required to make a selection on. The first player must close the modal as it is technically their turn. The selection will be placed on the `starter` field in the player effects.
+```
+{
+  type: "StarterSelectionRule",
+  displayText: string,
+  starters: string[]
 }
 ```
 

@@ -9,7 +9,7 @@ import {
   ListItem,
   CaretRightIcon,
 } from 'evergreen-ui';
-import { Player, GameState, GameType } from 'src/types';
+import { Player, GameState } from 'src/types';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
@@ -59,6 +59,7 @@ export default () => {
       <UnorderedList listStyle="none" size={300} marginTop={16}>
         {playerStore.ids.map((id: string) => (
           <ListItem
+            key={id}
             margin="0"
             color="muted"
             icon={id === gameStore.game.currentPlayerId ? CaretRightIcon : null}

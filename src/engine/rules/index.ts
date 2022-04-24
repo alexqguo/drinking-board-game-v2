@@ -18,6 +18,7 @@ import SkipNextMandatoryRule from 'src/engine/rules/SkipNextMandatoryRule';
 import ReverseTurnOrderRule from 'src/engine/rules/ReverseTurnOrderRule';
 import ApplyMoveConditionRule from 'src/engine/rules/ApplyMoveConditionRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
+import StarterSelectionRule from 'src/engine/rules/StarterSelectionRule';
 
 /*
 TODO:
@@ -61,6 +62,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   SkipTurnRule,
   SpeedModifierRule,
   SkipNextMandatoryRule,
+  StarterSelectionRule,
 };
 
 export const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
@@ -73,15 +75,16 @@ export const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
   return handler;
 }
 
-export default async (ruleIndex: number) => {
+export default async (ruleIndex: number, options: { nextGameState?: GameState }) => {
   const { alertStore, boardStore } = rootStore;
+  const { nextGameState = GameState.RULE_END } = options;
   const rule: RuleSchema = boardStore.schema.tiles[ruleIndex].rule;
 
   alertStore.update({
     open: true,
-    state: AlertState.PENDING,
-    nextGameState: GameState.RULE_END,
+    nextGameState,
     ruleIdx: ruleIndex,
+    state: AlertState.PENDING,
   });
 
   const handler = getHandlerForRule(rule);

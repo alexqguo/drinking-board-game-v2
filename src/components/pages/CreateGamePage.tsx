@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   FormField,
@@ -79,7 +79,7 @@ export default () => {
 
   return (
     <section>
-      <Pane padding={16}>
+      <Pane margin={16}>
         <Heading size={800} is="h1">{i18n.createGame.title}</Heading>
 
         {/* game */}

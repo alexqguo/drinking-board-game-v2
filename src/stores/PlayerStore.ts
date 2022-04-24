@@ -31,19 +31,18 @@ export default class PlayerStore {
 
   updatePlayer = async (id: string, playerData: Partial<Player>) => {
     const playerSnap: DataSnapshot = await get(query(this.rootStore.playerRef!, orderByChild('id'), equalTo(id)));
-    // const playerSnap = await this.rootStore.playerRef?.orderByChild('id').equalTo(id).once('value');
     const [key] = Object.entries(playerSnap!.val())[0];
     update(ref(db, `${this.rootStore.prefix}/players/${key}`), playerData);
   }
 
   updateEffects = async (id: string, newEffects: Partial<PlayerEffects>) => {
     const playerSnap: DataSnapshot = await get(query(this.rootStore.playerRef!, orderByChild('id'), equalTo(id)));
-    // const playerSnap = await this.rootStore.playerRef?.orderByChild('id').equalTo(id).once('value');
     const [key] = Object.entries(playerSnap!.val())[0];
     update(ref(db, `${this.rootStore.prefix}/players/${key}/effects`), newEffects);
   };
 
   static defaultEffects = (): PlayerEffects => ({
+    starter: '',
     extraTurns: 0,
     mandatorySkips: 0,
     customMandatoryTileIndex: -1,

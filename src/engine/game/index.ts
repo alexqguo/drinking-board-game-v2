@@ -11,8 +11,9 @@ const GameEventHandler = () => {
   let prevGameState = gameStore.game.state;
   const eventHandlers: { [key: string]: Function } = {
     [GameState.GAME_START]: () => {
-      if (false) {
-        // If the first tile is a starter select rule, execute it
+      // If the first tile is a starter select rule, execute it
+      if (boardStore.schema.tiles[0].rule.type === 'StarterSelectionRule') {
+        RuleEngine(0, { nextGameState: GameState.TURN_CHECK });
       } else {
         gameStore.setGameState(GameState.TURN_CHECK);
       }
@@ -175,7 +176,7 @@ const GameEventHandler = () => {
     },
     [GameState.RULE_TRIGGER]: () => {
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-      RuleEngine(currentPlayer.tileIndex);
+      RuleEngine(currentPlayer.tileIndex, {});
     },
     [GameState.RULE_END]: () => {
       gameStore.setGameState(GameState.TURN_END);
@@ -277,7 +278,6 @@ const uiActions = {
   alertClose: async (nextState: GameState) => {
     if (!nextState) throw new Error('No nextState was defined when the modal closed.');
 
-    console.log('closing alert with next state of ', nextState)
     const { alertStore, gameStore, actionStore } = rootStore;
     const { setGameState } = gameStore;
     await Promise.all([

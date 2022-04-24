@@ -69,8 +69,9 @@ export interface AlertAction {
 
 export enum ActionType {
   roll = 'roll',
-  playerSelection = 'playerSelection',
   choice = 'choice',
+  playerSelection = 'playerSelection',
+  starterSelection = 'starterSelection',
 }
 
 export enum ActionStatus {
@@ -154,7 +155,8 @@ export interface PlayerEffects {
   skippedTurns: LostTurnInfo,
   speedModifier: SpeedModifier,
   moveCondition: MoveCondition,
-  custom: { [key: string]: CustomEffect }
+  custom: { [key: string]: CustomEffect },
+  starter: string
   // anchors: number,
   // rollAugmentation: RollAugmentation,
 }
@@ -234,6 +236,7 @@ export interface RuleSchema {
   choices?: ChoiceSchema[],
   condition?: MoveConditionSchema,
   proxyRuleId?: string,
+  starters?: string[],
 }
 
 export interface BaseOutcomeSchema {
