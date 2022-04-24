@@ -96,21 +96,6 @@ export interface AlertDiceRoll {
   result: string // pipe separated string
 }
 
-export interface AlertPlayerSelection {
-  isRequired: boolean,
-  selectedId: string, // Currently only support selecting one player
-  candidateIds: string[]
-}
-
-export interface AlertChoiceInfo {
-  [key: string]: AlertChoice
-}
-
-export interface AlertChoice {
-  displayText: string,
-  isSelected: boolean,
-}
-
 export enum GameState {
   NOT_STARTED = 'NOT_STARTED',
   GAME_START = 'GAME_START',
