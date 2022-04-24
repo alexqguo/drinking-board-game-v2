@@ -79,8 +79,8 @@
     }, {
       "rule": {
         "displayText": "You caught a Pikachu! Drink 2 and replace your starter with this walking electric franchise.",
-        "type": "ProxyRule",
-        "proxyRuleId": "pikachuProxyRule"
+        "type": "UpdateStarterRule",
+        "starters": ["Pikachu"]
       },
       "position": [{
         "x": 262,

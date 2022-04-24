@@ -19,6 +19,7 @@ import ReverseTurnOrderRule from 'src/engine/rules/ReverseTurnOrderRule';
 import ApplyMoveConditionRule from 'src/engine/rules/ApplyMoveConditionRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 import StarterSelectionRule from 'src/engine/rules/StarterSelectionRule';
+import UpdateStarterRule from 'src/engine/rules/UpdateStarterRule';
 
 export const validateRequired = (...args: any[]): boolean => (
   args
@@ -48,6 +49,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   SpeedModifierRule,
   SkipNextMandatoryRule,
   StarterSelectionRule,
+  UpdateStarterRule,
 };
 
 export const getHandlerForRule = (rule: RuleSchema): RuleHandler => {

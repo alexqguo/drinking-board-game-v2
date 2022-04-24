@@ -1,5 +1,15 @@
 import rootStore from 'src/stores';
-import { RuleSchema, RuleHandler, AlertState, SpeedModifier, ModifierOperation, PlayerTarget, AlertAction, ActionType, ActionStatus } from 'src/types';
+import {
+  RuleSchema,
+  RuleHandler,
+  AlertState,
+  SpeedModifier,
+  ModifierOperation,
+  PlayerTarget,
+  AlertAction,
+  ActionType,
+  ActionStatus,
+} from 'src/types';
 import { validateRequired } from 'src/engine/rules';
 import { createId } from 'src/utils';
 
