@@ -22,10 +22,7 @@ Cleanup:
 Parity:
 * Finish rule implementations
   * With game engine turn calculation updates
-* Zones
-* Finish up remote games
-* Make extensions compataible
-* Improve animation of moving
+* Improve animation of moving. Only happens on the current player's screen
 * Add back battle music?
 
 New features:

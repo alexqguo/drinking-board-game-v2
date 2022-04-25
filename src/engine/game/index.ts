@@ -169,7 +169,11 @@ const GameEventHandler = () => {
     },
     [GameState.MOVE_START]: () => {
       rootStore.scrollToCurrentPlayer();
-      gameStore.setGameState(GameState.MOVE_END);
+
+      // Allow time for the "animation" to happen
+      setTimeout(() => {
+        gameStore.setGameState(GameState.MOVE_END);
+      }, 2000);
     },
     [GameState.MOVE_END]: () => {
       gameStore.setGameState(GameState.RULE_TRIGGER);
