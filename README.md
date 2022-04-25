@@ -17,7 +17,7 @@ Cleanup:
 * Better handling of creating/joining game
 * Remove multi dice rolls in one click. Not used and lots of overhead
 * Alert state is a bit messy
-* Extensions need i18n support
+* Extensions/non components need i18n support
 
 Parity:
 * Finish rule implementations
@@ -26,6 +26,7 @@ Parity:
 * Finish up remote games
 * Make extensions compataible
 * Improve animation of moving
+* Add back battle music?
 
 New features:
 * Rolls in an alert can have custom labels

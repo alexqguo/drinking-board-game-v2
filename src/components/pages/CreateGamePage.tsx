@@ -155,6 +155,7 @@ export default () => {
           disabled={!isReadyToStart()}
           onClick={validateAndSubmit}
           role="button"
+          appearance="primary"
         >
           {i18n.createGame.start}
         </Button>

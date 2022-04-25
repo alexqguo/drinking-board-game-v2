@@ -7,7 +7,6 @@ const StarterSelectAction = ({
   rule,
   action,
   actions,
-  players,
   isMyTurn,
   localPlayerId,
 }: ActionProps) => {

@@ -1,5 +1,6 @@
 import { GameState, GameExtensionInfo, AlertState, Player, AlertAction } from 'src/types';
 import en from 'src/i18n/en_US.json';
+import { formatString } from 'src/providers/TranslationProvider';
 import RootStore from 'src/stores/RootStore';
 import ActionStore from 'src/stores/ActionStore';
 
@@ -20,12 +21,51 @@ const starterStrengths = Object.freeze({
 export default (rootStore: RootStore): GameExtensionInfo => {
   const { gameStore, playerStore, alertStore, actionStore } = rootStore;
 
+  const getBattleResults = (actions: AlertAction[]): { winners: Player[], losers: Player[] } => {
+    const losers: Player[] = [];
+    const winners: Player[] = [];
+    const maxRoll = Math.max(...actions.map(a => Number(a.value)));
+    const resultsPerPlayer = actions.reduce((acc: { [key: string]: number[] }, cur: AlertAction) => {
+      if (!acc[cur.playerId]) acc[cur.playerId] = [];
+      acc[cur.playerId].push(Number(cur.value));
+      return acc;
+    }, {});
+
+    Object.keys(resultsPerPlayer).forEach((playerId: string) => {
+      const playerMax = Math.max(...resultsPerPlayer[playerId]);
+      const player = playerStore.players.get(playerId)!;
+
+      if (playerMax === maxRoll) {
+        winners.push(player);
+      } else {
+        losers.push(player);
+      }
+    });
+
+    return { winners, losers };
+  }
+
   return {
     battleHandler: (actions: AlertAction[]) => {
       const isDone = actions.every(a => !!a.value);
 
       if (isDone) {
+        let message;
+        const { winners, losers } = getBattleResults(actions);
 
+        if (winners.length > 1 && losers.length === 0) {
+          message = en.battle.tie;
+        } else {
+          message = formatString(en.battle.result, {
+            winners: winners.map(p => p.name).join(', '),
+            losers: losers.map(p => p.name).join(', '),
+          });
+        }
+
+        alertStore.update({
+          state: AlertState.CAN_CLOSE,
+          messageOverride: message,
+        });
       }
     },
     gameEvents: {

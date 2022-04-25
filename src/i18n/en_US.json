@@ -58,6 +58,8 @@
   },
   "battle": {
     "title": "Trainer battle!",
-    "description": "You each roll a die, and whoever rolls the higher number wins! Loser drinks 2. If you roll the same number, both drink 1 unless there is an outright loser. If your starter is strong against an opponents starter, you get 2 dice rolls to their 1, and you take the higher of the 2 rolls."
+    "description": "You each roll a die, and whoever rolls the higher number wins! Loser drinks 2. If you roll the same number, both drink 1 unless there is an outright loser. If your starter is strong against an opponents starter, you get 2 dice rolls to their 1, and you take the higher of the 2 rolls.",
+    "tie": "It's a tie! Each player drink one.",
+    "result": "Winners: {winners}. Losers: {losers}. Losers drink two."
   }
 }
