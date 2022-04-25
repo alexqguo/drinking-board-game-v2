@@ -29,6 +29,7 @@ Parity:
 
 New features:
 * Rolls in an alert can have custom labels
+* Add more display rule consequences to dice rolls rules
 
 ## Schema changes
 * TeleportRule is gone in favor of MoveRule with tileIndex

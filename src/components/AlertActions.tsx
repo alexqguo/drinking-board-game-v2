@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useObserver } from 'mobx-react';
-import { Pane } from 'evergreen-ui';
+import { Pane, Text } from 'evergreen-ui';
 import { StoreContext } from 'src/providers/StoreProvider';
 import { ActionType, AlertAction, RuleSchema } from 'src/types';
 import RollAction from 'src/components/actions/RollAction';
@@ -19,6 +19,7 @@ export default () => {
   const rootStore = useContext(StoreContext);
   const { alertStore, actionStore, gameStore, playerStore, boardStore } = rootStore;
   const rule: RuleSchema | null = boardStore.getTileOrZoneRuleForAlert(alertStore.alert);
+  const hasMultiplePlayers = new Set(actionStore.actionList.map(a => a.playerId)).size > 1;
 
   const renderActionComponentForAction = (action: AlertAction) => {
     const Component = actionTypeComponentMap[action.type];
@@ -37,9 +38,14 @@ export default () => {
   return useObserver(() => (
     <Pane marginTop={16}>
       {actionStore.actionList.map((action: AlertAction) => (
-        <div key={action.id}>
+        <Pane key={action.id} marginTop={8}>
+          {hasMultiplePlayers && (
+            <Text>
+              {playerStore.players.get(action.playerId)!.name}{' '}
+            </Text>
+          )}
           {renderActionComponentForAction(action)}
-        </div>
+        </Pane>
       ))}
     </Pane>
   ));

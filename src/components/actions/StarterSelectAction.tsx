@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paragraph, Button } from 'evergreen-ui';
+import { Pane, Button } from 'evergreen-ui';
 import { ActionProps, isActionDisabled } from './utils';
 import { uiActions } from 'src/engine/game';
 
@@ -12,13 +12,12 @@ const StarterSelectAction = ({
   localPlayerId,
 }: ActionProps) => {
   // Set isMyTurn to true if the action is for the local player. Will always be true in a local game
+  // TODO- this is broken, current player can choose for everyone
   const isDisabled = isActionDisabled(action, actions, isMyTurn || action.playerId === localPlayerId);
 
   return (
-    <Paragraph marginBottom={16}>
-      {players.get(action.playerId)?.name}
-      <br />
-      {/* ID is the choice index in this case */}
+    <Pane>
+      {/* ID is the starter index in this case */}
       {action.candidateIds?.map((id: string) => (
         <Button
           key={id}
@@ -31,7 +30,7 @@ const StarterSelectAction = ({
           {rule?.starters![Number(id)]}
         </Button>
       ))}
-    </Paragraph>
+    </Pane>
   );
 };
 

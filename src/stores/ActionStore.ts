@@ -13,7 +13,7 @@ import {
 } from 'firebase/database';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
-import { ActionStatus, ActionType, AlertAction, RuleSchema } from 'src/types';
+import { ActionStatus, ActionType, AlertAction, GameState, RuleSchema } from 'src/types';
 import { getHandlerForRule } from 'src/engine/rules';
 import { createId } from 'src/utils';
 
@@ -34,7 +34,7 @@ export default class ActionStore {
   }
 
   @action setActionChildChanged = (action: AlertAction) => {
-    const { alertStore, boardStore } = this.rootStore;
+    const { alertStore, boardStore, gameStore } = this.rootStore;
     this.actions.set(action.id, action);
 
     /**
@@ -60,10 +60,16 @@ export default class ActionStore {
      * --> Maybe consider putting this check individually in each postActionHandler. Could run into weird edge
      *     cases for things like group roll rule.
      */
-     if (this.rootStore.gameStore.isMyTurn) {
-      const curRule: RuleSchema | null = boardStore.getTileOrZoneRuleForAlert(alertStore.alert)!;
-      const { postActionHandler = () => {} } = getHandlerForRule(curRule);
-      postActionHandler(curRule, this.actionList);
+    if (gameStore.isMyTurn) {
+      if (gameStore.game.state === GameState.BATTLE && this.rootStore.extension?.battleHandler) {
+        this.rootStore.extension.battleHandler(this.actionList);
+      } else {
+        const curRule: RuleSchema | null = boardStore.getTileOrZoneRuleForAlert(alertStore.alert)!;
+        const { postActionHandler = () => {} } = getHandlerForRule(curRule);
+        postActionHandler(curRule, this.actionList);
+        // TODO- Consider removing the isMyTurn limitation on this, at least for actions where multiple
+        // players are involved, as they would require the current player to be online
+      }
     }
   }
 
@@ -99,9 +105,6 @@ export default class ActionStore {
   }
 
   clear = async () => {
-    // "Passing null to update() will remove the data at this location."
-    // For some reason have to cast to null anyway
-    // return update(this.rootStore.actionRef!, null as any);
     return remove(this.rootStore.actionRef!);
   }
 

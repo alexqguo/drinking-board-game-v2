@@ -74,11 +74,11 @@ export default () => {
     return (
     <Dialog {...dialogProps}>
       {rule ? <>
-        <Paragraph style={activeRule && activeRule !== rule ? null: displayTextStyles}>
+        <Paragraph style={activeRule && activeRule !== rule ? null : displayTextStyles}>
           {/* TODO - split on \n here if necessary */}
           {rule.displayText}
         </Paragraph>
-      </>: null}
+      </> : null}
 
       {alert.messageOverride ?
         <Paragraph style={displayTextStyles}>

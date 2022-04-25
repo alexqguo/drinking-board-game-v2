@@ -22,7 +22,6 @@ import CenterLayout from 'src/components/CenterLayout';
 
 interface PlayerData {
   name: string,
-  boardParam?: string, // Generic starting params for any game schemaa
 }
 
 export default () => {

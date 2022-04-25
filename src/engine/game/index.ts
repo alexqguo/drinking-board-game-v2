@@ -153,6 +153,7 @@ const GameEventHandler = () => {
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
       // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 4;
+      numSpacesToAdvance = 3;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
@@ -229,20 +230,9 @@ const GameEventHandler = () => {
   };
 
   if (extension) {
-    for (let [key, value] of Object.entries(extension.gameEvents)) {
-      // If a handler already exist for a game state, modify it
-      if (eventHandlers[key]) {
-        const previousHandler = eventHandlers[key];
-        // First run the custom handler, then run the predefined one
-        eventHandlers[key] = async () => {
-          await value();
-          previousHandler();
-        };
-
-      // This would really just be for proxy rules, but otherwise just add it to the list
-      } else {
-        eventHandlers[key] = value;
-      }
+    for (const [gameEventKey, customGameEventHandler] of Object.entries(extension.gameEvents)) {
+      // Overwrite the default game event handler with any the extension defines
+      eventHandlers[gameEventKey] = customGameEventHandler;
     }
   }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paragraph, Button } from 'evergreen-ui';
+import { Pane, Button } from 'evergreen-ui';
 import { ActionProps, isActionDisabled } from './utils';
 import { uiActions } from 'src/engine/game';
 
@@ -13,7 +13,7 @@ const ChoiceAction = ({
   const choices = rule!.choices!;
 
   return (
-    <Paragraph>
+    <Pane>
       {/* ID is the choice index in this case */}
       {action.candidateIds?.map((id: string) => (
         <Button
@@ -27,7 +27,7 @@ const ChoiceAction = ({
           {choices[Number(id)].rule.displayText}
         </Button>
       ))}
-    </Paragraph>
+    </Pane>
   );
 };
 

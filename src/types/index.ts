@@ -5,6 +5,7 @@ export enum GameType {
 
 export interface GameExtensionInfo {
   gameEvents: { [key: string]: Function },
+  battleHandler?: Function,
 }
 
 export interface CreateGameOptions {
@@ -113,6 +114,7 @@ export enum GameState {
   GAME_OVER = 'GAME_OVER',
   TURN_SKIP = 'TURN_SKIP',
   LOST_TURN_START = 'LOST_TURN_START',
+  BATTLE = 'BATTLE',
 }
 
 export enum TurnOrder {
