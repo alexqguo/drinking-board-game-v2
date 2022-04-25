@@ -7,12 +7,9 @@ const StarterSelectAction = ({
   rule,
   action,
   actions,
-  isMyTurn,
-  localPlayerId,
+  isMyAction,
 }: ActionProps) => {
-  // Set isMyTurn to true if the action is for the local player. Will always be true in a local game
-  // TODO- this is broken, current player can choose for everyone
-  const isDisabled = isActionDisabled(action, actions, isMyTurn || action.playerId === localPlayerId);
+  const isDisabled = isActionDisabled(action, actions, isMyAction);
 
   return (
     <Pane>

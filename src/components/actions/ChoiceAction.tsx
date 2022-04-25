@@ -7,9 +7,9 @@ const ChoiceAction = ({
   rule,
   action,
   actions,
-  isMyTurn,
+  isMyAction,
 }: ActionProps) => {
-  const isDisabled = isActionDisabled(action, actions, isMyTurn);
+  const isDisabled = isActionDisabled(action, actions, isMyAction);
   const choices = rule!.choices!;
 
   return (

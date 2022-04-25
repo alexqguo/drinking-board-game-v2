@@ -19,8 +19,7 @@ export const isActionDisabled = (action: AlertAction, actions: AlertAction[], is
 export interface ActionProps {
   action: AlertAction,
   actions: AlertAction[],
-  isMyTurn: boolean,
   players: Map<string, Player>,
   rule: RuleSchema | null,
-  localPlayerId: string,
+  isMyAction: boolean,
 }

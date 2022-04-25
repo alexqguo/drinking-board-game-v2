@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useObserver } from 'mobx-react';
 import { Pane, Text } from 'evergreen-ui';
 import { StoreContext } from 'src/providers/StoreProvider';
-import { ActionType, AlertAction, RuleSchema } from 'src/types';
+import { ActionType, AlertAction, GameType, RuleSchema } from 'src/types';
 import RollAction from 'src/components/actions/RollAction';
 import PlayerSelectAction from 'src/components/actions/PlayerSelectAction';
 import ChoiceAction from 'src/components/actions/ChoiceAction';
@@ -23,14 +23,14 @@ export default () => {
 
   const renderActionComponentForAction = (action: AlertAction) => {
     const Component = actionTypeComponentMap[action.type];
+
     return (
       <Component
         rule={rule}
         action={action}
         actions={actionStore.actionList}
-        isMyTurn={gameStore.isMyTurn}
         players={playerStore.players}
-        localPlayerId={gameStore.localPlayerId}
+        isMyAction={gameStore.game.type === GameType.local ? true : action.playerId === gameStore.localPlayerId}
       />
     );
   };

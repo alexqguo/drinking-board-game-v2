@@ -7,11 +7,11 @@ import { ActionProps, isActionDisabled } from './utils';
 const PlayerSelectAction = ({
   action,
   actions,
-  isMyTurn,
+  isMyAction,
   players,
 }: ActionProps) => {
   const i18n = useContext(TranslationContext);
-  const isDisabled = isActionDisabled(action, actions, isMyTurn);
+  const isDisabled = isActionDisabled(action, actions, isMyAction);
 
   return (
     <Paragraph>

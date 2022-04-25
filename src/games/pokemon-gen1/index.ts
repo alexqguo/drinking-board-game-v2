@@ -19,7 +19,7 @@ const starterStrengths = Object.freeze({
 });
 
 export default (rootStore: RootStore): GameExtensionInfo => {
-  const { gameStore, playerStore, alertStore, actionStore } = rootStore;
+  const { gameStore, playerStore, alertStore, actionStore, boardStore } = rootStore;
 
   const getBattleResults = (actions: AlertAction[]): { winners: Player[], losers: Player[] } => {
     const losers: Player[] = [];
@@ -71,9 +71,12 @@ export default (rootStore: RootStore): GameExtensionInfo => {
     gameEvents: {
       [GameState.MOVE_END]: () => {
         const currentIdx = playerStore.players.get(gameStore.game.currentPlayerId)!.tileIndex;
+        const currentTile = boardStore.schema.tiles[currentIdx];
         const playersAtCurrentTile = Array.from(playerStore.players.values())
           .filter(p => p.tileIndex === currentIdx);
-        if (playersAtCurrentTile.length > 1) {
+
+        // No battles at gyms
+        if (playersAtCurrentTile.length > 1 && !currentTile.mandatory) {
           gameStore.setGameState(GameState.BATTLE);
         } else {
           gameStore.setGameState(GameState.RULE_TRIGGER);
