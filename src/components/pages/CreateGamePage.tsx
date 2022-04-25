@@ -64,7 +64,7 @@ export default () => {
     return hasBoard && isValidGameType && hasEnoughPlayers && hasValidNames && hasLocalPlayer;
   };
 
-  const validateAndSubmit = async (e: Event) => {
+  const validateAndSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!isReadyToStart()) return;
 
@@ -79,6 +79,7 @@ export default () => {
     setCreatedGameId(gameId);
   }
 
+  console.log(gameType)
   return (
     <CenterLayout>
       <>
@@ -131,7 +132,7 @@ export default () => {
           label={i18n.createGame.gameType}
           value={gameType}
           options={gameTypeOptions}
-          onChange={value => gameTypeBind.onChangeVal(value)}
+          onChange={e => gameTypeBind.onChangeVal(e.target.value)}
         />
 
         {/* local player selection for remote games */}

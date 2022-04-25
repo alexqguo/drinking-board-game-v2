@@ -8,6 +8,7 @@ import {
   UnorderedList,
   ListItem,
   CaretRightIcon,
+  DisableIcon,
 } from 'evergreen-ui';
 import { Player, GameState, GameType } from 'src/types';
 import { TranslationContext } from 'src/providers/TranslationProvider';
@@ -50,7 +51,7 @@ export default () => {
       />
       <Button
         disabled={!isActionable}
-        iconBefore="disable"
+        iconBefore={DisableIcon}
         onClick={uiActions.skipTurn}
       >
         {i18n.playerStatus.skip}

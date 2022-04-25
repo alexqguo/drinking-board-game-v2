@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pane, Button } from 'evergreen-ui';
+import { Pane, Button, TickCircleIcon } from 'evergreen-ui';
 import { ActionProps, isActionDisabled } from './utils';
 import { uiActions } from 'src/engine/game';
 
@@ -21,7 +21,7 @@ const StarterSelectAction = ({
           marginRight={8}
           disabled={isDisabled}
           onClick={() => uiActions.handleActionSelection(id, action)}
-          iconAfter={!!action.value && id === action.value ? 'tick-circle' : false}
+          iconAfter={!!action.value && id === action.value ? TickCircleIcon : false}
         >
           {rule?.starters![Number(id)]}
         </Button>

@@ -16,7 +16,7 @@
     "@types/node": "^12.12.47",
     "@types/react": "^16.9.36",
     "@types/react-dom": "^16.9.8",
-    "evergreen-ui": "^4.27.4",
+    "evergreen-ui": "^6.9.6",
     "firebase": "^9.6.11",
     "mobx": "^6.5.0",
     "mobx-react": "^7.3.0",

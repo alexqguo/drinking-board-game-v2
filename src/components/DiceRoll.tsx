@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, ButtonProps } from 'evergreen-ui';
+import { Button, ButtonProps, HandRightIcon } from 'evergreen-ui';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 
 type RollCallback = (rolls: number[]) => void;
@@ -25,7 +25,7 @@ export default ({ numRolls = 1, onRoll, rolls, ...rest }: Props) => {
   return (
     <Button
       {...rest}
-      iconBefore="hand-right"
+      iconBefore={HandRightIcon}
       appearance="primary"
       onClick={handleClick}
     >

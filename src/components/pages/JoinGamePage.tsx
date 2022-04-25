@@ -76,8 +76,8 @@ export default () => {
       updateState({ searchStatus: SearchStatus.notFound });
     }
   };
-  const onInputChange = (e: Event) => {
-    const newId: string = (e.target as HTMLInputElement).value;
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newId: string = e.target.value;
     window.clearTimeout(timeout!);
     timeout = window.setTimeout(() => search(newId), 1000);
     updateState({ gameId: newId });
@@ -120,7 +120,7 @@ export default () => {
 
         <TextInputField
           label={i18n.joinGame.gameId}
-          onChange={(e: Event) => onInputChange(e)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onInputChange(e)}
           width="100%"
           value={state.searchStatus === SearchStatus.searching ? i18n.joinGame.searching : state.gameId}
           disabled={state.searchStatus === SearchStatus.found || state.searchStatus === SearchStatus.searching}

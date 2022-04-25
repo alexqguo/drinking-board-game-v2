@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Text,Button, Paragraph } from 'evergreen-ui'
+import { Text,Button, Paragraph, TickCircleIcon } from 'evergreen-ui'
 import { uiActions } from 'src/engine/game';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { ActionProps, isActionDisabled } from './utils';
@@ -23,7 +23,7 @@ const PlayerSelectAction = ({
           marginRight={8}
           disabled={isDisabled}
           onClick={() => uiActions.handleActionSelection(id, action)}
-          iconAfter={!!action.value && id === action.value ? 'tick-circle' : false}
+          iconAfter={!!action.value && id === action.value ? TickCircleIcon : false}
         >
           {players.get(id)?.name}
         </Button>
