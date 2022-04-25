@@ -56,7 +56,16 @@ export default class RootStore {
     this.boardStore = new BoardStore();
   }
 
+  reset() {
+    this.gameStore = new GameStore(this);
+    this.playerStore = new PlayerStore(this);
+    this.alertStore = new AlertStore(this);
+    this.actionStore = new ActionStore(this);
+    this.boardStore = new BoardStore();
+  }
+
   async createGame(options: CreateGameOptions): Promise<string> {
+    this.reset();
     const { playerNames, gameType, board, localPlayer } = options;
     const gameId: string = createId('game');
     this.gameId = gameId;
@@ -181,6 +190,7 @@ export default class RootStore {
   }
 
   async restoreSession(options: RestoreGameOptions) {
+    this.reset();
     const { gameId, localPlayerId, board } = options;
     this.gameId = gameId;
     this.prefix = RootStore.createPrefix(gameId);

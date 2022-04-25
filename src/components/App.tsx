@@ -12,7 +12,6 @@ const theme = mergeTheme(defaultTheme, {
   components: {
     Button: {
       baseStyle: {
-        //
         /**
          * I'm putting this here specifically for primary button types.
          * It's not currently possible in evergreen to override the primary button theme without
@@ -35,7 +34,7 @@ const theme = mergeTheme(defaultTheme, {
   },
 });
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider value={theme}>
       <StoreProvider>

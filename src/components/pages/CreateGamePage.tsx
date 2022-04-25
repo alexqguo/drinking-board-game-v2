@@ -79,7 +79,6 @@ export default () => {
     setCreatedGameId(gameId);
   }
 
-  console.log(gameType)
   return (
     <CenterLayout>
       <>
