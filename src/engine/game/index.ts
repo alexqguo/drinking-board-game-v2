@@ -173,7 +173,7 @@ const GameEventHandler = () => {
       // Allow time for the "animation" to happen
       setTimeout(() => {
         gameStore.setGameState(GameState.MOVE_END);
-      }, 2000);
+      }, 750);
     },
     [GameState.MOVE_END]: () => {
       gameStore.setGameState(GameState.RULE_TRIGGER);
