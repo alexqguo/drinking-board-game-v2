@@ -305,10 +305,34 @@ Meant to be used ONLY when the game starts. Placed on tile 0. Prompts a modal at
 ```
 
 #### UpdateStarterRule
-todo
+Update the starter of the current player. Either uses `starters[0]` to hardcode the new starter, or a custom `playerTarget` which the player will swap with, so one of those must be provided.
+```
+{
+  type: "UpdateStarterRule",
+  displayText: string,
+  starters?: string[],
+  playerTarget?: "custom"
+}
+```
 
 #### AnchorRule
-todo
+Currently only used in Gen 2. The player who lands on this has their `anchors` effect incremented by one. An anchor means this player cannot be passed in a roll by another player, so during move calculation, if there is a player in your path with an anchor, you will go up until where they are and not pass. Mandatory skips do NOT factor into this calculation. You can provide multiple anchors (if you want to) with the `numTurns` property, but in 99% of cases you just want to set it to 1.
+```
+{
+  type: "AnchorRule",
+  displayText: string,
+  numTurns: number
+}
+```
+
+#### GroupRollRule
+Currently only used in the Bug Catching Contest in Gen 2. Everyone rolls a die and nothing else happens.
+```
+{
+  type: "GroupRollRule",
+  displayText: string
+}
+```
 
 ### Other enums
 #### PlayerTarget

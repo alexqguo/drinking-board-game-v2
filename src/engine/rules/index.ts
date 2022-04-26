@@ -20,7 +20,8 @@ import ApplyMoveConditionRule from 'src/engine/rules/ApplyMoveConditionRule';
 import DrinkDuringLostTurnsRule from 'src/engine/rules/DrinkDuringLostTurnsRule';
 import StarterSelectionRule from 'src/engine/rules/StarterSelectionRule';
 import UpdateStarterRule from 'src/engine/rules/UpdateStarterRule';
-import AnchorRule from 'src/engine/rules//AnchorRule';
+import AnchorRule from 'src/engine/rules/AnchorRule';
+import GroupRollRule from 'src/engine/rules/GroupRollRule';
 
 export const validateRequired = (...args: any[]): boolean => (
   args
@@ -52,6 +53,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   StarterSelectionRule,
   UpdateStarterRule,
   AnchorRule,
+  GroupRollRule,
 };
 
 export const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
