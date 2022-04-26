@@ -21,7 +21,7 @@ const StarterSelectAction = ({
           marginRight={8}
           disabled={isDisabled}
           onClick={() => uiActions.handleActionSelection(id, action)}
-          iconAfter={!!action.value && id === action.value ? TickCircleIcon : false}
+          iconAfter={!!action.value && id === action.value ? TickCircleIcon : null}
         >
           {rule?.starters![Number(id)]}
         </Button>

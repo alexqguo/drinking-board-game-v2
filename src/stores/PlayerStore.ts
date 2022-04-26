@@ -59,6 +59,7 @@ export default class PlayerStore {
       tileIndex: -1,
       numCurrentSuccesses: 0
     },
+    anchors: 0,
     custom: {},
   })
 }

@@ -304,6 +304,12 @@ Meant to be used ONLY when the game starts. Placed on tile 0. Prompts a modal at
 }
 ```
 
+#### UpdateStarterRule
+todo
+
+#### AnchorRule
+todo
+
 ### Other enums
 #### PlayerTarget
 Specifies a target player for a rule.

@@ -7,8 +7,6 @@ import ActionStore from 'src/stores/ActionStore';
 /*
 
 to check/implement
-- steal starter rule
-- anchor rule
 - group roll rule
 
 - ilex forest
@@ -21,17 +19,15 @@ to check/implement
 */
 
 const starters = Object.freeze({
-  pikachu: 'Pikachu',
-  squirtle: 'Squirtle',
-  bulbasaur: 'Bulbasaur',
-  charmander: 'Charmander',
+  totodile: 'Totodile',
+  chikorita: 'Chikorita',
+  cyndaquil: 'Cyndaquil',
 });
 
 const starterStrengths = Object.freeze({
-  [starters.pikachu]: starters.squirtle,
-  [starters.squirtle]: starters.charmander,
-  [starters.charmander]: starters.bulbasaur,
-  [starters.bulbasaur]: starters.squirtle,
+  [starters.totodile]: starters.cyndaquil,
+  [starters.cyndaquil]: starters.chikorita,
+  [starters.chikorita]: starters.totodile,
 });
 
 export default (rootStore: RootStore): GameExtensionInfo => {

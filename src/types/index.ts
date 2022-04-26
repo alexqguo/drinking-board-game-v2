@@ -140,7 +140,7 @@ export interface PlayerEffects {
   moveCondition: MoveCondition,
   custom: { [key: string]: CustomEffect },
   starter: string
-  // anchors: number,
+  anchors: number,
   // rollAugmentation: RollAugmentation,
 }
 

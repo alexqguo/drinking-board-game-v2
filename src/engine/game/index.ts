@@ -1,6 +1,17 @@
 import { autorun } from 'mobx';
 import rootStore from 'src/stores';
-import { GameState, TileSchema, AlertState, MoveConditionSchema, ZoneType, ZoneSchema, RuleHandler, AlertRuleType, AlertAction } from 'src/types';
+import {
+  GameState,
+  TileSchema,
+  AlertState,
+  MoveConditionSchema,
+  ZoneType,
+  ZoneSchema,
+  RuleHandler,
+  AlertRuleType,
+  AlertAction,
+  Player,
+} from 'src/types';
 import RuleEngine, { getHandlerForRule } from 'src/engine/rules';
 import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
@@ -141,7 +152,6 @@ const GameEventHandler = () => {
         .slice(tileIndex + 1, tileIndex + 1 + roll)
         .findIndex((tile: TileSchema, idx: number) => {
           return tile.mandatory || effects.customMandatoryTileIndex === tileIndex + idx + 1;
-          // TODO - OR anchor
         });
 
       if (effects.mandatorySkips > 0 && firstMandatoryIndex !== -1) {
@@ -152,7 +162,22 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 3;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 38;
+
+      // Get all other players with an anchor, and sort them by position to allow us to break on the earliest match
+      const otherPlayersWithAnchors: Player[] = Array.from(playerStore.players.values())
+        .filter(p => p.id !== currentPlayer.id && p.effects.anchors && p.effects.anchors > 0)
+        .sort((p1, p2) => p1.tileIndex - p2.tileIndex);
+      // For each players with anchors, if their position is within the range, modify numSpacesToAdvance and break
+      for (let i = 0; i < otherPlayersWithAnchors.length; i++) {
+        const p = otherPlayersWithAnchors[i];
+
+        if (p.tileIndex >= currentPlayer.tileIndex && p.tileIndex <= tileIndex + numSpacesToAdvance) {
+          numSpacesToAdvance = p.tileIndex - tileIndex;
+          await playerStore.updateEffects(p.id, { anchors: p.effects.anchors - 1 });
+          break;
+        }
+      }
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
