@@ -61,6 +61,7 @@ const MoveRule: RuleHandler = async (rule: RuleSchema) => {
   if (playerTarget === PlayerTarget.custom) {
     actions.push({
       id: createId('action'),
+      ruleId: rule.id,
       playerId: gameStore.game.currentPlayerId,
       type: ActionType.playerSelection,
       status: ActionStatus.ready,
@@ -73,6 +74,7 @@ const MoveRule: RuleHandler = async (rule: RuleSchema) => {
   if (diceRolls) {
     const diceRollActions = ActionStore.createNDiceRollActionObjects({
       n: diceRolls.numRequired,
+      ruleId: rule.id,
       status: ActionStatus.dependent,
       playerId: gameStore.game.currentPlayerId,
     });

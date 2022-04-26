@@ -20,6 +20,7 @@ const ChoiceRule: RuleHandler = async (rule: RuleSchema) => {
     // I think this is only used for the Sabrina space on gen 1. There's no actual effect
     actions.push(...ActionStore.createNDiceRollActionObjects({
       n: diceRolls.numRequired,
+      ruleId: rule.id,
       playerId: gameStore.game.currentPlayerId,
     }));
   }
@@ -28,6 +29,7 @@ const ChoiceRule: RuleHandler = async (rule: RuleSchema) => {
 
   actions.push({
     id: createId('choice'),
+    ruleId: rule.id,
     playerId: gameStore.game.currentPlayerId,
     type: ActionType.choice,
     status: ActionStatus.dependent,
@@ -45,7 +47,7 @@ ChoiceRule.postActionHandler = async (rule: RuleSchema, actions: AlertAction[]) 
     const priorNumChoices = alertStore.alert.outcomeIdentifier.split('|').filter(o => !!o).length;
     const numChoiceActions = actions.filter(a => a.type === ActionType.choice).length;
 
-    const choiceIndex = Number(actions.find(a => a.type === ActionType.choice)?.value);
+    const choiceIndex = Number(actions.find(a => a.type === ActionType.choice && a.ruleId === rule.id)?.value);
     const choice = rule.choices![choiceIndex];
     const handler = getHandlerForRule(choice.rule);
 

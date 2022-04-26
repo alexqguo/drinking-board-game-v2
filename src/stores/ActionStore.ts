@@ -117,14 +117,16 @@ export default class ActionStore {
 
   static createNDiceRollActionObjects = ({
     n,
+    ruleId,
     playerId,
     status = ActionStatus.ready,
-  }: { n: number, playerId: string, status?: ActionStatus }): AlertAction[] => {
+  }: { n: number, ruleId: string, playerId: string, status?: ActionStatus }): AlertAction[] => {
     const actions: AlertAction[] = [];
     for (let i = 0; i < n; i++) {
       actions.push({
         id: createId('action'),
         status,
+        ruleId,
         playerId,
         type: ActionType.roll,
         value: null,

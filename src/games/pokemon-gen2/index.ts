@@ -5,17 +5,9 @@ import RootStore from 'src/stores/RootStore';
 import ActionStore from 'src/stores/ActionStore';
 
 /*
-
-to check/implement
-- group roll rule
-
-- ilex forest
-- goldenrod gym
-- goldenrod game center
-- snubbull
-- reverse turn order
-- suicune/entei/raikou
-
+to fix
+- ilex forest **
+- goldenrod game center **Crash**
 */
 
 const starters = Object.freeze({
@@ -29,6 +21,8 @@ const starterStrengths = Object.freeze({
   [starters.cyndaquil]: starters.chikorita,
   [starters.chikorita]: starters.totodile,
 });
+
+const trainerBattleRuleId = 'battle_gen2';
 
 export default (rootStore: RootStore): GameExtensionInfo => {
   const { gameStore, playerStore, alertStore, actionStore, boardStore } = rootStore;
@@ -108,6 +102,7 @@ export default (rootStore: RootStore): GameExtensionInfo => {
           actions.push(...ActionStore.createNDiceRollActionObjects({
             n: (hasStrength ? 2 : 1),
             playerId: p.id,
+            ruleId: trainerBattleRuleId,
           }));
         });
 

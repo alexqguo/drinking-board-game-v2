@@ -27,6 +27,7 @@ const StarterSelectionRule: RuleHandler = async (rule: RuleSchema) => {
   playerStore.ids.forEach((id: string) => {
     actions.push({
       id: createId('action'),
+      ruleId: rule.id,
       playerId: id,
       status: ActionStatus.ready,
       type: ActionType.starterSelection,

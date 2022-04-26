@@ -18,6 +18,7 @@ const DrinkDuringLostTurnsRule: RuleHandler = async (rule: RuleSchema) => {
   const { numRequired } = rule.diceRolls; // Really this should just be hardcoded to 2
   const actions = ActionStore.createNDiceRollActionObjects({
     n: numRequired,
+    ruleId: rule.id,
     status: ActionStatus.dependent,
     playerId: gameStore.game.currentPlayerId,
   });

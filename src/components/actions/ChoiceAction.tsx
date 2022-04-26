@@ -22,7 +22,7 @@ const ChoiceAction = ({
           marginRight={8}
           disabled={isDisabled}
           onClick={() => uiActions.handleActionSelection(id, action)}
-          iconAfter={!!action.value && id === action.value ? TickCircleIcon : false}
+          iconAfter={!!action.value && id === action.value ? TickCircleIcon : null}
         >
           {choices[Number(id)].rule.displayText}
         </Button>

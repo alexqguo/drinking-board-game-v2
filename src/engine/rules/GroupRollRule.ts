@@ -9,6 +9,7 @@ const GroupRollRule: RuleHandler = async (rule: RuleSchema) => {
   const actions: AlertAction[] = playerIds.reduce((acc: AlertAction[], cur: string) => {
     acc.push({
       id: createId('action'),
+      ruleId: rule.id,
       playerId: cur,
       type: ActionType.roll,
       status: ActionStatus.ready,

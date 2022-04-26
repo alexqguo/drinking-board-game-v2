@@ -57,6 +57,7 @@ export interface Alert {
 
 export interface AlertAction {
   id: string,
+  ruleId: string,
   playerId: string,
   type: ActionType,
   status: ActionStatus,
@@ -206,6 +207,7 @@ export interface TileSchema {
 }
 
 export interface RuleSchema {
+  id: string,
   type: string,
   displayText: string,
   diceRolls?: DiceRollSchema

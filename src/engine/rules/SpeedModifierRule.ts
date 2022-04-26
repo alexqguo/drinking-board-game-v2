@@ -30,6 +30,7 @@ const SpeedModifierRule: RuleHandler = async (rule: RuleSchema) => {
   } else {
     const action: AlertAction = {
       id: createId('action'),
+      ruleId: rule.id,
       playerId: gameStore.game.currentPlayerId,
       type: ActionType.playerSelection,
       status: ActionStatus.ready,

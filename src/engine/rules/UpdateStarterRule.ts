@@ -23,6 +23,7 @@ const UpdateStarterRule: RuleHandler = async (rule: RuleSchema) => {
   } else if (playerTarget === PlayerTarget.custom) {
     actionStore.createNewActions([{
       id: createId('action'),
+      ruleId: rule.id,
       playerId: gameStore.game.currentPlayerId,
       type: ActionType.playerSelection,
       status: ActionStatus.ready,

@@ -18,6 +18,8 @@ const starterStrengths = Object.freeze({
   [starters.bulbasaur]: starters.squirtle,
 });
 
+const trainerBattleRuleId = 'battle_gen1';
+
 export default (rootStore: RootStore): GameExtensionInfo => {
   const { gameStore, playerStore, alertStore, actionStore, boardStore } = rootStore;
 
@@ -96,6 +98,7 @@ export default (rootStore: RootStore): GameExtensionInfo => {
           actions.push(...ActionStore.createNDiceRollActionObjects({
             n: (hasStrength ? 2 : 1),
             playerId: p.id,
+            ruleId: trainerBattleRuleId,
           }));
         });
 

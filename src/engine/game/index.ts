@@ -49,6 +49,7 @@ const GameEventHandler = () => {
 
       if (currentZone && currentZone.rule && currentZone.type === ZoneType.active) {
         const handler: RuleHandler = getHandlerForRule(currentZone.rule);
+        console.log('updating alert for zone');
         await alertStore.update({
           open: true,
           state: AlertState.PENDING,
@@ -162,7 +163,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      if (currentPlayer.name === 'asdf') numSpacesToAdvance = 22;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 20;
 
       // Get all other players with an anchor, and sort them by position to allow us to break on the earliest match
       const otherPlayersWithAnchors: Player[] = Array.from(playerStore.players.values())

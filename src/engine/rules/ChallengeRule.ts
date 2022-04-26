@@ -15,6 +15,7 @@ const ChallengeRule: RuleHandler = async (rule: RuleSchema) => {
   const { actionStore, gameStore } = rootStore;
   const action: AlertAction = {
     id: createId('action'),
+    ruleId: rule.id,
     playerId: gameStore.game.currentPlayerId,
     type: ActionType.playerSelection,
     status: ActionStatus.ready,
@@ -34,6 +35,7 @@ ChallengeRule.postActionHandler = (rule: RuleSchema, actions: AlertAction[]) => 
     alertStore.update({ messageOverride: en.challenge.whoWon });
     actionStore.createNewActions([{
       id: createId('action'),
+      ruleId: rule.id,
       playerId: gameStore.game.currentPlayerId,
       type: ActionType.playerSelection,
       status: ActionStatus.ready,

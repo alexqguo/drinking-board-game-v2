@@ -19,6 +19,7 @@ Cleanup:
 * Alert state is a bit messy
 * Extensions/non components need i18n support
 * Any post action handler that does `actions.find` (finds first) should be updated to instead find the last one in case the rule is nested
+* Consider clearing preexisting actions when executing a nested rule. The logic gets all fucked up. Actions now how a `ruleId` on them to indicate where they came from, this should be incorporated into the `Alert` component's logic as well so that all actions aren't grouped together
 
 Parity:
 * Finish rule implementations

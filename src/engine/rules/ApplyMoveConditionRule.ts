@@ -115,6 +115,7 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
   if (playerTarget === PlayerTarget.custom) {
     actions.push({
       id: createId('action'),
+      ruleId: rule.id,
       type: ActionType.playerSelection,
       status: ActionStatus.ready,
       playerId: gameStore.game.currentPlayerId,
@@ -124,8 +125,8 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
   } else {
     const playerIds = (playerTarget === PlayerTarget.allOthers ?
       gameStore.otherPlayerIds : [gameStore.game.currentPlayerId]);
-    playerIds.forEach((playerId: string) => {
-      playerStore.updateEffects(playerId, {
+    playerIds.forEach(async (playerId: string) => {
+      await playerStore.updateEffects(playerId, {
         moveCondition: {
           tileIndex: boardStore.getTileIndexForRule(rule),
           numCurrentSuccesses: 0,
@@ -138,6 +139,7 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
   if (rule.condition?.immediate) {
     actions.push(...ActionStore.createNDiceRollActionObjects({
       n: rule.condition.diceRolls?.numRequired || 1,
+      ruleId: rule.id,
       playerId: gameStore.game.currentPlayerId,
       status: ActionStatus.dependent,
     }));

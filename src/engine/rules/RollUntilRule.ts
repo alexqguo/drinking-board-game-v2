@@ -13,8 +13,9 @@ const RollUntilRule: RuleHandler = async (rule: RuleSchema) => {
   }
 
   // Create a singular action at first. postActionHandler will add more depending on the results
-  const actions = [{
+  const actions: AlertAction[] = [{
     id: createId('action'),
+    ruleId: rule.id,
     playerId: gameStore.game.currentPlayerId,
     status: ActionStatus.ready,
     type: ActionType.roll,
@@ -28,12 +29,14 @@ RollUntilRule.postActionHandler = (rule: RuleSchema, actions: AlertAction[]) => 
   const { alertStore, actionStore, gameStore } = rootStore;
   const lastAction = actions[actions.length - 1];
   const isDone = rule.criteria!.indexOf(lastAction.value) > -1;
+  console.log('roll until rule post', actions)
 
   if (isDone) {
     alertStore.update({ state: AlertState.CAN_CLOSE });
   } else if (!!lastAction.value && rule.criteria!.indexOf(lastAction.value) === -1) {
     actionStore.pushAction({
       id: createId('action'),
+      ruleId: rule.id,
       playerId: gameStore.game.currentPlayerId,
       status: ActionStatus.ready,
       type: ActionType.roll,
