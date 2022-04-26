@@ -1168,7 +1168,7 @@
             "isAny": true,
             "rule": {
               "type": "DisplayRule",
-              "displayText": "Phew"
+              "displayText": "You can continue!"
             },
             "criteria": [5, 6]
           }]

@@ -18,6 +18,7 @@ Cleanup:
 * Remove multi dice rolls in one click. Not used and lots of overhead
 * Alert state is a bit messy
 * Extensions/non components need i18n support
+* Any post action handler that does `actions.find` (finds first) should be updated to instead find the last one in case the rule is nested
 
 Parity:
 * Finish rule implementations

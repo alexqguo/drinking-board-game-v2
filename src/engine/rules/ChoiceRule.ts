@@ -42,15 +42,27 @@ ChoiceRule.postActionHandler = async (rule: RuleSchema, actions: AlertAction[]) 
   const isDone = actions.every(a => !!a.value);
 
   if (isDone) {
+    const priorNumChoices = alertStore.alert.outcomeIdentifier.split('|').filter(o => !!o).length;
+    const numChoiceActions = actions.filter(a => a.type === ActionType.choice).length;
+
     const choiceIndex = Number(actions.find(a => a.type === ActionType.choice)?.value);
     const choice = rule.choices![choiceIndex];
     const handler = getHandlerForRule(choice.rule);
 
-    await alertStore.update({
-      outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|choice:${choiceIndex}`,
-    });
+    /**
+     * If a choice rule outcome is a separate rule which has its own actions, we need this check here
+     * to ensure this code doesn't run twice once the subsequent actions get updated.
+     * This may not work very well with nested ChoiceRules. Or maybe it would. Who knows!
+     */
+    if (numChoiceActions > priorNumChoices) {
+      await alertStore.update({
+        outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|choice:${choiceIndex}`,
+      });
 
-    handler(choice.rule);
+      handler(choice.rule);
+    } else if (handler.postActionHandler) {
+      handler.postActionHandler(choice.rule, actions);
+    }
   }
 };
 

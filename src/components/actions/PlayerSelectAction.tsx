@@ -28,7 +28,6 @@ const PlayerSelectAction = ({
           {players.get(id)?.name}
         </Button>
       ))}
-      {JSON.stringify(action)}
     </Paragraph>
   );
 };

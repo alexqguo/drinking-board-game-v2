@@ -152,7 +152,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 4;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 3;
 
       if (effects.customMandatoryTileIndex === tileIndex + numSpacesToAdvance) {
         await playerStore.updateEffects(currentPlayer.id, { customMandatoryTileIndex: -1 });
