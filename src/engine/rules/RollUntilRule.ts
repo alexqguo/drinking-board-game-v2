@@ -29,7 +29,6 @@ RollUntilRule.postActionHandler = (rule: RuleSchema, actions: AlertAction[]) => 
   const { alertStore, actionStore, gameStore } = rootStore;
   const lastAction = actions[actions.length - 1];
   const isDone = rule.criteria!.indexOf(lastAction.value) > -1;
-  console.log('roll until rule post', actions)
 
   if (isDone) {
     alertStore.update({ state: AlertState.CAN_CLOSE });
