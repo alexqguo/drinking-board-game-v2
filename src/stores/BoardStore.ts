@@ -1,20 +1,16 @@
-import { Alert, AlertRuleType, BoardSchema, RuleSchema, TileSchema, ZoneSchema } from 'src/types';
-
-
-const decorateRuleIds = (rule: RuleSchema, baseId: string) => {
-  rule.id = baseId;
-  const childRules = [
-    ...rule.choices?.map(c => c.rule) || [],
-    ...rule.diceRolls?.outcomes?.map(o => o.rule) || [],
-  ];
-  childRules.forEach((childRule, i) => {
-    decorateRuleIds(childRule, `${baseId}_${i}`);
-  });
-};
+import {
+  Alert,
+  AlertRuleType,
+  BoardSchema,
+  RuleSchema,
+  TileSchema,
+  ZoneSchema,
+} from 'src/types';
 
 // Technically has no reason to use mobx right now
 // It's all local and static data
 export default class BoardStore {
+  rulesById: Map<string, RuleSchema> = new Map();
   schema: BoardSchema = {
     zones: [],
     tiles: []
@@ -22,6 +18,19 @@ export default class BoardStore {
 
   setBoardSchema = (schema: BoardSchema) => {
     if (this.schema.tiles.length) throw new Error('Schema already initialized');
+
+    const decorateRuleIds = (rule: RuleSchema, baseId: string) => {
+      rule.id = baseId;
+      this.rulesById.set(baseId, rule);
+
+      const childRules = [
+        ...rule.choices?.map(c => c.rule) || [],
+        ...rule.diceRolls?.outcomes?.map(o => o.rule) || [],
+      ];
+      childRules.forEach((childRule, i) => {
+        decorateRuleIds(childRule, `${baseId}_${i}`);
+      });
+    };
 
     // Do mutations or whatever here
     this.schema = schema;

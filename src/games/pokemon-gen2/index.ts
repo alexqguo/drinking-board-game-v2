@@ -7,7 +7,6 @@ import ActionStore from 'src/stores/ActionStore';
 /*
 to fix
 - ilex forest **
-- goldenrod game center **Crash**
 */
 
 const starters = Object.freeze({

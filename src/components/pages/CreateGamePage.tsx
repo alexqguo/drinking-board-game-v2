@@ -38,7 +38,7 @@ export default () => {
   const gameTypeOptions = [
     { label: i18n.createGame.local, value: GameType.local },
     { label: i18n.createGame.remote, value: GameType.remote },
-  ]; // Don't really want to define this every time
+  ];
 
   const isValidName = (player: PlayerData) => {
     return player.name.length > 0

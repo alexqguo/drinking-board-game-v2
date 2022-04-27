@@ -64,11 +64,17 @@ export default class ActionStore {
       if (gameStore.game.state === GameState.BATTLE && this.rootStore.extension?.battleHandler) {
         this.rootStore.extension.battleHandler(this.actionList);
       } else {
-        const curRule: RuleSchema | null = boardStore.getTileOrZoneRuleForAlert(alertStore.alert)!;
-        const { postActionHandler = () => {} } = getHandlerForRule(curRule);
-        postActionHandler(curRule, this.actionList);
         // TODO- Consider removing the isMyTurn limitation on this, at least for actions where multiple
         // players are involved, as they would require the current player to be online
+
+        /**
+         * For the action which changed, invoke its rule's postActionHandler with all actions for that rule.
+         * It's necessary to do this filtering in the case of nested rules/actions.
+         */
+        const actionsForRule = this.actionList.filter(a => a.ruleId === action.ruleId);
+        const rule = boardStore.rulesById.get(action.ruleId)!;
+        const { postActionHandler = () => {} } = getHandlerForRule(rule);
+        postActionHandler(rule, actionsForRule);
       }
     }
   }

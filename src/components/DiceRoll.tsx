@@ -11,7 +11,6 @@ interface Props extends ButtonProps {
 }
 
 const createRoll = () => Math.floor(Math.random() * 6) + 1;
-// const createRoll = () => 2;
 
 // This is a controlled component
 export default ({ numRolls = 1, onRoll, rolls, ...rest }: Props) => {

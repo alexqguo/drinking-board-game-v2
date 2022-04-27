@@ -109,6 +109,8 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
     return;
   }
 
+  console.log('apply move condition rule id', rule);
+
   const { playerTarget } = rule;
   const actions: AlertAction[] = [];
 
@@ -126,6 +128,7 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
     const playerIds = (playerTarget === PlayerTarget.allOthers ?
       gameStore.otherPlayerIds : [gameStore.game.currentPlayerId]);
     playerIds.forEach(async (playerId: string) => {
+      // TODO- use ruleId instead of tileIndex, update game engine accordingly
       await playerStore.updateEffects(playerId, {
         moveCondition: {
           tileIndex: boardStore.getTileIndexForRule(rule),

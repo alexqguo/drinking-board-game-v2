@@ -137,7 +137,7 @@ const GameEventHandler = () => {
       let roll = gameStore.game.currentRoll!;
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
       const { effects, tileIndex } = currentPlayer;
-      // TODO - check roll augmentation
+      // TODO - check roll augmentation (gen3)
 
       if (effects.speedModifier.numTurns > 0) {
         roll = getAdjustedRoll(roll, effects.speedModifier);
@@ -163,7 +163,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 20;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 57;
 
       // Get all other players with an anchor, and sort them by position to allow us to break on the earliest match
       const otherPlayersWithAnchors: Player[] = Array.from(playerStore.players.values())

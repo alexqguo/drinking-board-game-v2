@@ -68,9 +68,7 @@ DiceRollRule.postActionHandler = async (rule: RuleSchema, actions: AlertAction[]
   const isDone = actions.every(a => !!a.value);
 
   if (isDone) {
-    const rolls = actions
-      .filter((a: AlertAction) => a.ruleId === rule.id)
-      .map((a: AlertAction) => a.value);
+    const rolls = actions.map((a: AlertAction) => a.value);
     const outcome = getOutcome(rule, rolls);
 
     if (outcome && numRequired === actions.length) {
@@ -79,10 +77,6 @@ DiceRollRule.postActionHandler = async (rule: RuleSchema, actions: AlertAction[]
         outcomeIdentifier: alertStore.alert.outcomeIdentifier + `|outcome:${outcomes?.indexOf(outcome)}`,
       });
       handler(outcome.rule);
-    } else if (outcome) {
-      // In the case there was a nested rule with its own actions
-      const handler = getHandlerForRule(outcome.rule);
-      handler.postActionHandler!(outcome.rule, actions);
     } else {
       alertStore.update({ state: AlertState.CAN_CLOSE });
     }
