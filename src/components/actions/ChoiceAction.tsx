@@ -10,7 +10,9 @@ const ChoiceAction = ({
   isMyAction,
 }: ActionProps) => {
   const isDisabled = isActionDisabled(action, actions, isMyAction);
-  const choices = rule!.choices!;
+  const choices = rule?.choices!;
+  // Shitty fix for race condition in remote games when clearing the alert/actions together
+  if (!choices) return null;
 
   return (
     <Pane>
