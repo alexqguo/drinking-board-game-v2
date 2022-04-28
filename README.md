@@ -31,7 +31,7 @@ New features:
 * Add more display rule consequences to dice rolls rules
 * Better mobile support
 * Panic/help button
-* Loading state when creating/joining games
+* Improve the player avatars. Maybe make them icons of the starter?
 
 ## Schema changes from v1
 * TeleportRule is gone in favor of MoveRule with tileIndex

@@ -19,6 +19,7 @@ import { GameType, CreateGameOptions, Board } from 'src/types';
 import config from 'src/config';
 import { StoreContext } from 'src/providers/StoreProvider';
 import CenterLayout from 'src/components/CenterLayout';
+import Loading from 'src/components/Loading';
 
 interface PlayerData {
   name: string,
@@ -32,6 +33,7 @@ export default () => {
   const [players, setPlayers] = useState<PlayerData[]>([{ name: '' }, { name: '' }]);
   const [gameType, gameTypeBind] = useInput(GameType.local);
   const [localPlayer, localPlayerBind] = useInput('');
+  const [isLoading, setIsLoading] = useState(false);
 
   if (createdGameId) return <Redirect to={`/game/${createdGameId}`} />;
 
@@ -68,6 +70,7 @@ export default () => {
     e.preventDefault();
     if (!isReadyToStart()) return;
 
+    setIsLoading(true);
     const options: CreateGameOptions = {
       board,
       gameType,
@@ -78,6 +81,8 @@ export default () => {
     const gameId = await store.createGame(options);
     setCreatedGameId(gameId);
   }
+
+  if (isLoading) return <Loading />
 
   return (
     <CenterLayout>

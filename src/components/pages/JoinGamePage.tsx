@@ -17,6 +17,7 @@ import { StoreContext } from 'src/providers/StoreProvider';
 import { db } from 'src/firebase';
 import RootStore from 'src/stores/RootStore';
 import CenterLayout from 'src/components/CenterLayout';
+import Loading from 'src/components/Loading';
 
 enum SearchStatus {
   idle,
@@ -39,6 +40,7 @@ export default () => {
   const rootStore = useContext(StoreContext);
   const i18n = useContext(TranslationContext);
   const [joined, setJoined] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useState<State>({
     gameId,
     searchStatus: gameId ? SearchStatus.searching : SearchStatus.idle,
@@ -84,6 +86,7 @@ export default () => {
   };
 
   const joinGame = async () => {
+    setIsLoading(true);
     await rootStore.restoreSession({
       gameId: state.gameId,
       localPlayerId: state.selectedPlayerId,
@@ -103,10 +106,14 @@ export default () => {
   };
 
   useEffect(() => { if (gameId) search(gameId) }, []);
+
   if (joined) {
     console.log('joined ' + state.gameId)
     return <Redirect to={`/game/${state.gameId}`} />;
   }
+
+  if (isLoading) return <Loading />;
+
   return (
     <CenterLayout>
       <>
