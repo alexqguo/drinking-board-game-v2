@@ -45,8 +45,7 @@ export interface GameData {
 
 export interface Alert {
   open: boolean,
-  ruleIdx: number,
-  ruleType: AlertRuleType,
+  ruleId: string,
   state: AlertState,
   nextGameState: GameState,
   diceRolls: AlertDiceRollInfo,
@@ -75,11 +74,6 @@ export enum ActionType {
 export enum ActionStatus {
   ready = 'ready', // User can do the action now
   dependent = 'dependent', // This action is waiting for ones before it
-}
-
-export enum AlertRuleType {
-  rule = 'rule',
-  zone = 'zone',
 }
 
 export enum AlertState {

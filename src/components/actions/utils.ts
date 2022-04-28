@@ -20,6 +20,6 @@ export interface ActionProps {
   action: AlertAction,
   actions: AlertAction[],
   players: Map<string, Player>,
-  rule: RuleSchema | null,
+  rule: RuleSchema | undefined,
   isMyAction: boolean,
 }

@@ -105,7 +105,7 @@ export default (rootStore: RootStore): GameExtensionInfo => {
         await actionStore.createNewActions(actions);
         alertStore.update({
           open: true,
-          ruleIdx: -1,
+          ruleId: '',
           nextGameState: GameState.RULE_TRIGGER,
           state: AlertState.PENDING,
           headingOverride: en.battle.title,

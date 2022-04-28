@@ -6,7 +6,7 @@ import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
 import AlertActions from 'src/components/AlertActions';
 import { uiActions } from 'src/engine/game';
-import { AlertState, AlertRuleType } from 'src/types';
+import { AlertState } from 'src/types';
 
 const displayTextStyles = {
   lineHeight: '32px',
@@ -27,8 +27,7 @@ export default () => {
 
   const i18n = useContext(TranslationContext);
   const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-  const currentTile = alert.ruleType === AlertRuleType.zone ? zones[alert.ruleIdx] : tiles[alert.ruleIdx];
-  const rule = currentTile ? currentTile.rule : null;
+  const rule = boardStore.rulesById.get(alert.ruleId);
 
   return useObserver(() => {
     const { alert } = alertStore;
@@ -66,6 +65,7 @@ export default () => {
       footer,
       width: 700,
       isShown: alert.open,
+      topOffset: 100,
       shouldCloseOnEscapePress: false,
       shouldCloseOnOverlayClick: false,
       confirmLabel: i18n.alert.done,

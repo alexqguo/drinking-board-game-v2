@@ -18,7 +18,7 @@ const actionTypeComponentMap = Object.freeze({
 export default () => {
   const rootStore = useContext(StoreContext);
   const { alertStore, actionStore, gameStore, playerStore, boardStore } = rootStore;
-  const rule: RuleSchema | null = boardStore.getTileOrZoneRuleForAlert(alertStore.alert);
+  const rule: RuleSchema | undefined = boardStore.rulesById.get(alertStore.alert.ruleId);
   const hasMultiplePlayers = new Set(actionStore.actionList.map(a => a.playerId)).size > 1;
 
   const renderActionComponentForAction = (action: AlertAction) => {

@@ -1,6 +1,4 @@
 import {
-  Alert,
-  AlertRuleType,
   BoardSchema,
   RuleSchema,
   TileSchema,
@@ -41,12 +39,6 @@ export default class BoardStore {
     this.schema.zones.forEach((z: ZoneSchema, i: number) => {
       decorateRuleIds(z.rule, `zone_rule_${i}`);
     });
-  }
-
-  getTileOrZoneRuleForAlert = (alert: Alert): RuleSchema | null => {
-    if (alert.ruleIdx < 0) return null;
-    if (alert.ruleType === AlertRuleType.zone) return this.schema.zones[alert.ruleIdx].rule;
-    return this.schema.tiles[alert.ruleIdx].rule;
   }
 
   // These are slow and bad

@@ -8,7 +8,6 @@ import {
   ZoneType,
   ZoneSchema,
   RuleHandler,
-  AlertRuleType,
   AlertAction,
   Player,
 } from 'src/types';
@@ -24,7 +23,7 @@ const GameEventHandler = () => {
     [GameState.GAME_START]: () => {
       // If the first tile is a starter select rule, execute it
       if (boardStore.schema.tiles[0].rule.type === 'StarterSelectionRule') {
-        RuleEngine(0, { nextGameState: GameState.TURN_CHECK });
+        RuleEngine(boardStore.schema.tiles[0].rule.id, { nextGameState: GameState.TURN_CHECK });
       } else {
         gameStore.setGameState(GameState.TURN_CHECK);
       }
@@ -54,8 +53,7 @@ const GameEventHandler = () => {
           open: true,
           state: AlertState.PENDING,
           nextGameState: GameState.TURN_START,
-          ruleIdx: boardStore.getIndexForZone(currentZone),
-          ruleType: AlertRuleType.zone,
+          ruleId: currentZone.rule.id,
         });
         handler(currentZone.rule);
       } else {
@@ -206,7 +204,7 @@ const GameEventHandler = () => {
     },
     [GameState.RULE_TRIGGER]: () => {
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
-      RuleEngine(currentPlayer.tileIndex, {});
+      RuleEngine(boardStore.schema.tiles[currentPlayer.tileIndex].rule.id, {});
     },
     [GameState.RULE_END]: () => {
       gameStore.setGameState(GameState.TURN_END);
@@ -252,7 +250,7 @@ const GameEventHandler = () => {
         open: true,
         state: AlertState.CAN_CLOSE,
         nextGameState: GameState.TURN_END,
-        ruleIdx: -1,
+        ruleId: '',
         messageOverride: currentPlayer.effects.skippedTurns.message,
       });
     }

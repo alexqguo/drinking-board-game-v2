@@ -1,6 +1,6 @@
 import { observable, action, makeObservable } from 'mobx';
 import { update, ref } from 'firebase/database';
-import { Alert, AlertState, AlertRuleType, GameState } from 'src/types';
+import { Alert, AlertState, GameState } from 'src/types';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
 
@@ -34,12 +34,11 @@ export default class AlertStore {
     update(this.rootStore.alertRef!, AlertStore.defaultAlert());
   }
 
-  static defaultAlert = () => ({
+  static defaultAlert = (): Alert => ({
     open: false,
     state: AlertState.PENDING,
     nextGameState: GameState.NOT_STARTED,
-    ruleIdx: -1,
-    ruleType: AlertRuleType.rule,
+    ruleId: '',
     diceRolls: {},
     messageOverride: '',
     headingOverride: '',

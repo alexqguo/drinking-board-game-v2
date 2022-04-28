@@ -18,7 +18,6 @@ Cleanup:
 * Remove multi dice rolls in one click. Not used and lots of overhead
 * Alert state is a bit messy
 * Extensions/non components need i18n support
-* Any post action handler that does `actions.find` (finds first) should be updated to instead find the last one in case the rule is nested
 * Actions now how a `ruleId` on them to indicate where they came from, this should be incorporated into the `Alert` component's logic as well so that all actions aren't grouped together
 
 Parity:
@@ -30,8 +29,11 @@ Parity:
 New features:
 * Rolls in an alert can have custom labels
 * Add more display rule consequences to dice rolls rules
+* Better mobile support
+* Panic/help button
+* Loading state when creating/joining games
 
-## Schema changes
+## Schema changes from v1
 * TeleportRule is gone in favor of MoveRule with tileIndex
 * ChoiceRule schema is different, choices array item will be an object with a "rule" key rather than the rule directly
 * "any" diceRoll outcome is removed, and the former "any" rule is just listed as an outcome. This would work in the old version too

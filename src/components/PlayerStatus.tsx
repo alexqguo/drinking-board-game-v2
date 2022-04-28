@@ -32,30 +32,39 @@ export default () => {
   if (isActionable && rolls.length) setRolls([]);
   return useObserver(() => (
     <Pane
-      width={220}
+      width={210}
       minHeight={100}
-      padding={20}
-      elevation={1}
+      padding={15}
+      elevation={2}
       backgroundColor="white"
       position="fixed"
       top={0}
       left={0}
+      zIndex={99} // Overlay has z-index of 20
     >
-      <Heading marginBottom={8}>{player.name}</Heading>
+      <Heading marginBottom={8}>
+        {player.name}
+      </Heading>
+
       <PlayerEffects />
-      <DiceRoll
-        rolls={rolls}
-        disabled={!isActionable}
-        onRoll={onRoll}
-        marginRight={8}
-      />
-      <Button
-        disabled={!isActionable}
-        iconBefore={DisableIcon}
-        onClick={uiActions.skipTurn}
-      >
-        {i18n.playerStatus.skip}
-      </Button>
+
+      {gameStore.isMyTurn && (
+        <>
+          <DiceRoll
+            rolls={rolls}
+            disabled={!isActionable}
+            onRoll={onRoll}
+            marginRight={8}
+          />
+          <Button
+            disabled={!isActionable}
+            iconBefore={DisableIcon}
+            onClick={uiActions.skipTurn}
+          >
+            {i18n.playerStatus.skip}
+          </Button>
+        </>
+      )}
 
       <UnorderedList listStyle="none" size={300} marginTop={16}>
         {playerStore.ids.map((id: string) => (
