@@ -22,8 +22,6 @@ export default () => {
   const rootStore = useContext(StoreContext);
   const { gameStore, playerStore, boardStore, alertStore } = rootStore;
   const { alert } = alertStore;
-  const { schema } = boardStore;
-  const { zones, tiles } = schema;
 
   const i18n = useContext(TranslationContext);
   const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
