@@ -150,7 +150,7 @@ export interface LostTurnInfo {
 }
 
 export interface MoveCondition {
-  tileIndex: number, // This is the condition of the rule located at tileIndex
+  ruleId: string, // Condition of the rule with ruleId
   numCurrentSuccesses: number,
 }
 

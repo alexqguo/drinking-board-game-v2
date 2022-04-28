@@ -4,7 +4,6 @@ import {
   GameState,
   TileSchema,
   AlertState,
-  MoveConditionSchema,
   ZoneType,
   ZoneSchema,
   RuleHandler,
@@ -48,7 +47,6 @@ const GameEventHandler = () => {
 
       if (currentZone && currentZone.rule && currentZone.type === ZoneType.active) {
         const handler: RuleHandler = getHandlerForRule(currentZone.rule);
-        console.log('updating alert for zone');
         await alertStore.update({
           open: true,
           state: AlertState.PENDING,
@@ -68,7 +66,7 @@ const GameEventHandler = () => {
         gameStore.setGameState(GameState.LOST_TURN_START);
       } else {
         const { moveCondition } = currentPlayer.effects;
-        const conditionSchema = boardStore.schema.tiles[moveCondition.tileIndex]?.rule.condition;
+        const conditionSchema = boardStore.rulesById.get(moveCondition.ruleId)?.condition;
         if (conditionSchema
           && conditionSchema.diceRolls
           && conditionSchema.diceRolls?.numRequired
@@ -107,16 +105,22 @@ const GameEventHandler = () => {
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
       const { moveCondition } = currentPlayer.effects;
 
-      if (moveCondition.tileIndex === -1) {
+      if (moveCondition.ruleId === '') {
         gameStore.setGameState(GameState.MOVE_CALCULATE);
         return;
       }
 
       const roll = gameStore.game.currentRoll;
-      const conditionSchema: MoveConditionSchema = boardStore.schema.tiles[moveCondition.tileIndex].rule.condition!;
-      const { diceRolls } = conditionSchema;
+      const conditionSchema = boardStore.rulesById.get(moveCondition.ruleId)?.condition;
 
-      if (conditionSchema && (!diceRolls || !diceRolls.numRequired || diceRolls?.numRequired === 1)) {
+      // If there is a move condition with either no diceRolls specified or only requiring 1
+      if (conditionSchema
+        && (
+          !conditionSchema.diceRolls
+          || !conditionSchema.diceRolls.numRequired
+          || conditionSchema.diceRolls?.numRequired === 1
+        )
+      ) {
         const result = await canPlayerMove(currentPlayer.id, conditionSchema, [roll!]);
         if (!result.canMove) {
           alertStore.update({
@@ -161,7 +165,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 57;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 41;
 
       // Get all other players with an anchor, and sort them by position to allow us to break on the earliest match
       const otherPlayersWithAnchors: Player[] = Array.from(playerStore.players.values())

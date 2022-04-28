@@ -324,6 +324,7 @@
         "displayText": "Dugtrio used Dig! Drink 3 and next turn add 3 spaces to your move roll!",
         "type": "SpeedModifierRule",
         "modifier": ["+", 3],
+        "playerTarget": "self",
         "numTurns": 1
       },
       "zone": "MT. MORTAR",

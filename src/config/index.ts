@@ -5,7 +5,7 @@ export const boards: Board[] = [
     name: 'Pokemon gen. 1',
     value: 'pokemon-gen1',
   }, {
-    name: 'Pokemon gen. 2 (not fully working yet)',
+    name: 'Pokemon gen. 2',
     value: 'pokemon-gen2',
   },
 ];

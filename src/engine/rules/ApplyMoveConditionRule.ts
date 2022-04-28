@@ -11,7 +11,7 @@ import {
   ActionType,
   ActionStatus
 } from 'src/types';
-import { validateRequired } from 'src/engine/rules';
+import { validateRequired, getHandlerForRule } from 'src/engine/rules';
 import PlayerStore from 'src/stores/PlayerStore';
 import { formatString } from 'src/providers/TranslationProvider';
 import en from 'src/i18n/en_US.json';
@@ -56,8 +56,9 @@ export const canPlayerMove = async (
     }
 
     if (condition.consequence) {
-      // TODO - execute the consequence rule. Need this for gen 2 zone
-      // const handler = getHandlerForRule(condition.consequence);
+      // This is only used in Gen 2 Ilex Forest
+      const handler = getHandlerForRule(condition.consequence);
+      handler(condition.consequence);
     }
 
     return {
@@ -109,8 +110,6 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
     return;
   }
 
-  console.log('apply move condition rule id', rule);
-
   const { playerTarget } = rule;
   const actions: AlertAction[] = [];
 
@@ -131,7 +130,7 @@ const ApplyMoveConditionRule: RuleHandler = async (rule: RuleSchema) => {
       // TODO- use ruleId instead of tileIndex, update game engine accordingly
       await playerStore.updateEffects(playerId, {
         moveCondition: {
-          tileIndex: boardStore.getTileIndexForRule(rule),
+          ruleId: rule.id,
           numCurrentSuccesses: 0,
         }
       });
@@ -170,7 +169,7 @@ ApplyMoveConditionRule.postActionHandler = async (rule: RuleSchema, actions: Ale
       const playerId = actions[0].value;
       await playerStore.updateEffects(playerId, {
         moveCondition: {
-          tileIndex: boardStore.getTileIndexForRule(rule),
+          ruleId: rule.id,
           numCurrentSuccesses: 0,
         }
       });

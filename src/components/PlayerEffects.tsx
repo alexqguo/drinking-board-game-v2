@@ -26,9 +26,9 @@ export default () => {
           {formatString(playerStatus.customMandatory, { idx: `${effects.customMandatoryTileIndex}` })}
         </Badge>
       : null}
-      {effects.moveCondition.tileIndex > -1 ?
+      {effects.moveCondition.ruleId ?
         <Badge color="blue">
-          {boardStore.schema.tiles[effects.moveCondition.tileIndex].rule.condition?.description}
+          {boardStore.rulesById.get(effects.moveCondition.ruleId)?.condition?.description}
         </Badge>
       : null}
     </Pane>

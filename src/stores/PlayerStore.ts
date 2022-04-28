@@ -56,7 +56,7 @@ export default class PlayerStore {
       modifier: -1
     },
     moveCondition: {
-      tileIndex: -1,
+      ruleId: '',
       numCurrentSuccesses: 0
     },
     anchors: 0,
