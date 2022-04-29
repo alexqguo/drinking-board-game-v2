@@ -16,6 +16,7 @@ Cleanup:
 * Extensions/non components need i18n support
 * Actions now how a `ruleId` on them to indicate where they came from, this should be incorporated into the `Alert` component's logic as well so that all actions aren't grouped together
 * Replace Evergreen with MUI or Bulma or something else. Not sure why I made this decision two years ago to begin with
+* `RollAugmentationRule` can easily be consolidated into `SpeedModifierRule`
 
 Parity:
 * Finish rule implementations
@@ -297,6 +298,9 @@ Allows the player to skip the next mandatory space(s). Note that if you land dir
   numSpaces: number
 }
 ```
+
+#### RollAugmentationRule
+Todo
 
 #### StarterSelectionRule
 Meant to be used ONLY when the game starts. Placed on tile 0. Prompts a modal at the beginning of the game that each player is required to make a selection on. The first player must close the modal as it is technically their turn. The selection will be placed on the `starter` field in the player effects.

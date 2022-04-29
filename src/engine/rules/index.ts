@@ -22,6 +22,7 @@ import StarterSelectionRule from 'src/engine/rules/StarterSelectionRule';
 import UpdateStarterRule from 'src/engine/rules/UpdateStarterRule';
 import AnchorRule from 'src/engine/rules/AnchorRule';
 import GroupRollRule from 'src/engine/rules/GroupRollRule';
+import RollAugmentationRule from 'src/engine/rules/RollAugmentationRule';
 
 export const validateRequired = (...args: any[]): boolean => (
   args
@@ -54,6 +55,7 @@ const ruleMappings: { [key: string]: RuleHandler } = {
   UpdateStarterRule,
   AnchorRule,
   GroupRollRule,
+  RollAugmentationRule,
 };
 
 export const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
