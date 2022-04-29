@@ -67,6 +67,7 @@ const setEffects = (playerIds: string[], rule: RuleSchema) => {
 };
 
 export const getAdjustedRoll = (originalRoll: number, mod: SpeedModifier): number => {
+  if (!mod) return originalRoll;
   const { operation, modifier } = mod;
 
   switch (operation) {

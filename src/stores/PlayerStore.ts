@@ -55,6 +55,11 @@ export default class PlayerStore {
       operation: ModifierOperation.equal,
       modifier: -1
     },
+    rollAugmentation: {
+      numTurns: 0,
+      operation: ModifierOperation.equal,
+      modifier: -1
+    },
     moveCondition: {
       ruleId: '',
       numCurrentSuccesses: 0

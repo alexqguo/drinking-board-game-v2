@@ -31,7 +31,7 @@ class ErrorBoundary extends Component<Props, State> {
             intent="danger"
             title="Whoops! Something went wrong."
           >
-            Your game may have crashed or Alex may have deleted your game in the database by accident. Try refreshing the page and see what happens.
+            Your game may have crashed or Alex may have "accidentally" deleted your game in the database. Try refreshing the page and see what happens.
           </Alert>
         </Pane>
       );

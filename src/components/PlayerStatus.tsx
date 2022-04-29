@@ -15,6 +15,7 @@ import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
 import PlayerEffects from 'src/components/PlayerEffects';
+import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 import { uiActions } from 'src/engine/game';
 
 export default () => {
@@ -29,10 +30,16 @@ export default () => {
     setRolls(rolls);
   };
 
+  const onRollAugment = (rolls: number[]) => {
+    const newRoll = getAdjustedRoll(rolls[0], player.effects.rollAugmentation);
+    uiActions.handleRollAugmentation(newRoll, player.id);
+    setRolls([newRoll]);
+  }
+
   if (isActionable && rolls.length) setRolls([]);
   return useObserver(() => (
     <Pane
-      width={210}
+      width={215}
       minHeight={100}
       padding={15}
       elevation={2}
@@ -55,11 +62,25 @@ export default () => {
             disabled={!isActionable}
             onRoll={onRoll}
             marginRight={8}
+            marginBottom={8}
           />
+          {!!player.effects.rollAugmentation.numTurns && (
+            <DiceRoll
+              rolls={rolls}
+              disabled={!isActionable}
+              onRoll={onRollAugment}
+              marginRight={8}
+              marginBottom={8}
+            >
+              {player.effects.rollAugmentation.operation}
+              {player.effects.rollAugmentation.modifier}
+            </DiceRoll>
+          )}
           <Button
             disabled={!isActionable}
             iconBefore={DisableIcon}
             onClick={uiActions.skipTurn}
+            marginBottom={8}
           >
             {i18n.playerStatus.skip}
           </Button>

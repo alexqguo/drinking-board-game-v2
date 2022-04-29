@@ -139,7 +139,6 @@ const GameEventHandler = () => {
       let roll = gameStore.game.currentRoll!;
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
       const { effects, tileIndex } = currentPlayer;
-      // TODO - check roll augmentation (gen3)
 
       if (effects.speedModifier.numTurns > 0) {
         roll = getAdjustedRoll(roll, effects.speedModifier);
@@ -288,6 +287,22 @@ const uiActions = {
     }
   },
   handleRoll: (roll: number) => {
+    rootStore.gameStore.update({
+      state: GameState.ROLL_END,
+      currentRoll: roll,
+    });
+  },
+  handleRollAugmentation: (roll: number, playerId: string) => {
+    const currentPlayer = rootStore.playerStore.players.get(playerId)!;
+    const { effects } = currentPlayer;
+
+    rootStore.playerStore.updateEffects(playerId, {
+      rollAugmentation: {
+        ...effects.rollAugmentation,
+        numTurns: effects.rollAugmentation.numTurns - 1
+      },
+    });
+
     rootStore.gameStore.update({
       state: GameState.ROLL_END,
       currentRoll: roll,

@@ -132,11 +132,11 @@ export interface PlayerEffects {
   extraTurns: number,
   skippedTurns: LostTurnInfo,
   speedModifier: SpeedModifier,
+  rollAugmentation: SpeedModifier,
   moveCondition: MoveCondition,
   custom: { [key: string]: CustomEffect },
   starter: string
   anchors: number,
-  // rollAugmentation: RollAugmentation,
 }
 
 export interface CustomEffect {

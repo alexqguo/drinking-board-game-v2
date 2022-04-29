@@ -3,22 +3,19 @@
 ## TODOs
 
 Boards:
-* Add back Gen2/3 boards
+* Add back Gen3 board
   * A bit of ApplyMoveConditionRule
-  * GroupRollRule
   * RollAugmentRule
-  * AnchorRule
-  * more?
   * Remove `requireDiceRolls`
 * Add Zelda board
 
 Cleanup:
 * Move game extensions to external modules?
-* Better handling of creating/joining game
 * Remove multi dice rolls in one click. Not used and lots of overhead
 * Alert state is a bit messy
 * Extensions/non components need i18n support
 * Actions now how a `ruleId` on them to indicate where they came from, this should be incorporated into the `Alert` component's logic as well so that all actions aren't grouped together
+* Replace Evergreen with MUI or Bulma or something else. Not sure why I made this decision two years ago to begin with
 
 Parity:
 * Finish rule implementations
@@ -30,13 +27,17 @@ New features:
 * Rolls in an alert can have custom labels
 * Add more display rule consequences to dice rolls rules
 * Better mobile support
-* Panic/help button
+* Always present toolbarish thingy with
+  * Panic button
+  * Help/rules button
+  * Donate link?
 * Improve the player avatars. Maybe make them icons of the starter?
 
 ## Schema changes from v1
 * TeleportRule is gone in favor of MoveRule with tileIndex
 * ChoiceRule schema is different, choices array item will be an object with a "rule" key rather than the rule directly
 * "any" diceRoll outcome is removed, and the former "any" rule is just listed as an outcome. This would work in the old version too
+* `playerTarget` now a required field in `SpeedModifierRule`
 * New rule types
   * `StarterSelectionRule`
   * `UpdateStarterRule`
