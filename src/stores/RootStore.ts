@@ -34,6 +34,7 @@ import { db } from 'src/firebase';
 import GameEventHandler from 'src/engine/game';
 import gen1 from 'src/games/pokemon-gen1';
 import gen2 from 'src/games/pokemon-gen2';
+import gen3 from 'src/games/pokemon-gen3';
 
 export default class RootStore {
   gameStore: GameStore;
@@ -232,6 +233,7 @@ export default class RootStore {
     switch (boardName) {
       case 'pokemon-gen1': this.extension = gen1(this);
       case 'pokemon-gen2': this.extension = gen2(this);
+      case 'pokemon-gen3': this.extension = gen3(this);
     }
   }
 
