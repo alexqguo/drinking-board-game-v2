@@ -1,15 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { ref, DatabaseReference, onValue, DataSnapshot } from 'firebase/database';
 import {
-  Heading,
-  FormField,
-  Button,
-  TextInputField,
-  Radio,
-  Pane,
+  Title,
   Text,
-  Paragraph
-} from 'evergreen-ui';
+  Button,
+  Radio,
+  RadioGroup,
+  TextInput,
+} from '@mantine/core';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { useParams, Redirect } from 'react-router-dom';
 import { GameType, Player, SessionData } from 'src/types';
@@ -117,38 +115,41 @@ export default () => {
   return (
     <CenterLayout>
       <>
-        <Heading is="h1" size={800} marginBottom={16}>
+        <Title order={1} mb="md">
           {i18n.joinGame.title}
-        </Heading>
+        </Title>
 
-        <Paragraph marginBottom={16}>
+        <Text component="p" mb="md">
           {i18n.joinGame.explanation}
-        </Paragraph>
+        </Text>
 
-        <TextInputField
+        <TextInput
+          mb="md"
+          width="100%"
           label={i18n.joinGame.gameId}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onInputChange(e)}
-          width="100%"
           value={state.searchStatus === SearchStatus.searching ? i18n.joinGame.searching : state.gameId}
           disabled={state.searchStatus === SearchStatus.found || state.searchStatus === SearchStatus.searching}
-          validationMessage={state.searchStatus === SearchStatus.notFound ? i18n.joinGame.notFound : null}
+          error={state.searchStatus === SearchStatus.notFound ? i18n.joinGame.notFound : null}
         />
 
         {state.session && state.session.game && state.session.game.type === GameType.remote ?
-          <FormField label={i18n.joinGame.selectPlayer}>
-            <Pane role="group">
-              {state.session.players.map((p: Player) => (
-                <Radio
-                  name="remote-player-selection"
-                  onChange={(e) => updateState({ selectedPlayerId: e.target.value })}
-                  disabled={p.isActive}
-                  label={p.name}
-                  value={p.id}
-                  key={p.id}
-                />
-              ))}
-            </Pane>
-          </FormField>
+          <RadioGroup
+            label={i18n.joinGame.selectPlayer}
+            orientation="vertical"
+            mb="md"
+          >
+            {state.session.players.map((p: Player) => (
+              <Radio
+                name="remote-player-selection"
+                onChange={(e) => updateState({ selectedPlayerId: e.target.value })}
+                disabled={p.isActive}
+                label={p.name}
+                value={p.id}
+                key={p.id}
+              />
+            ))}
+          </RadioGroup>
         : null}
 
         <Button
@@ -158,11 +159,9 @@ export default () => {
           {i18n.joinGame.join}
         </Button>
 
-        <Pane marginTop={16}>
-          <Text size={300}>
-            <a href="/">{i18n.home.backLink}</a>
-          </Text>
-        </Pane>
+        <Text size="sm" mt="md">
+          <a href="/">{i18n.home.backLink}</a>
+        </Text>
       </>
     </CenterLayout>
   );

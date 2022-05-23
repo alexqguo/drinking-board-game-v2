@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Heading, Paragraph, Button, Pane } from 'evergreen-ui';
+import { Title, Button, Container, Text } from '@mantine/core';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import CenterLayout from 'src/components/CenterLayout';
 
@@ -9,22 +9,27 @@ export default () => {
   return (
     <CenterLayout>
       <>
-        <Heading is="h1" size={800} marginBottom={16}>{i18n.home.title}</Heading>
-        <Paragraph marginBottom={16}>
+        <Title order={1} mb="md">{i18n.home.title}</Title>
+        <Text component="p">
           {i18n.home.explanation}
-        </Paragraph>
+        </Text>
 
-        <Pane marginBottom={16}>
+        <Container px={0} mb="md">
           <Button
-            is="a"
+            component="a"
             href="/#/create"
-            appearance="primary"
-            marginRight={8}
+            mr="md"
           >
             {i18n.home.createGame}
-          </Button>{' '}
-          <Button is="a" href="/#/join">{i18n.home.joinGame}</Button>
-        </Pane>
+          </Button>
+          <Button
+            component="a"
+            href="/#/join"
+            variant="outline"
+          >
+            {i18n.home.joinGame}
+          </Button>
+        </Container>
 
         <div>
           <a target="_blank" rel="noreferrer" href="https://github.com/alexqguo/drinking-board-game-v2">
