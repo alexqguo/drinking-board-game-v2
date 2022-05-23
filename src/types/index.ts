@@ -48,7 +48,6 @@ export interface Alert {
   ruleId: string,
   state: AlertState,
   nextGameState: GameState,
-  diceRolls: AlertDiceRollInfo,
   messageOverride: string,
   headingOverride: string,
   outcomeIdentifier: string,
@@ -83,10 +82,6 @@ export enum AlertState {
   REQUIRE_ACTION = 'REQUIRE_ACTION',
 }
 
-export type AlertDiceRollInfo = {
-  [key: string]: AlertDiceRoll,
-};
-
 export interface AlertDiceRoll {
   numRolls: number,
   result: string // pipe separated string
@@ -98,6 +93,7 @@ export enum GameState {
   TURN_CHECK = 'TURN_CHECK',
   ZONE_CHECK = 'ZONE_CHECK',
   TURN_START = 'TURN_START',
+  TURN_MULTIROLL_CONDITION_CHECK = 'TURN_MULTIROLL_CONDITION_CHECK',
   ROLL_START = 'ROLL_START',
   ROLL_END = 'ROLL_END',
   MOVE_CALCULATE = 'MOVE_CALCULATE',

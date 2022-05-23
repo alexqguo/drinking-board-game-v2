@@ -29,7 +29,6 @@ export default () => {
 
   return useObserver(() => {
     const { alert } = alertStore;
-    const hasDiceRoll = !!alert.diceRolls;
     let activeRule = rule;
 
     if (alert.outcomeIdentifier) {
@@ -90,19 +89,6 @@ export default () => {
         </Paragraph>
       </> : null}
 
-      {/* TODO- Should be removed. See note in requireDiceRolls implementation */}
-      {hasDiceRoll ? <Paragraph>
-        {Object.keys(alert.diceRolls).map((key: string) => (
-          <DiceRoll
-            key={key}
-            marginRight={16}
-            disabled={!gameStore.isMyTurn || !!alert.diceRolls[key].result}
-            numRolls={alert.diceRolls[key].numRolls}
-            rolls={normalizeRolls(alert.diceRolls[key].result)}
-            onRoll={(rolls) => uiActions.handleAlertRoll(key, rolls)}
-          />
-        ))}
-      </Paragraph> : null}
       <AlertActions />
     </Dialog>
     );

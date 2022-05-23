@@ -19,7 +19,7 @@
     "remote": "Remote",
     "start": "Start!",
     "playingAs": "Who are you playing as?",
-    "explanation": "Currently only Pokemon gen. 1 and 2 are supported, but others will be added soon! You must have between 2-10 players. Playing locally: Everyone is playing the game on a single computer. Playing remotely: Each player in the game uses their own device to control only their turns."
+    "explanation": "You must have between 2-10 players. Playing locally: Everyone is playing the game on a single computer. Playing remotely: Each player in the game uses their own device to control only their turns."
   },
   "joinGame": {
     "title": "Join a game",

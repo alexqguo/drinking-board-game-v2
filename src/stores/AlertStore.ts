@@ -39,7 +39,6 @@ export default class AlertStore {
     state: AlertState.PENDING,
     nextGameState: GameState.NOT_STARTED,
     ruleId: '',
-    diceRolls: {},
     messageOverride: '',
     headingOverride: '',
     outcomeIdentifier: '',

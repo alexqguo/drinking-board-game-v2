@@ -3,10 +3,6 @@
 ## TODOs
 
 Boards:
-* Add back Gen3 board
-  * A bit of ApplyMoveConditionRule
-  * RollAugmentRule
-  * Remove `requireDiceRolls`
 * Add Zelda board
 
 Cleanup:

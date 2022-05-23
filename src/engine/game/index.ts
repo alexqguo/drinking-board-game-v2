@@ -11,9 +11,11 @@ import {
   Player,
 } from 'src/types';
 import RuleEngine, { getHandlerForRule } from 'src/engine/rules';
-import { requireDiceRolls, getRollsFromAlertDiceRoll } from 'src/engine/alert';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
-import { canPlayerMove } from 'src/engine/rules/ApplyMoveConditionRule';
+import {
+  canPlayerMove,
+  createTurnConditionRollActions,
+} from 'src/engine/rules/ApplyMoveConditionRule';
 
 const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore, alertStore, extension } = rootStore;
@@ -71,32 +73,31 @@ const GameEventHandler = () => {
           && conditionSchema.diceRolls
           && conditionSchema.diceRolls?.numRequired
           && conditionSchema.diceRolls?.numRequired > 1) {
-          // TODO - open modal, require rolls. when rolls are done,
-          alertStore.update({
-            open: true,
-            state: AlertState.REQUIRE_ACTION,
-            messageOverride: conditionSchema.description,
-          });
-          const rollInfo = await requireDiceRolls(conditionSchema.diceRolls.numRequired);
-          const rolls = getRollsFromAlertDiceRoll(rollInfo);
-          const moveResult = await canPlayerMove(currentPlayer.id, conditionSchema, rolls);
 
-          if (!moveResult.canMove) {
-            await new Promise<void>(resolve => {
-              setTimeout(() => { // Just pause so the modal doesn't dismiss immediately
-                alertStore.clear();
-                gameStore.setGameState(GameState.TURN_END);
-                resolve();
-              }, 1200);
-            })
-            return;
-          } else {
-            alertStore.update({ state: AlertState.CAN_CLOSE });
-          }
+          /**
+           * If player has a move condition, and the ruleId of the condition is a multi roll:
+           * - This means you need to roll multiple times to determine if you can even take your turn
+           *   - Used for elite four and legendary birds
+           *   - Arguably it's not really a move condition, it's more of a turn condition
+           *   - (maybe create a different rule type for this in the future)
+           */
+          gameStore.setGameState(GameState.TURN_MULTIROLL_CONDITION_CHECK);
+        } else {
+          gameStore.setGameState(GameState.ROLL_START);
         }
-
-        gameStore.setGameState(GameState.ROLL_START);
       }
+    },
+    [GameState.TURN_MULTIROLL_CONDITION_CHECK]: () => {
+      const { schema } = boardStore;
+      const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
+      const turnConditionRule = schema.tiles[currentPlayer.tileIndex].rule;
+
+      alertStore.update({
+        open: true,
+        state: AlertState.REQUIRE_ACTION,
+        ruleId: turnConditionRule.id,
+      });
+      createTurnConditionRollActions(turnConditionRule);
     },
     [GameState.ROLL_START]: () => {
       // Not really anything special to do here, but PlayerStatus references game state to enable rolling
@@ -164,7 +165,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 41;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 68;
 
       // Get all other players with an anchor, and sort them by position to allow us to break on the earliest match
       const otherPlayersWithAnchors: Player[] = Array.from(playerStore.players.values())
