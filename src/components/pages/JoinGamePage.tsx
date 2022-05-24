@@ -138,11 +138,12 @@ export default () => {
             label={i18n.joinGame.selectPlayer}
             orientation="vertical"
             mb="md"
+            onChange={(newValue) => updateState({ selectedPlayerId: newValue})}
           >
             {state.session.players.map((p: Player) => (
               <Radio
                 name="remote-player-selection"
-                onChange={(e) => updateState({ selectedPlayerId: e.target.value })}
+                // onChange={(e) => updateState({ selectedPlayerId: e.target.value })}
                 disabled={p.isActive}
                 label={p.name}
                 value={p.id}
