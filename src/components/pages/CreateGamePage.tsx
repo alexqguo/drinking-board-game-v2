@@ -1,21 +1,20 @@
 import React, { useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
-  FormField,
-  TextInput,
-  Heading,
-  SelectField,
-  Radio,
-  Button,
-  RadioGroup,
-  DeleteIcon,
-  Pane,
+  Title,
   Text,
-  Paragraph,
-} from 'evergreen-ui';
+  Button,
+  Select,
+  InputWrapper,
+  TextInput,
+  CloseButton,
+  Container,
+  RadioGroup,
+  Radio,
+} from '@mantine/core';
 import useInput from 'src/hooks/useInput';
 import { TranslationContext } from 'src/providers/TranslationProvider';
-import { GameType, CreateGameOptions, Board } from 'src/types';
+import { GameType, CreateGameOptions } from 'src/types';
 import config from 'src/config';
 import { StoreContext } from 'src/providers/StoreProvider';
 import CenterLayout from 'src/components/CenterLayout';
@@ -28,7 +27,7 @@ interface PlayerData {
 export default () => {
   const store = useContext(StoreContext);
   const i18n = useContext(TranslationContext);
-  const [board, boardBind] = useInput('pokemon-gen1');
+  const [board, boardBind] = useInput(config.boards[0].value);
   const [createdGameId, setCreatedGameId] = useState('');
   const [players, setPlayers] = useState<PlayerData[]>([{ name: '' }, { name: '' }]);
   const [gameType, gameTypeBind] = useInput(GameType.local);
@@ -87,44 +86,42 @@ export default () => {
   return (
     <CenterLayout>
       <>
-        <Heading size={800} is="h1" marginBottom={16}>{i18n.createGame.title}</Heading>
+        <Title order={1} mb="md">{i18n.createGame.title}</Title>
 
-        <Paragraph marginBottom={16}>
+        <Text component="p" mb="md">
           {i18n.createGame.explanation}
-        </Paragraph>
+        </Text>
 
         {/* game */}
-        <SelectField
+        <Select
           value={board}
           label={i18n.createGame.selectGame}
-          onChange={boardBind.onChange}
-        >
-          {config.boards.map((board: Board) => (
-            <option value={board.value} key={board.value}>{board.name}</option>
-          ))}
-        </SelectField>
+          // onChange={boardBind.onChange}
+          onChange={newValue => boardBind.onChangeVal(newValue)}
+          data={config.boards}
+          mb="md"
+        />
 
         {/* players */}
-        <FormField label={i18n.createGame.players} />
-        {players.map((player: PlayerData, i: number) => (
-          <Pane key={`player-input-${i}`} marginBottom={8}>
-            <TextInput
-              placeholder="name"
-              onChange={({ target }: { target: HTMLInputElement }) => updatePlayer('name', target.value, i)}
-              value={player.name}
-            />
+        <InputWrapper label={i18n.createGame.players}>
+          {players.map((player: PlayerData, i: number) => (
+            <Container px={0} key={`player-input-${i}`} mb="sm">
+              <TextInput
+                placeholder="name"
+                onChange={({ target }: { target: HTMLInputElement }) => updatePlayer('name', target.value, i)}
+                value={player.name}
+                rightSection={i >= 2 && (
+                  <CloseButton
+                    onClick={() => removePlayer(i)}
+                  />
+                )}
+              />
+            </Container>
+          ))}
+        </InputWrapper>
 
-            {i >= 2 ? <DeleteIcon
-              color="muted"
-              size={12}
-              style={{ cursor: 'pointer' }}
-              marginLeft={4}
-              onClick={() => removePlayer(i)}
-            /> : null}
-          </Pane>
-        ))}
         <Button
-          marginBottom={16}
+          mb="md"
           disabled={players.length >= config.maxPlayers}
           onClick={() => setPlayers([...players, { name: '' }])}
         >
@@ -133,43 +130,49 @@ export default () => {
 
         {/* gametype */}
         <RadioGroup
-          label={i18n.createGame.gameType}
+          mb="md"
           value={gameType}
-          options={gameTypeOptions}
-          onChange={e => gameTypeBind.onChangeVal(e.target.value)}
-        />
+          label={i18n.createGame.gameType}
+          onChange={newValue => gameTypeBind.onChangeVal(newValue)}
+        >
+          {gameTypeOptions.map(o => (
+            <Radio
+              label={o.label}
+              value={o.value}
+              key={o.value}
+            />
+          ))}
+        </RadioGroup>
 
         {/* local player selection for remote games */}
-        {gameType === GameType.remote ? <>
-          <Pane role="group">
-            <FormField label={i18n.createGame.playingAs} />
-            {players.filter(p => !!p.name).map(p => (
-              <Radio
-                name="localPlayer"
-                label={p.name}
-                key={p.name}
-                checked={localPlayer === p.name}
-                onChange={() => localPlayerBind.onChangeVal(p.name)}
-              />
-            ))}
-          </Pane>
-        </> : null}
+        {gameType === GameType.remote ? <RadioGroup
+          mb="md"
+          label={i18n.createGame.playingAs}
+          onChange={newValue => localPlayerBind.onChangeVal(newValue)}
+        >
+          {players.filter(p => !!p.name).map(p => (
+            <Radio
+              name="localPlayer"
+              label={p.name}
+              key={p.name}
+              value={p.name}
+              checked={localPlayer === p.name}
+            />
+          ))}
+        </RadioGroup> : null}
 
         {/* submit */}
         <Button
           disabled={!isReadyToStart()}
           onClick={validateAndSubmit}
           role="button"
-          appearance="primary"
         >
           {i18n.createGame.start}
         </Button>
 
-        <Pane marginTop={16}>
-          <Text size={300}>
-            <a href="/">{i18n.home.backLink}</a>
-          </Text>
-        </Pane>
+        <Text mt="md" size="sm">
+          <a href="/">{i18n.home.backLink}</a>
+        </Text>
       </>
     </CenterLayout>
   );

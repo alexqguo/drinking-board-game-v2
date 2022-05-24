@@ -22,7 +22,7 @@ export interface RestoreGameOptions {
 }
 
 export interface Board {
-  name: string,
+  label: string,
   value: string,
 }
 
