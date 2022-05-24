@@ -1,14 +1,18 @@
 import React, { ReactNode, useContext } from 'react';
-import { Button, ButtonProps, HandRightIcon } from 'evergreen-ui';
+import { FaHandPointRight } from 'react-icons/fa';
+import { Button, MantineSize } from '@mantine/core';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 
 type RollCallback = (rolls: number[]) => void;
 
-interface Props extends ButtonProps {
+interface Props {
   rolls: number[],
+  disabled: boolean,
   numRolls?: number,
   onRoll: RollCallback,
   children?: ReactNode,
+  mr?: MantineSize,
+  mb?: MantineSize,
 }
 
 const createRoll = () => Math.floor(Math.random() * 6) + 1;
@@ -19,7 +23,9 @@ export default ({
   onRoll,
   rolls,
   children,
-  ...rest
+  disabled,
+  mr,
+  mb,
 }: Props) => {
   const i18n = useContext(TranslationContext);
 
@@ -30,10 +36,12 @@ export default ({
 
   return (
     <Button
-      {...rest}
-      iconBefore={HandRightIcon}
-      appearance="primary"
+      leftIcon={<FaHandPointRight />}
       onClick={handleClick}
+      disabled={disabled}
+      size="xs"
+      mr={mr}
+      mb={mb}
     >
       {rolls.length ? rolls.join(',  ') : i18n.playerStatus.roll}
       {children}

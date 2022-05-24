@@ -1,15 +1,13 @@
 import React, { useContext, useState } from 'react';
 import { useObserver } from 'mobx-react';
 import {
-  Pane,
-  Heading,
   Button,
-  Paragraph,
-  UnorderedList,
-  ListItem,
-  CaretRightIcon,
-  DisableIcon,
-} from 'evergreen-ui';
+  Text,
+  Title,
+  List,
+  Paper,
+} from '@mantine/core';
+import { FaBan, FaCaretRight } from 'react-icons/fa';
 import { Player, GameState, GameType } from 'src/types';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
@@ -38,20 +36,24 @@ export default () => {
 
   if (isActionable && rolls.length) setRolls([]);
   return useObserver(() => (
-    <Pane
-      width={215}
-      minHeight={100}
-      padding={15}
-      elevation={2}
-      backgroundColor="white"
-      position="fixed"
-      top={0}
-      left={0}
-      zIndex={99} // Overlay has z-index of 20
+    <Paper
+      p="md"
+      shadow="md"
+      radius="xs"
+      withBorder
+      sx={{
+        width: 215,
+        minHeight: 100,
+        backgroundColor: 'white',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 99, // evergreen(?) overlay has z-index of 20
+      }}
     >
-      <Heading marginBottom={8}>
+      <Title order={4} mb="sm">
         {player.name}
-      </Heading>
+      </Title>
 
       <PlayerEffects />
 
@@ -61,16 +63,16 @@ export default () => {
             rolls={rolls}
             disabled={!isActionable}
             onRoll={onRoll}
-            marginRight={8}
-            marginBottom={8}
+            mr="xs"
+            mb="xs"
           />
           {!!player.effects.rollAugmentation.numTurns && (
             <DiceRoll
               rolls={rolls}
               disabled={!isActionable}
               onRoll={onRollAugment}
-              marginRight={8}
-              marginBottom={8}
+              mr="xs"
+              mb="xs"
             >
               {player.effects.rollAugmentation.operation}
               {player.effects.rollAugmentation.modifier}
@@ -78,35 +80,37 @@ export default () => {
           )}
           <Button
             disabled={!isActionable}
-            iconBefore={DisableIcon}
             onClick={uiActions.skipTurn}
-            marginBottom={8}
+            leftIcon={<FaBan />}
+            color="orange"
+            size="xs"
+            mb="sm"
           >
             {i18n.playerStatus.skip}
           </Button>
         </>
       )}
 
-      <UnorderedList listStyle="none" size={300} marginTop={16}>
+      <List size="xs" mt="md" sx={{ listStyleType: 'none' }}>
         {playerStore.ids.map((id: string) => (
-          <ListItem
+          <List.Item
             key={id}
-            margin="0"
+            m="0"
             color="muted"
-            icon={id === gameStore.game.currentPlayerId ? CaretRightIcon : null}
+            icon={id === gameStore.game.currentPlayerId ? <FaCaretRight /> : null}
           >
             {playerStore.players.get(id)!.name}
-          </ListItem>
+          </List.Item>
         ))}
-      </UnorderedList>
+      </List>
 
       {gameStore.game.type === GameType.remote ? (
-        <Paragraph size={300} marginTop={8}>
+        <Text component="p" size="xs" mt="sm">
           <a href={`/#/join/${gameStore.game.id}`} target="_blank" rel="noreferrer">
             {gameStore.game.id}
           </a>
-        </Paragraph>
+        </Text>
       ) : null}
-    </Pane>
+    </Paper>
   ));
 }
