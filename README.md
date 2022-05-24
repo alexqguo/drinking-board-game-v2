@@ -4,6 +4,19 @@
 
 Boards:
 * Add Zelda board
+  * mandatory spaces are skipped the second time
+  * gohma- combination
+  * saria's song space, choice rule
+  * boomerang space
+  * pull back players
+  * poe space may require a few tweaks
+  * volvagia
+  * water temple swap places rule
+  * six barriers, refight previous bosses
+  * ganondorf roll until. need small tweak
+  * ganon- should actually be a normal choice rule. but do you redo the two mandatory spaces?
+  * items
+  * zone for leading player
 
 Bugs:
 * Overflow on player effects badges
@@ -17,15 +30,12 @@ Cleanup:
 * `RollAugmentationRule` can easily be consolidated into `SpeedModifierRule`
 
 Parity:
-* Finish rule implementations
-  * With game engine turn calculation updates
 * Improve animation of moving. Only happens on the current player's screen
 * Add back battle music?
 
 New features:
 * Rolls in an alert can have custom labels
 * Add more display rule consequences to dice rolls rules
-* Better mobile support
 * Always present toolbarish thingy with
   * Panic button
   * Help/rules button
