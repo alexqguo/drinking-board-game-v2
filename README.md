@@ -5,6 +5,7 @@
 Boards:
 * Add Zelda board
   * mandatory spaces are skipped the second time
+    * create "mandatoryOnce" field and put it on all bosses except the last ones
   * gohma- combination
   * saria's song space, choice rule
   * boomerang space
