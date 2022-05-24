@@ -1,5 +1,9 @@
 import React from 'react';
-import { Pane, Button, TickCircleIcon } from 'evergreen-ui';
+import { FaRegCheckCircle } from 'react-icons/fa';
+import {
+  Button,
+  Container,
+} from '@mantine/core';
 import { ActionProps, isActionDisabled } from './utils';
 import { uiActions } from 'src/engine/game';
 
@@ -15,21 +19,23 @@ const ChoiceAction = ({
   if (!choices) return null;
 
   return (
-    <Pane>
+    <Container px={0}>
       {/* ID is the choice index in this case */}
       {action.candidateIds?.map((id: string) => (
         <Button
           key={id}
-          height={24}
-          marginRight={8}
+          mr="xs"
+          size="xs"
+          color="gray"
+          variant="outline"
           disabled={isDisabled}
           onClick={() => uiActions.handleActionSelection(id, action)}
-          iconAfter={!!action.value && id === action.value ? TickCircleIcon : null}
+          rightIcon={!!action.value && id === action.value ? <FaRegCheckCircle /> : null}
         >
           {choices[Number(id)].rule.displayText}
         </Button>
       ))}
-    </Pane>
+    </Container>
   );
 };
 

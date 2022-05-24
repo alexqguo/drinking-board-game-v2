@@ -5,13 +5,15 @@
 Boards:
 * Add Zelda board
 
+Bugs:
+* Overflow on player effects badges
+
 Cleanup:
 * Move game extensions to external modules?
 * Remove multi dice rolls in one click. Not used and lots of overhead
 * Alert state is a bit messy
 * Extensions/non components need i18n support
 * Actions now how a `ruleId` on them to indicate where they came from, this should be incorporated into the `Alert` component's logic as well so that all actions aren't grouped together
-* Replace Evergreen with MUI or Bulma or something else. Not sure why I made this decision two years ago to begin with
 * `RollAugmentationRule` can easily be consolidated into `SpeedModifierRule`
 
 Parity:

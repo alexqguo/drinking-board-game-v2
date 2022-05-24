@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useObserver } from 'mobx-react';
-import { Pane, Text } from 'evergreen-ui';
+import { Container, Text } from '@mantine/core';
 import { StoreContext } from 'src/providers/StoreProvider';
 import { ActionType, AlertAction, GameType, RuleSchema } from 'src/types';
 import RollAction from 'src/components/actions/RollAction';
@@ -36,17 +36,17 @@ export default () => {
   };
 
   return useObserver(() => (
-    <Pane marginTop={16}>
+    <Container px={0} mt="md">
       {actionStore.actionList.map((action: AlertAction) => (
-        <Pane key={action.id} marginTop={8}>
+        <Container px={0} key={action.id} mt="sm">
           {hasMultiplePlayers && (
             <Text>
               {playerStore.players.get(action.playerId)!.name}{' '}
             </Text>
           )}
           {renderActionComponentForAction(action)}
-        </Pane>
+        </Container>
       ))}
-    </Pane>
+    </Container>
   ));
 };
