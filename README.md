@@ -37,6 +37,7 @@ New features:
 * Rolls in an alert can have custom labels
 * Add more display rule consequences to dice rolls rules
 * Always present toolbarish thingy with
+  * Players in passive zones+their effects below the status indicator
   * Panic button
   * Help/rules button
   * Donate link?
