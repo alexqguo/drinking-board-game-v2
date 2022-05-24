@@ -165,7 +165,7 @@ const GameEventHandler = () => {
       }
 
       let numSpacesToAdvance = firstMandatoryIndex === -1 ? roll : firstMandatoryIndex + 1;
-      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 68;
+      // if (currentPlayer.name === 'asdf') numSpacesToAdvance = 38;
 
       // Get all other players with an anchor, and sort them by position to allow us to break on the earliest match
       const otherPlayersWithAnchors: Player[] = Array.from(playerStore.players.values())

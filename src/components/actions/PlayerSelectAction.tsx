@@ -1,5 +1,9 @@
 import React, { useContext } from 'react';
-import { Text,Button, Paragraph, TickCircleIcon } from 'evergreen-ui'
+import { FaRegCheckCircle } from 'react-icons/fa';
+import {
+  Button,
+  Text,
+} from '@mantine/core';
 import { uiActions } from 'src/engine/game';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { ActionProps, isActionDisabled } from './utils';
@@ -14,21 +18,23 @@ const PlayerSelectAction = ({
   const isDisabled = isActionDisabled(action, actions, isMyAction);
 
   return (
-    <Paragraph>
-      <Text marginRight={8}>{i18n.actions.playerSelection}</Text>
+    <Text component="p">
+      <Text mr="sm">{i18n.actions.playerSelection}</Text>
       {action.candidateIds?.map((id: string) => (
         <Button
           key={id}
-          height={24}
-          marginRight={8}
+          mr="xs"
+          size="xs"
+          color="gray"
+          variant="outline"
           disabled={isDisabled}
           onClick={() => uiActions.handleActionSelection(id, action)}
-          iconAfter={!!action.value && id === action.value ? TickCircleIcon : false}
+          rightIcon={!!action.value && id === action.value ? <FaRegCheckCircle /> : false}
         >
           {players.get(id)?.name}
         </Button>
       ))}
-    </Paragraph>
+    </Text>
   );
 };
 

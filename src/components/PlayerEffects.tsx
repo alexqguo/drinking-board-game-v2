@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useObserver } from 'mobx-react';
-import { Badge, Pane } from 'evergreen-ui';
+import { Container, Badge } from '@mantine/core';
 import { TranslationContext, formatString } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import { PlayerEffects } from 'src/types';
@@ -12,8 +12,8 @@ export default () => {
   const effects: PlayerEffects = playerStore.players.get(gameStore.playerStatusId)?.effects!;
 
   return useObserver(() => (
-    <Pane marginBottom={16}>
-      {effects.starter ? <Badge color="neutral">{effects.starter}</Badge> : null}
+    <Container mb="md" px={0}>
+      {effects.starter ? <Badge color="gray">{effects.starter}</Badge> : null}
       {effects.extraTurns ? <Badge color="blue">{playerStatus.extraTurn}</Badge> : null}
       {effects.skippedTurns.numTurns ? <Badge color="red">{playerStatus.missedTurn}</Badge> : null}
       {effects.mandatorySkips ? <Badge color="blue">{playerStatus.skipMandatory}</Badge> : null}
@@ -31,6 +31,6 @@ export default () => {
           {boardStore.rulesById.get(effects.moveCondition.ruleId)?.condition?.description}
         </Badge>
       : null}
-    </Pane>
+    </Container>
   ));
 };

@@ -1,17 +1,21 @@
 import React from 'react';
-import { Pane } from 'evergreen-ui';
+import { Container } from '@mantine/core';
 
 export default ({ children }: { children: JSX.Element }) => (
   <section>
-    <Pane
-      margin={32}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
+    <Container
+      px={0}
+      m="xl"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        maxWidth: '100%',
+      }}
     >
-      <Pane maxWidth={500}>
+      <Container px={0} sx={{ maxWidth: 500 }}>
         {children}
-      </Pane>
-    </Pane>
+      </Container>
+    </Container>
   </section>
 );

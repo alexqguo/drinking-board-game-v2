@@ -1,10 +1,17 @@
 import React from 'react';
-import { Spinner, Pane } from 'evergreen-ui';
+import { Loader, Container } from '@mantine/core';
 
 const Loading = () => (
-  <Pane display="flex" alignItems="center" justifyContent="center" height={400}>
-    <Spinner />
-  </Pane>
+  <Container
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 400,
+    }}
+  >
+    <Loader size="xl" />
+  </Container>
 );
 
 export default Loading;

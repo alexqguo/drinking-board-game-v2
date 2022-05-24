@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { Alert, Pane } from 'evergreen-ui';
+import { FaExclamationCircle } from 'react-icons/fa';
+import { Container, Alert } from '@mantine/core';
 
 interface Props {
   children: ReactNode;
@@ -26,14 +27,15 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <Pane padding={16}>
+        <Container p="md">
           <Alert
-            intent="danger"
+            color="red"
+            icon={<FaExclamationCircle />}
             title="Whoops! Something went wrong."
           >
             Your game may have crashed or Alex may have "accidentally" deleted your game in the database. Try refreshing the page and see what happens.
           </Alert>
-        </Pane>
+        </Container>
       );
     }
 
