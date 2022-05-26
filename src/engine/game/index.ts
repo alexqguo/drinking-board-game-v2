@@ -204,6 +204,7 @@ const GameEventHandler = () => {
       }, 750);
     },
     [GameState.MOVE_END]: () => {
+      // TODO- record visited space for player
       gameStore.setGameState(GameState.RULE_TRIGGER);
     },
     [GameState.RULE_TRIGGER]: () => {

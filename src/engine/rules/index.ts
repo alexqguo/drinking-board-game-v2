@@ -69,7 +69,7 @@ export const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
 }
 
 export default async (ruleId: string, options: { nextGameState?: GameState }) => {
-  const { alertStore, boardStore } = rootStore;
+  const { alertStore, boardStore, gameStore, playerStore } = rootStore;
   const { nextGameState = GameState.RULE_END } = options;
   const rule: RuleSchema = boardStore.rulesById.get(ruleId)!;
 
@@ -82,4 +82,16 @@ export default async (ruleId: string, options: { nextGameState?: GameState }) =>
 
   const handler = getHandlerForRule(rule);
   handler(rule);
+
+  // Handle items
+  if (rule.acquireItem) {
+    playerStore.updateEffects(
+      gameStore.game.currentPlayerId,
+      {
+        items: {
+          [rule.acquireItem]: true,
+        },
+      }
+    );
+  }
 };

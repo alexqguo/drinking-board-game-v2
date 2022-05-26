@@ -6,6 +6,7 @@ Boards:
 * Add Zelda board
   * mandatory spaces are skipped the second time
     * create "mandatoryOnce" field and put it on all bosses except the last ones
+    * for each player, create "visitedMandatories" field (or maybe just all visited spaces) to track where they've been
   * gohma- combination
   * saria's song space, choice rule
   * boomerang space
@@ -14,10 +15,14 @@ Boards:
   * volvagia
   * water temple swap places rule
   * six barriers, refight previous bosses
-  * ganondorf roll until. need small tweak
   * ganon- should actually be a normal choice rule. but do you redo the two mandatory spaces?
-  * items
   * zone for leading player
+  * items show up in status indicator
+    * if player has items, show an "Items" dropdown
+  * handle any schema updates (like choice rule)
+  * done but need to test
+    * ganondorf roll until. need small tweak
+    * acquire items
 
 Bugs:
 * Overflow on player effects badges
@@ -29,6 +34,9 @@ Cleanup:
 * Extensions/non components need i18n support
 * Actions now how a `ruleId` on them to indicate where they came from, this should be incorporated into the `Alert` component's logic as well so that all actions aren't grouped together
 * `RollAugmentationRule` can easily be consolidated into `SpeedModifierRule`
+* `RollUntilRule` defaults to consecutive roll criteria if `criteria` is not passed, this was done out of laziness and should be cleaned up
+* Put rule IDs in the schema, don't generate them
+* Switch `mandatory` field to `mandatoryType` in schemas
 
 Parity:
 * Improve animation of moving. Only happens on the current player's screen

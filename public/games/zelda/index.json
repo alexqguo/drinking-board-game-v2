@@ -41,11 +41,11 @@
     "rule": {
       "displayText": "Choose one person to pelt with your Fairy Slingshot. Give one drink.",
       "type": "DisplayRule",
-      "_todo_item": "fairy slingshot?"
+      "acquireItem": "FAIRY_SLINGSHOT"
     },
     "position": [{ "x": 1059, "y": 791 }, { "x": 1347, "y": 790 }, { "x": 1202, "y": 1044 }]
   }, {
-    "mandatory": true,
+    "mandatoryType": "once",
     "rule": {
       "displayText": "GOHMA\nIf you have played Zelda OoT, T2D nerd! Otherwise, you may either T1D, or go back 4 spaces and roll again, skipping Gohma.",
       "type": "ChoiceRule",
@@ -104,7 +104,7 @@
     "rule": {
       "displayText": "You bought a Hylian Shield! Wear it and give the person to your left a piggyback ride around the room. Otherwise, T1D. [[[item get]]]",
       "type": "DisplayRule",
-      "_todo_item": "hylian shield"
+      "acquireItem": "HYLIAN_SHIELD"
     },
     "position": [{ "x": 612, "y": 1557 }, { "x": 904, "y": 1557 }, { "x": 759, "y": 1809 }]
   }, {
@@ -132,14 +132,14 @@
     "rule": {
       "displayText": "If you have the Hylian Shield, nothing happens. Otherwise, roll a die, that many people must remove 1 article of clothing. [[[item use]]]",
       "type": "DisplayRule",
-      "_todo_item": "hylian shield"
+      "acquireItem": "HYLIAN_SHIELD"
     },
     "position": [{ "x": 315, "y": 2073 }, { "x": 609, "y": 2073 }, { "x": 461, "y": 2329 }]
   }, {
     "rule": {
       "displayText": "Roll a die.\n1-4: Pick someone to finish their drink.\n5-6: You hold the Bomb too long, finish your own drink.",
       "type": "DiceRollRule",
-      "_todo_item": "bomb",
+      "acquireItem": "BOMB",
       "diceRolls": {
         "numRequired": 1,
         "outcomes": [{
@@ -160,11 +160,11 @@
     },
     "position": [{ "x": 461, "y": 2329 }, { "x": 315, "y": 2073 }, { "x": 169, "y": 2327 }]
   }, {
-    "mandatory": true,
+    "mandatoryType": "once",
     "rule": {
       "displayText": "KING DODONGO\nT1D, or T2D and G1D. If you have the Bomb, instead roll a die. Count around the table to your right, drop a shot in that person's drink. [[[item use]]]",
       "type": "DisplayRule",
-      "_todo_item": "bomb"
+      "acquireItem": "BOMB"
     },
     "position": [{ "x": 169, "y": 2327 }, { "x": 462, "y": 2331 }, { "x": 317, "y": 2578 }]
   }, {
@@ -187,8 +187,8 @@
       "displayText": "Plug your nose and hold your breath for 25 seconds. If you succeed, you win the Silver Scale, take an immediate turn.",
       "type": "ChoiceRule",
       "choices": [{
-        "displayText": "Succeed [[item get]]",
-        "_todo_item": "silver scale",
+        "displayText": "Succeed",
+        "acquireItem": "SILVER_SCALE",
         "type": "ExtraTurnRule",
         "numTurns": 1
       }, {
@@ -201,7 +201,7 @@
     "rule": {
       "displayText": "You find a Golden Skulltula and gain a Heart Piece. Skip your next drinks. [[[item get?]]]",
       "type": "DisplayRule",
-      "_todo_item": "skulltulla and heart piece?"
+      "acquireItem": "HEART_PIECE"
     },
     "position": [{ "x": 906, "y": 2583 }, { "x": 762, "y": 2333 }, { "x": 1056, "y": 2332 }]
   }, {
@@ -217,7 +217,7 @@
     },
     "position": [{ "x": 1204, "y": 2584 }, { "x": 1058, "y": 2334 }, { "x": 1352, "y": 2333 }]
   }, {
-    "mandatory": true,
+    "mandatoryType": "once",
     "rule": {
       "displayText": "BARINADE\nFill your drink and finish it to double your next roll, or T2D and half your next roll (round up).",
       "type": "ChoiceRule",
@@ -272,7 +272,7 @@
     "rule": {
       "displayText": "You race the Gravekeeper's Ghost and win the Hookshot! Pull everyone else within 4 spaces back to this triangle. [[[move other people, item get]]]",
       "type": "TodoRule",
-      "_todo_item": "hookshot"
+      "acquireItem": "HOOKSHOT"
     },
     "position": [{ "x": 2238, "y": 2333 }, { "x": 2094, "y": 2583 }, { "x": 2386, "y": 2585 }]
   }, {
@@ -285,7 +285,7 @@
     "rule": {
       "displayText": "You found the Fairy Bow! Whoever landed on the Fairy Slingshot must take 3 drinks in jealousy. [[[item use]]]",
       "type": "DisplayRule",
-      "_todo_item": "fairy bow"
+      "acquireItem": "FAIRY_BOW"
     },
     "position": [{ "x": 2534, "y": 2329 }, { "x": 2387, "y": 2586 }, { "x": 2687, "y": 2583 }]
   }, {
@@ -303,7 +303,7 @@
     },
     "position": [{ "x": 2537, "y": 2330 }, { "x": 2685, "y": 2075 }, { "x": 2834, "y": 2326 }]
   }, {
-    "mandatory": true,
+    "mandatoryType": "once",
     "rule": {
       "displayText": "PHANTOM GANON\nYou can either T3D, or T5D and reverse the turn order.",
       "type": "ChoiceRule",
@@ -320,7 +320,7 @@
     "rule": {
       "displayText": "You stop the rolling Goron by stepping in front of him, T3D. If you landed on the Bomb, instead G3D. You receive the Goron Tunic. [[[item get, item use]]]",
       "type": "DisplayRule",
-      "_todo_item": "goron tunic"
+      "acquireItem": "GORON_TUNIC"
     },
     "position": [{ "x": 2391, "y": 2073 }, { "x": 2538, "y": 1820 }, { "x": 2683, "y": 2071 }]
   }, {
@@ -343,15 +343,14 @@
     "position": [{ "x": 2239, "y": 1813 }, { "x": 2387, "y": 1559 }, { "x": 2093, "y": 1561 }]
   }, {
     "rule": {
-      "displayText": "The Like Like eats your tunic, now you must buy a new one. Remove your shirt and go back 4 spaces. [[[teleport]]]",
+      "displayText": "The Like Like eats your tunic, now you must buy a new one. Remove your shirt and go back 4 spaces.",
       "type": "MoveRule",
       "tileIndex": 34,
-      "playerTarget": "self",
-      "_todo_item_remove": "goron tunic"
+      "playerTarget": "self"
     },
     "position": [{ "x": 2094, "y": 1558 }, { "x": 2241, "y": 1308 }, { "x": 2384, "y": 1556 }]
   }, {
-    "mandatory": true,
+    "mandatoryType": "once",
     "rule": {
       "displayText": "VOLVAGIA\nTake a shot to slay the dragon. Someone may offer to take the shot instead and receive an immediate turn as a reward. [[[immediate turn]]]",
       "type": "TodoRule"
@@ -379,7 +378,7 @@
     "rule": {
       "displayText": "Thaw the Zora King with Blue Fire. Eat a spoon full of hot sauce. You receive the Zora Tunic! [[[item get]]]",
       "type": "DisplayRule",
-      "_todo_item": "zora tunic"
+      "acquireItem": "ZORA_TUNIC"
     },
     "position": [{ "x": 1648, "y": 790 }, { "x": 1796, "y": 537 }, { "x": 1944, "y": 790 }]
   }, {
@@ -404,12 +403,12 @@
   }, {
     "rule": {
       "displayText": "You found the Longshot! Pull the nearest player ahead of you back to this space. Skip any bosses you have already defeated. [[[item get, pull people back]]]",
-      "type": "DisplayRule",
-      "_todo_item": "longshot"
+      "type": "TodoRule",
+      "acquireItem": "LONGSHOT"
     },
     "position": [{ "x": 1500, "y": 1047 }, { "x": 1351, "y": 793 }, { "x": 1203, "y": 1045 }]
   }, {
-    "mandatory": true,
+    "mandatoryType": "once",
     "rule": {
       "displayText": "MORPHA\nMorpha swallows you. Either take one shot and break free or finish a glass of water and miss your next turn.",
       "type": "ChoiceRule",
@@ -440,7 +439,7 @@
     "rule": {
       "displayText": "You fight your way to the Lens of Truth. If you're the first one here everyone must share an embarrassing story. [[[item get]]]",
       "type": "DisplayRule",
-      "_todo_item": "lens of truth"
+      "acquireItem": "LENS_OF_TRUTH"
     },
     "position": [{ "x": 761, "y": 1815 }, { "x": 1052, "y": 1815 }, { "x": 907, "y": 2070 }]
   }, {
@@ -460,7 +459,7 @@
     },
     "position": [{ "x": 612, "y": 2074 }, { "x": 910, "y": 2072 }, { "x": 758, "y": 2326 }]
   }, {
-    "mandatory": true,
+    "mandatoryType": "once",
     "rule": {
       "displayText": "BONGO BONGO\nGo around the table performing the previous beats and adding your own. First person to fail T4D.",
       "type": "DisplayRule"
@@ -479,7 +478,7 @@
       "modifier": ["=", 1],
       "numTurns": 1,
       "playerTarget": "custom",
-      "_todo_item": "ice arrow"
+      "acquireItem": "ICE_ARROW"
     },
     "position": [{ "x": 1056, "y": 2326 }, { "x": 1202, "y": 2077 }, { "x": 1352, "y": 2326 }]
   }, {
@@ -492,7 +491,7 @@
     "rule": {
       "displayText": "You equipped the Silver Gauntlets. Challenge someone to an arm wrestling match. You both T3D. [[[item get]]]",
       "type": "DisplayRule",
-      "_todo_item": "silver gauntlets"
+      "acquireItem": "SILVER_GAUNTLETS"
     },
     "position": [{ "x": 1942, "y": 2328 }, { "x": 1798, "y": 2075 }, { "x": 2091, "y": 2074 }]
   }, {
@@ -508,7 +507,7 @@
     },
     "position": [{ "x": 2240, "y": 2329 }, { "x": 2093, "y": 2073 }, { "x": 2387, "y": 2071 }]
   }, {
-    "mandatory": true,
+    "mandatoryType": "once",
     "rule": {
       "displayText": "TWINROVA\nRoll a die.\n1: Microwave your drink and finish it.\n5-6: Either sprinkle some hot sauce into your drink or fill your drink with ice and finish it.",
       "type": "DiceRollRule",
@@ -534,7 +533,7 @@
     "rule": {
       "displayText": "You blind yourself with the Light Arrow. Close your eyes and pick a triangle, do what it says.",
       "type": "DisplayRule",
-      "_todo_item": "light arrow?"
+      "acquireItem": "LIGHT_ARROW"
     },
     "position": [{ "x": 2093, "y": 2067 }, { "x": 2237, "y": 1820 }, { "x": 1947, "y": 1817 }]
   }, {
@@ -550,22 +549,45 @@
     "position": [{ "x": 1947, "y": 1817 }, { "x": 2091, "y": 1565 }, { "x": 2235, "y": 1814 }]
   }, {
     "rule": {
+      "mandatoryType": "once",
       "displayText": "SIX BARRIERS\nClose your eyes and have someone spin you. Now point to a space and battle the colored area's boss. If there is none, try again.",
       "type": "TodoRule"
     },
     "position": [{ "x": 1938, "y": 1303 }, { "x": 1794, "y": 1054 }, { "x": 1650, "y": 1300 }]
   }, {
     "rule": {
-      "displayText": "GANONDORF\nYou juggle lightning with Ganondorf. Roll the die until you get the same number twice in a row. Take that many drinks. After every roll take 1 drink. [[[roll until]]]",
-      "type": "TodoRule"
+      "mandatoryType": "once",
+      "displayText": "GANONDORF\nYou juggle lightning with Ganondorf. Roll the die until you get the same number twice in a row. Take that many drinks. After every roll take 1 drink.",
+      "type": "RollUntilRule"
     },
     "position": [{ "x": 1650, "y": 1300 }, { "x": 1795, "y": 1050 }, { "x": 1503, "y": 1048 }]
   }, {
     "rule": {
+      "mandatoryType": "once",
       "displayText": "GANON\nFirst escape the castle! Finish your drink. Now your sword is gone, roll a die.\nIf it's a 1, go back 2 spaces.\nOtherwise it's time to resort to unconventional methods. Shotgun a beer and save Hyrule!!! [[[dice roll with game over outcome]]]",
       "type": "TodoRule"
     },
     "position": [{ "x": 1503, "y": 1048 }, { "x": 1647, "y": 802 }, { "x": 1793, "y": 1049 }]
   }],
-  "zones": []
+
+  "zones": [],
+  "_TODO": "^^^fill out zones",
+
+  "items": {
+    "_desc": "These aren't actually needed curently, but keeping here in case items in the future come with their own effects, etc.",
+    "HOOKSHOT": {},
+    "FAIRY_SLINGSHOT": {},
+    "HYLIAN_SHIELD": {},
+    "BOMB": {},
+    "SILVER_SCALE": {},
+    "HEART_PIECE": {},
+    "FAIRY_BOW": {},
+    "GORON_TUNIC": {},
+    "ZORA_TUNIC": {},
+    "LONGSHOT": {},
+    "LENS_OF_TRUTH": {},
+    "ICE_ARROW": {},
+    "SILVER_GAUNTLETS": {},
+    "LIGHT_ARROW": {}
+  }
 }

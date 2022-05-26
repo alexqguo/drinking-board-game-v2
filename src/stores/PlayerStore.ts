@@ -65,6 +65,6 @@ export default class PlayerStore {
       numCurrentSuccesses: 0
     },
     anchors: 0,
-    custom: {},
+    items: {},
   })
 }

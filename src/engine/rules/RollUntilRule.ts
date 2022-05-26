@@ -28,7 +28,18 @@ const RollUntilRule: RuleHandler = async (rule: RuleSchema) => {
 RollUntilRule.postActionHandler = (rule: RuleSchema, actions: AlertAction[]) => {
   const { alertStore, actionStore, gameStore } = rootStore;
   const lastAction = actions[actions.length - 1];
-  const isDone = rule.criteria!.indexOf(lastAction.value) > -1;
+  let isDone = false;
+
+  if (rule.criteria) {
+    // Player is done if their last roll matches the criteria
+    isDone = rule.criteria!.indexOf(lastAction.value) > -1;
+  } else {
+    // If no criteria was passed, default to requiring two consecutive rolls of the same number
+    const lastTwoRolls = actions.slice(actions.length - 2)
+      .map((a: AlertAction) => a.value);
+
+    isDone = lastTwoRolls.length === 2 && lastTwoRolls[0] === lastTwoRolls[1];
+  }
 
   if (isDone) {
     alertStore.update({ state: AlertState.CAN_CLOSE });

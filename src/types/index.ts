@@ -1,3 +1,5 @@
+import { deprecate } from "util";
+
 export enum GameType {
   local = 'local',
   remote = 'remote',
@@ -130,14 +132,9 @@ export interface PlayerEffects {
   speedModifier: SpeedModifier,
   rollAugmentation: SpeedModifier,
   moveCondition: MoveCondition,
-  custom: { [key: string]: CustomEffect },
   starter: string
   anchors: number,
-}
-
-export interface CustomEffect {
-  description: string,
-  value: unknown,
+  items: { [key: string]: boolean }
 }
 
 export interface LostTurnInfo {
@@ -184,13 +181,22 @@ export type RuleHandler = {
 ////////////////////////////////////////////////////////////////
 // Schema interfaces. Anything living in the board JSON files
 ////////////////////////////////////////////////////////////////
+export enum MandatoryType {
+  always = 'always',
+  once = 'once',
+}
+
 export interface BoardSchema {
   tiles: TileSchema[],
   zones: ZoneSchema[],
 }
 
 export interface TileSchema {
+  /**
+   * @deprecated should use mandatoryType instead
+   */
   mandatory?: boolean,
+  mandatoryType?: MandatoryType,
   rule: RuleSchema,
   position: Point[],
   zone?: string,
@@ -212,6 +218,7 @@ export interface RuleSchema {
   condition?: MoveConditionSchema,
   proxyRuleId?: string,
   starters?: string[],
+  acquireItem?: string,
 }
 
 export interface BaseOutcomeSchema {
