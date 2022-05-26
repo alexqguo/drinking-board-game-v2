@@ -204,7 +204,6 @@ const GameEventHandler = () => {
       }, 750);
     },
     [GameState.MOVE_END]: () => {
-      // TODO- record visited space for player
       gameStore.setGameState(GameState.RULE_TRIGGER);
     },
     [GameState.RULE_TRIGGER]: () => {
@@ -237,6 +236,7 @@ const GameEventHandler = () => {
         nextPlayerId = playerIds[nextPlayerIdx];
       }
 
+      await playerStore.addVisitedTile(currentPlayerId, currentPlayer.tileIndex);
       gameStore.update({
         state: GameState.TURN_CHECK,
         currentPlayerId: nextPlayerId,

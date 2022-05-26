@@ -122,6 +122,8 @@ export interface Player {
   hasWon: boolean,
   isActive?: boolean,
   effects: PlayerEffects,
+  // Consider making this a list to maintain ordering
+  visitedTiles: { [key: number]: boolean },
 }
 
 export interface PlayerEffects {

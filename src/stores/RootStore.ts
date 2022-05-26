@@ -87,6 +87,7 @@ export default class RootStore {
         isActive,
         tileIndex: 0,
         hasWon: false,
+        visitedTiles: { 0: true },
         effects: PlayerStore.defaultEffects(),
       };
     });

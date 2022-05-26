@@ -32,13 +32,23 @@ export default class PlayerStore {
   updatePlayer = async (id: string, playerData: Partial<Player>) => {
     const playerSnap: DataSnapshot = await get(query(this.rootStore.playerRef!, orderByChild('id'), equalTo(id)));
     const [key] = Object.entries(playerSnap!.val())[0];
-    update(ref(db, `${this.rootStore.prefix}/players/${key}`), playerData);
-  }
+    return update(ref(db, `${this.rootStore.prefix}/players/${key}`), playerData);
+  };
+
+  addVisitedTile = async (id: string, tileIdx: number) => {
+    console.log('asdf hello2323', tileIdx)
+    const playerSnap: DataSnapshot = await get(query(this.rootStore.playerRef!, orderByChild('id'), equalTo(id)));
+    const [key] = Object.entries(playerSnap!.val())[0];
+    console.log('asdf hello', tileIdx)
+    return update(ref(db, `${this.rootStore.prefix}/players/${key}/visitedTiles`), {
+      [tileIdx]: true,
+    });
+  };
 
   updateEffects = async (id: string, newEffects: Partial<PlayerEffects>) => {
     const playerSnap: DataSnapshot = await get(query(this.rootStore.playerRef!, orderByChild('id'), equalTo(id)));
     const [key] = Object.entries(playerSnap!.val())[0];
-    update(ref(db, `${this.rootStore.prefix}/players/${key}/effects`), newEffects);
+    return update(ref(db, `${this.rootStore.prefix}/players/${key}/effects`), newEffects);
   };
 
   static defaultEffects = (): PlayerEffects => ({

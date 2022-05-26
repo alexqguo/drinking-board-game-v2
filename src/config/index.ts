@@ -11,6 +11,10 @@ export const boards: Board[] = [
     label: 'Pokemon gen. 3',
     value: 'pokemon-gen3',
   },
+  {
+    label: 'Legend of Zelda',
+    value: 'zelda',
+  },
 ];
 
 export const maxPlayers = 10;
