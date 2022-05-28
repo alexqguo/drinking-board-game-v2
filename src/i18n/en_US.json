@@ -41,7 +41,8 @@
     "missedTurn": "Missed turn",
     "skipMandatory": "Skip mandatory space",
     "customMandatory": "Stop at tile {idx}",
-    "anchor": "Cannot be passed"
+    "anchor": "Cannot be passed",
+    "shareGame": "Share game link"
   },
   "lostTurn": {
     "drink": "Drink {numTurns}",

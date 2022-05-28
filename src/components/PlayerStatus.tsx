@@ -13,6 +13,7 @@ import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
 import PlayerEffects from 'src/components/PlayerEffects';
+import ShareGamePopover from 'src/components/ShareGamePopover';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 import { uiActions } from 'src/engine/game';
 
@@ -105,11 +106,7 @@ export default () => {
       </List>
 
       {gameStore.game.type === GameType.remote ? (
-        <Text component="p" size="xs" mt="sm">
-          <a href={`/#/join/${gameStore.game.id}`} target="_blank" rel="noreferrer">
-            {gameStore.game.id}
-          </a>
-        </Text>
+        <ShareGamePopover gameId={gameStore.game.id} />
       ) : null}
     </Paper>
   ));
