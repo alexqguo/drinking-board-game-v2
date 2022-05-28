@@ -21,13 +21,9 @@ const GameEventHandler = () => {
   const { gameStore, playerStore, boardStore, alertStore, extension } = rootStore;
   let prevGameState = gameStore.game.state;
   const eventHandlers: { [key: string]: Function } = {
+    [GameState.STARTER_SELECT]: () => {},
     [GameState.GAME_START]: () => {
-      // If the first tile is a starter select rule, execute it
-      if (boardStore.schema.tiles[0].rule.type === 'StarterSelectionRule') {
-        RuleEngine(boardStore.schema.tiles[0].rule.id, { nextGameState: GameState.TURN_CHECK });
-      } else {
-        gameStore.setGameState(GameState.TURN_CHECK);
-      }
+      gameStore.setGameState(GameState.TURN_CHECK);
     },
     [GameState.TURN_CHECK]: () => {
       // Can player take their turn
@@ -283,9 +279,20 @@ const GameEventHandler = () => {
 // Provide some hooks for UI components
 const uiActions = {
   start: () => {
+    const { gameStore, boardStore } = rootStore;
+
     // Only start the game if it hasn't been started. When joining game state will already exist
-    if (rootStore.gameStore.game.state === GameState.NOT_STARTED) {
-      rootStore.gameStore.setGameState(GameState.GAME_START);
+    if (gameStore.game.state === GameState.NOT_STARTED) {
+      // If the first tile is a starter select rule, execute it
+      if (boardStore.schema.tiles[0].rule.type === 'StarterSelectionRule') {
+        gameStore.setGameState(GameState.STARTER_SELECT);
+        RuleEngine(boardStore.schema.tiles[0].rule.id, {
+          headingOverride: ' ', // TODO- put something more useful here?
+          nextGameState: GameState.GAME_START,
+        });
+      } else {
+        gameStore.setGameState(GameState.GAME_START);
+      }
     }
   },
   handleRoll: (roll: number) => {
