@@ -21,6 +21,7 @@ Boards:
 
 Bugs:
 * Overflow on player effects badges
+* Fix up when you get kicked out of the game
 
 Cleanup:
 * Move game extensions to external modules?

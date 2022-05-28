@@ -90,6 +90,7 @@ export interface AlertDiceRoll {
 export enum GameState {
   NOT_STARTED = 'NOT_STARTED',
   GAME_START = 'GAME_START',
+  STARTER_SELECT = 'STARTER_SELECT',
   TURN_CHECK = 'TURN_CHECK',
   ZONE_CHECK = 'ZONE_CHECK',
   TURN_START = 'TURN_START',

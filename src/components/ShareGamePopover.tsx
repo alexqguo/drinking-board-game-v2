@@ -25,8 +25,6 @@ export default ({
     })();
   }, [gameId]);
 
-  console.log(qrCodeDataUrl)
-
   return (
     <Popover
       withArrow

@@ -68,15 +68,16 @@ export const getHandlerForRule = (rule: RuleSchema): RuleHandler => {
   return handler;
 }
 
-export default async (ruleId: string, options: { nextGameState?: GameState }) => {
+export default async (ruleId: string, options: { headingOverride?: string, nextGameState?: GameState }) => {
   const { alertStore, boardStore } = rootStore;
-  const { nextGameState = GameState.RULE_END } = options;
+  const { nextGameState = GameState.RULE_END, headingOverride = '' } = options;
   const rule: RuleSchema = boardStore.rulesById.get(ruleId)!;
 
   alertStore.update({
     ruleId,
     open: true,
     nextGameState,
+    headingOverride,
     state: AlertState.PENDING,
   });
 
