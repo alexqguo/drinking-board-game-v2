@@ -41,7 +41,6 @@ const GameEventHandler = () => {
       const currentPlayer = playerStore.players.get(gameStore.game.currentPlayerId)!;
       const currentTile = tiles[currentPlayer.tileIndex];
       const currentZone: ZoneSchema = zones.find((z: ZoneSchema) => z.name === currentTile.zone)!;
-      rootStore.scrollToCurrentPlayer();
 
       if (currentZone && currentZone.rule && currentZone.type === ZoneType.active) {
         const handler: RuleHandler = getHandlerForRule(currentZone.rule);
@@ -192,8 +191,6 @@ const GameEventHandler = () => {
       }
     },
     [GameState.MOVE_START]: () => {
-      rootStore.scrollToCurrentPlayer();
-
       // Allow time for the "animation" to happen
       setTimeout(() => {
         gameStore.setGameState(GameState.MOVE_END);
@@ -256,6 +253,11 @@ const GameEventHandler = () => {
       });
     }
   };
+  const animationHandlers: { [key: string]: Function } = {
+    [GameState.TURN_START]: () => { rootStore.scrollToCurrentPlayer() },
+    [GameState.MOVE_START]: () => { rootStore.scrollToCurrentPlayer() },
+    [GameState.ZONE_CHECK]: () => { rootStore.scrollToCurrentPlayer() },
+  };
 
   if (extension) {
     for (const [gameEventKey, customGameEventHandler] of Object.entries(extension.gameEvents)) {
@@ -266,8 +268,17 @@ const GameEventHandler = () => {
 
   autorun(() => {
     const { state } = gameStore.game;
-    if (state === prevGameState || !gameStore.isMyTurn) return;
+
+    // If nothing has changed, return early
+    if (state === prevGameState) return;
     console.log(`New game state: ${state}`);
+
+    // Handle animations for all players
+    const animationHandler = animationHandlers[state];
+    if (animationHandler) animationHandler();
+
+    // Handle game state updates just for the current player
+    if (!gameStore.isMyTurn) return;
     prevGameState = state;
 
     const handler = eventHandlers[state];
