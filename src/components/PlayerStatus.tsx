@@ -2,18 +2,16 @@ import React, { useContext, useState } from 'react';
 import { useObserver } from 'mobx-react';
 import {
   Button,
-  Text,
   Title,
   List,
   Paper,
 } from '@mantine/core';
 import { FaBan, FaCaretRight } from 'react-icons/fa';
-import { Player, GameState, GameType } from 'src/types';
+import { Player, GameState } from 'src/types';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 import { StoreContext } from 'src/providers/StoreProvider';
 import DiceRoll from 'src/components/DiceRoll';
 import PlayerEffects from 'src/components/PlayerEffects';
-import ShareGamePopover from 'src/components/ShareGamePopover';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
 import { uiActions } from 'src/engine/game';
 
@@ -104,10 +102,6 @@ export default () => {
           </List.Item>
         ))}
       </List>
-
-      {gameStore.game.type === GameType.remote ? (
-        <ShareGamePopover gameId={gameStore.game.id} />
-      ) : null}
     </Paper>
   ));
 }

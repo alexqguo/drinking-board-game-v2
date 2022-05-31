@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { Popover, Text, Button } from '@mantine/core';
+import { FaPeopleArrows } from 'react-icons/fa';
 import { TranslationContext } from 'src/providers/TranslationProvider';
 
 interface Props {
@@ -30,14 +31,19 @@ export default ({
       withArrow
       shadow="xl"
       opened={open}
+      position="top"
+      placement="end"
       closeOnClickOutside
       onClose={() => setIsOpen(false)}
       target={
-        <Button size="xs" mt="xs" variant="outline" compact onClick={() => setIsOpen(true)}>
-            {i18n.playerStatus.shareGame}
+        <Button compact size="xl" radius="xl" onClick={() => setIsOpen(true)}>
+          <FaPeopleArrows />
         </Button>
       }
     >
+      <Text>
+        {i18n.playerStatus.shareGame}
+      </Text>
       <a href={joinGameUrl.href} target="_blank" rel="noreferrer">
         <Text size="xs">{gameId}</Text>
       </a>

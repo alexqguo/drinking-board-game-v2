@@ -7,6 +7,7 @@ import BoardImage from 'src/components/BoardImage';
 import PlayerAvatar from 'src/components/PlayerAvatar';
 import Alert from 'src/components/Alert';
 import PlayerStatus from 'src/components/PlayerStatus';
+import Toolbar from 'src/components/Toolbar';
 import { uiActions } from 'src/engine/game';
 
 export default () => {
@@ -27,6 +28,7 @@ export default () => {
       <PlayerStatus />
       <BoardImage />
       <Alert />
+      <Toolbar />
 
       {Array.from(playerStore.players.values()).map((p: Player) => (
         <PlayerAvatar player={p} key={p.id} />
