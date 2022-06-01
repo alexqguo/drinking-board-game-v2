@@ -47,7 +47,6 @@ export default () => {
         position: 'fixed',
         top: 0,
         left: 0,
-        zIndex: 99, // evergreen(?) overlay has z-index of 20
       }}
     >
       <Title order={4} mb="sm">
