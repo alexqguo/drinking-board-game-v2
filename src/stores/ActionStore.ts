@@ -13,7 +13,7 @@ import {
 } from 'firebase/database';
 import RootStore from 'src/stores/RootStore';
 import { db } from 'src/firebase';
-import { ActionStatus, ActionType, AlertAction, GameState, RuleSchema } from 'src/types';
+import { ActionStatus, ActionType, AlertAction, GameState } from 'src/types';
 import { getHandlerForRule } from 'src/engine/rules';
 import { createId } from 'src/utils';
 
@@ -34,7 +34,7 @@ export default class ActionStore {
   }
 
   @action setActionChildChanged = (action: AlertAction) => {
-    const { alertStore, boardStore, gameStore } = this.rootStore;
+    const { boardStore, gameStore } = this.rootStore;
     this.actions.set(action.id, action);
 
     /**

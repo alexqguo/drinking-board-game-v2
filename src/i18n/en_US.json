@@ -28,6 +28,9 @@
     "notFound": "Could not find game",
     "selectPlayer": "Who are you playing as?",
     "join": "Join",
+    "refreshing": "Someone else has joined as {playerName}. Leaving the game.",
+    "issuesJoining": "Issues joining?",
+    "bootPlayer": "Boot {playerName}",
     "explanation": "Join a game started by one of your friends. Paste the GameID into the text box below if it did not autofill, select who you're playing as, and press join!"
   },
   "alert": {

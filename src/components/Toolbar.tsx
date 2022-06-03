@@ -2,12 +2,10 @@ import React, { useContext } from 'react';
 import { useObserver } from 'mobx-react';
 import { Paper } from '@mantine/core';
 import { StoreContext } from 'src/providers/StoreProvider';
-import { TranslationContext } from 'src/providers/TranslationProvider';
 import ShareGamePopover from 'src/components/ShareGamePopover';
 import { GameType } from 'src/types';
 
 export default () => {
-  const i18n = useContext(TranslationContext);
   const { gameStore } = useContext(StoreContext);
 
   return useObserver(() => (
