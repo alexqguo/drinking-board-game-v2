@@ -596,7 +596,77 @@
     "position": [{ "x": 1503, "y": 1048 }, { "x": 1647, "y": 802 }, { "x": 1793, "y": 1049 }]
   }],
 
-  "zones": [],
+  "zones": [{
+    "name": "TEMPLE OF TIME",
+    "type": "eagerActive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "Temple of Time, it's a mother fuckin' social, regardless of who lands here everyone T1D."
+    }
+  }, {
+    "name": "DEKU TREE",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in the Deku Tree there shall be no cursing."
+    }
+  }, {
+    "name": "DODONGO'S CAVERN",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in Dodongo's Cavern no saying names or pointing."
+    }
+  }, {
+    "name": "JABU JABU'S BELLY",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in Jabu Jabu's Belly, you must speak in rhyme... orange."
+    }
+  }, {
+    "name": "FOREST TEMPLE",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in the Forest Temple you must end each phrase with \"in the butt\"."
+    }
+  }, {
+    "name": "FIRE TEMPLE",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in the Fire Temple you must insult someone after your drinks."
+    }
+  }, {
+    "name": "WATER TEMPLE",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in the Water Temple you may not speak with your mouth. Reading the board is allowed."
+    }
+  }, {
+    "name": "SHADOW TEMPLE",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in the Shadow Temple you can't say \"drink\"."
+    }
+  }, {
+    "name": "SPIRIT TEMPLE",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in the Spirit Temple you must stroke another person's leg three times after each drink."
+    }
+  }, {
+    "name": "GANON'S CASTLE",
+    "type": "passive",
+    "rule": {
+      "type": "DisplayRule",
+      "displayText": "While in Ganon's Castle you must stand."
+    }
+  }],
   "_TODO": "^^^fill out zones",
 
   "items": {

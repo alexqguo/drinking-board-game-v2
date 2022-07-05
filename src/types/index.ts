@@ -274,8 +274,14 @@ export enum PlayerTarget {
 }
 
 export enum ZoneType {
+  // Doesn't actually change anything about how the game runs
   passive = 'passive',
-  active = 'active'
+
+  // Something happens before each turn in the zone
+  active = 'active',
+
+  // Something hapepns as soon as the player lands in the zone
+  eagerActive = 'eagerActive',
 }
 
 export enum Direction {

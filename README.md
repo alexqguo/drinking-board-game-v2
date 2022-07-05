@@ -8,18 +8,32 @@ Boards:
     * create "mandatoryOnce" field and put it on all bosses except the last ones
     * for each player, create "visitedMandatories" field (or maybe just all visited spaces) to track where they've been
   * gohma- combination
+    * need both teleport and immediate turn
   * saria's song space, choice rule
+    * custom player target for "who hummed it first", person gets an immediate turn
+    * possible new rule type ImmediateTurnRule
+      * with "includeSelf" property to handle the volvagia space
   * boomerang space
+    * fight X, then come back
   * pull back players
+    * new rule type
+      * either everyone within range, or the nearest player
+      * they move back to the current space
   * poe space may require a few tweaks
   * volvagia
+    * custom player target for "who is taking the shot", if it's another player they get an immediate turn
   * water temple swap places rule
+    * swap places with anyone in the water temple
+    * new rule type?
+      * provide a tile index range
+      * if no other players within that range, do nothing (or say no players within range)
+      * if players within range, put a choice action and swap positions with the one selected
   * six barriers, refight previous bosses
+    * choice action for the bosses
   * ganon- should actually be a normal choice rule. but do you redo the two mandatory spaces?
   * zone for leading player
   * items show up in status indicator
     * if player has items, show an "Items" dropdown
-  * handle any schema updates (like choice rule)
   * done but need to test
     * ganondorf roll until. need small tweak
     * acquire items
