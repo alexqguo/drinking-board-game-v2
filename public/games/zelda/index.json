@@ -50,14 +50,20 @@
       "displayText": "GOHMA\nIf you have played Zelda OoT, T2D nerd! Otherwise, you may either T1D, or go back 4 spaces and roll again, skipping Gohma.",
       "type": "ChoiceRule",
       "choices": [{
-        "displayText": "Played OoT (T2D)",
-        "type": "DisplayRule"
+        "rule": {
+          "displayText": "Played OoT (T2D)",
+          "type": "DisplayRule"
+        }
       }, {
-        "displayText": "Haven't played OoT (T1D)",
-        "type": "DisplayRule"
+        "rule": {
+          "displayText": "Haven't played OoT (T1D)",
+          "type": "DisplayRule"
+        }
       }, {
-        "displayText": "Go back 4 spaces and roll again [todo- teleport rule with param to also gain an extra turn]",
-        "type": "TodoRule"
+        "rule": {
+          "displayText": "Go back 4 spaces and roll again [todo- teleport rule with param to also gain an extra turn]",
+          "type": "TodoRule"
+        }
       }]
     },
     "position": [{ "x": 1202, "y": 1044 }, { "x": 1055, "y": 797 }, { "x": 910, "y": 1050 }]
@@ -187,13 +193,17 @@
       "displayText": "Plug your nose and hold your breath for 25 seconds. If you succeed, you win the Silver Scale, take an immediate turn.",
       "type": "ChoiceRule",
       "choices": [{
-        "displayText": "Succeed",
-        "acquireItem": "SILVER_SCALE",
-        "type": "ExtraTurnRule",
-        "numTurns": 1
+        "rule": {
+          "displayText": "Succeed",
+          "acquireItem": "SILVER_SCALE",
+          "type": "ExtraTurnRule",
+          "numTurns": 1
+        }
       }, {
-        "displayText": "Fail",
-        "type": "DisplayRule"
+        "rule": {
+          "displayText": "Fail",
+          "type": "DisplayRule"
+        }
       }]
     },
     "position": [{ "x": 757, "y": 2333 }, { "x": 613, "y": 2584 }, { "x": 906, "y": 2583 }]
@@ -222,15 +232,19 @@
       "displayText": "BARINADE\nFill your drink and finish it to double your next roll, or T2D and half your next roll (round up).",
       "type": "ChoiceRule",
       "choices":[{
-        "displayText": "Finish your drink, double your next roll",
-        "type": "SpeedModifierRule",
-        "modifier": ["*", 2],
-        "numTurns": 1
+        "rule": {
+          "displayText": "Finish your drink, double your next roll",
+          "type": "SpeedModifierRule",
+          "modifier": ["*", 2],
+          "numTurns": 1
+        }
       }, {
-        "displayText": "T2D, half your next roll",
-        "type": "SpeedModifierRule",
-        "modifier": ["*", 0.5],
-        "numTurns": 1
+        "rule": {
+          "displayText": "T2D, half your next roll",
+          "type": "SpeedModifierRule",
+          "modifier": ["*", 0.5],
+          "numTurns": 1
+        }
       }]
     },
     "position": [{ "x": 1351, "y": 2334 }, { "x": 1496, "y": 2583 }, { "x": 1205, "y": 2583 }]
@@ -239,12 +253,16 @@
       "displayText": "You fall into a 7 year slumber. Bounce a quarter into a glass 7 times. If you make 3 or less, miss your next turn.",
       "type": "ChoiceRule",
       "choices":[{
-        "displayText": "3 or less",
-        "type": "SkipTurnRule",
-        "numTurns": 1
+        "rule": {
+          "displayText": "3 or less",
+          "type": "SkipTurnRule",
+          "numTurns": 1
+        }
       }, {
-        "displayText": "4 or more",
-        "type": "DisplayRule"
+        "rule": {
+          "displayText": "4 or more",
+          "type": "DisplayRule"
+        }
       }]
     },
     "position": [{ "x": 1500, "y": 2582 }, { "x": 1648, "y": 2333 }, { "x": 1796, "y": 2578 }]
@@ -308,11 +326,15 @@
       "displayText": "PHANTOM GANON\nYou can either T3D, or T5D and reverse the turn order.",
       "type": "ChoiceRule",
       "choices": [{
-        "type": "DisplayRule",
-        "displayText": "T3D"
+        "rule": {
+          "type": "DisplayRule",
+          "displayText": "T3D"
+        }
       }, {
-        "type": "ReverseTurnOrderRule",
-        "displayText": "T5D and reverse the turn order"
+        "rule": {
+          "type": "ReverseTurnOrderRule",
+          "displayText": "T5D and reverse the turn order"
+        }
       }]
     },
     "position": [{ "x": 2684, "y": 2073 }, { "x": 2536, "y": 2328 }, { "x": 2391, "y": 2073 }]
@@ -413,12 +435,16 @@
       "displayText": "MORPHA\nMorpha swallows you. Either take one shot and break free or finish a glass of water and miss your next turn.",
       "type": "ChoiceRule",
       "choices": [{
-        "type": "DisplayRule",
-        "displayText": "Take a shot and break free"
+        "rule": {
+          "type": "DisplayRule",
+          "displayText": "Take a shot and break free"
+        }
       }, {
-        "type": "SkipTurnRule",
-        "numTurns": 1,
-        "displayText": "Finish a glass of water and miss your next turn"
+        "rule": {
+          "type": "SkipTurnRule",
+          "numTurns": 1,
+          "displayText": "Finish a glass of water and miss your next turn"
+        }
       }]
 
     },
