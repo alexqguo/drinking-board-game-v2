@@ -4,9 +4,6 @@
 
 Boards:
 * Add Zelda board
-  * mandatory spaces are skipped the second time
-    * create "mandatoryOnce" field and put it on all bosses except the last ones
-    * for each player, create "visitedMandatories" field (or maybe just all visited spaces) to track where they've been
   * gohma- combination
     * need both teleport and immediate turn
   * saria's song space, choice rule
@@ -37,6 +34,10 @@ Boards:
   * done but need to test
     * ganondorf roll until. need small tweak
     * acquire items
+  * done and tested
+    * mandatory spaces are skipped the second time
+      * create "mandatoryOnce" field and put it on all bosses except the last ones
+      * for each player, create "visitedMandatories" field (or maybe just all visited spaces) to track where they've been
 
 Bugs:
 * Overflow on player effects badges
