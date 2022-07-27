@@ -9,6 +9,7 @@ import {
   RuleHandler,
   AlertAction,
   Player,
+  MandatoryType,
 } from 'src/types';
 import RuleEngine, { getHandlerForRule } from 'src/engine/rules';
 import { getAdjustedRoll } from 'src/engine/rules/SpeedModifierRule';
@@ -147,9 +148,19 @@ const GameEventHandler = () => {
       }
 
       let firstMandatoryIndex = boardStore.schema.tiles
+        // Tiles from current position to end of roll position. Next N tiles where N=roll
         .slice(tileIndex + 1, tileIndex + 1 + roll)
+        // Find the first one that's mandatory
         .findIndex((tile: TileSchema, idx: number) => {
-          return tile.mandatory || effects.customMandatoryTileIndex === tileIndex + idx + 1;
+          // The actual index on the board. idx in this case is just the index of the subset
+          const actualTileIdx = tileIndex + idx + 1;
+          return tile.mandatory // Tile is mandatory (deprecated)
+            // Tile is mandatory always
+            || tile.mandatoryType === MandatoryType.always
+            // Tile is mandatory once and player has not yet been
+            || (tile.mandatoryType === MandatoryType.once && !currentPlayer.visitedTiles[idx])
+            // This is a custom mandatory spot for the player
+            || effects.customMandatoryTileIndex === actualTileIdx;
         });
 
       if (effects.mandatorySkips > 0 && firstMandatoryIndex !== -1) {
