@@ -1,4 +1,4 @@
-# Drinking board game v2
+# [Deprecated] Drinking board game v2
 
 ## TODOs
 
