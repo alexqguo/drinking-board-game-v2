@@ -1,5 +1,7 @@
 # [Deprecated] Drinking board game v2
 
+**NOTE:** This project is deprecated. See https://github.com/alexqguo/drinking-board-game-v3.
+
 ## TODOs
 
 Boards:
